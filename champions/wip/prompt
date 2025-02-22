@@ -1,0 +1,3 @@
+i am sending a compiler for the Champion Design Language and some example champions made with it. I need a markdown file that describes the features of the language.
+think about what sections should be in the document and i will say if they are fine. dont make the document yet.
+omit any unnecessary sections, especially ones not directly referencing language features. also, the language has two main types of code, one for declaring attributes and stuff, and one for blocks like behaviour, cast, use and hit, which is just lua code, but with some aliases like enemies mapping to context.enemies in lua. dont talk about any lua features like if and for. again, write just the sections and ill review

@@ -1,0 +1,54 @@
+champion ezreal
+sprite ezreal.jpg
+
+attributes:
+    health 1604.2
+    armor 70.3
+    mr 42.8
+    ms 370
+
+behavior:
+  if ready q then
+    range q - 100
+    movement aggressive
+  else
+    range q + 50
+    movement passive
+  end
+
+abilities:
+color 0.8, 0.8, 0.4
+q:
+  cd 4
+  damage 380
+  range 1300
+  size 120
+  speed 2000
+  stop_on_hit true
+  cast ranged
+ use:
+  proj = missile from pos
+  spawn proj
+ hit:
+  damage physical
+  for _, ability in pairs(self.abilities) do
+    ability.timer = ability.timer - 1.5
+  end
+
+e:
+  cd 11.5
+  size 120
+  damage 340
+  speed 2000
+  dist 475
+  range 700
+  cast dash
+  use:
+    pos = cast.pos
+    if closest_dist < range + 50 then
+      proj = missile from pos to closest_enemy colliders nil
+      spawn proj
+    end
+  hit:
+    damage magic
+

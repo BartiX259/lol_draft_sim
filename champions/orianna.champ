@@ -1,0 +1,61 @@
+champion orianna
+sprite orianna.jpg
+
+attributes:
+  health 1789.5
+  armor 66
+  mr 40
+  ms 370
+
+behavior:
+  if ready q then
+    range q - 50
+    movement aggressive
+  else
+    range q + 200
+    movement passive
+  end
+
+abilities:
+  color 0.3, 0.5, 0.8 
+  q:
+    cd 2.7
+    range 1025
+    damage 300
+    speed 1400
+    size 175
+    persist_time 1
+    cast splash
+    use:
+      local cast_pos = cast.pos -- + cast.dir * 100
+      proj = missile from pos to cast_pos
+      proj.next = aoe at cast_pos colliders nil
+      spawn proj
+    hit:
+      damage magic
+  w:
+    cd 5
+    damage 400
+    size 225
+    cast:
+      return q.proj and in_range(q.proj, enemies, size / 2 + 30) >= 1
+    use:
+        proj = aoe at q.proj follow q.proj
+        spawn proj
+    hit:
+      damage magic
+      effect slow 20% 1s
+  r:
+    cd 90
+    damage 650
+    size 415
+    deploy_time 0.2
+    color 0.3, 0.5, 0.8, 0.7 
+    cast:
+      return q.proj and in_range(q.proj, enemies, size / 2) >= clamp(#enemies - 1, 1, 3)
+    use:
+      proj = aoe at q.proj follow q.proj
+      spawn proj
+    hit:
+      damage magic
+      effect pull to proj speed 1200

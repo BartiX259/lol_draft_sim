@@ -1,0 +1,38 @@
+champion lulu
+sprite lulu.jpg
+
+attributes:
+    health 1602.4
+    armor 70
+    mr 41
+    ms 375
+
+behavior:
+    range q
+    movement passive
+
+abilities:
+  color 0.8, 0.5, 0.8 
+  q:
+    cd 5.1
+    damage 156
+    range 925
+    speed 1600
+    size 120
+    cast ranged
+    use:
+        local dir = (cast.dir + vec2.random() / 5):normalize()
+        spawn missile from pos
+        dir = (cast.dir + vec2.random() / 5):normalize()
+        delay 0.1 spawn missile from pos
+    hit:
+        damage magic
+        effect slow 1s 20%
+  we:
+      cd 6
+      range 650
+      cast buff
+      use:
+        effect shield 2.5s 303
+        effect speed 3.5s 25%
+        effect damage_buff 3.5s 30%

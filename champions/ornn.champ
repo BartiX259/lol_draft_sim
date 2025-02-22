@@ -1,0 +1,63 @@
+champion ornn
+sprite ornn.jpg
+
+attributes:
+  health 3030
+  armor 237
+  mr 115.6
+  ms 380
+
+behavior:
+  if ready e then
+     range e
+     movement aggressive
+  else
+    range e + 250
+    movement peel
+  end
+
+abilities:
+  color 0.8, 0.4, 0.2
+
+  e:
+    cd 12
+    damage 260
+    range 800
+    speed 1600
+    size 360
+    deploy_time 0.35
+    cast splash
+    use:
+      proj = aoe at self follow self hard_follow true
+      spawn proj
+      effect on self pull to cast.pos speed speed
+    hit:
+      damage physical
+      effect airborne 1.25s
+
+  r:
+    cd 120
+    damage 175
+    range 2500
+    speed 1200
+    size 340
+    cast splash
+    use:
+        proj = missile from cast.pos to self
+        spawn proj
+
+    hit:
+      damage magic
+      effect slow 50% 2s
+
+  r_recast:
+     damage 350
+     speed 1900
+     size 340
+     cast after r
+     use:
+         proj = missile from r.proj to closest_enemy.pos
+         spawn proj
+     hit:
+      damage magic
+      effect airborne 1s

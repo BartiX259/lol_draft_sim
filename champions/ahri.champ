@@ -1,0 +1,77 @@
+champion ahri
+sprite ahri.jpg
+
+attributes:
+  health 1728.8
+  armor 72.5
+  mr 44.25
+  ms 375
+
+behavior:
+  if ready e then
+    range e
+    movement aggressive
+  elseif ready q then
+    range q
+    movement passive
+  else
+    range q + 150
+    movement passive
+  end
+
+abilities:
+-- Stats of q and q_ret
+color 0.4, 0.5, 0.9
+damage 280
+speed 1750
+size 200
+q:
+  cd 4
+  range 900
+  cast splash
+ use:
+  proj = missile from pos
+  spawn proj
+ hit:
+  damage magic
+
+q_ret:
+  cast after q
+  use:
+    proj = missile from q.proj to self
+    spawn proj
+  hit:
+   damage true
+
+e:
+  cd 8
+  damage 270
+  range 1000
+  speed 1550
+  size 120
+  stop_on_hit true
+  color 1, 0.2, 0.8 
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage magic
+    effect charm to self 1.5s speed 100
+
+r:
+  cd 8
+  damage 200
+  dist 500
+  size 100
+  speed 1000
+  cast dash
+  use:
+    effect on self pull to cast.pos speed 1300 on finish do
+        if closest_dist < q.range then
+            proj = missile from pos to cast.target range nil
+            spawn proj
+        end
+    end
+  hit:
+    damage magic

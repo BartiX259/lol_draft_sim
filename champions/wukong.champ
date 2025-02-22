@@ -1,0 +1,85 @@
+champion wukong
+sprite wukong.jpg
+
+attributes:
+  health 1694
+  armor 162.5
+  mr 50.45
+  ms 385
+
+behavior:
+  if self.spinning or closest_dist < aa.range + 100 then
+    range aa
+    self.target = closest_enemy
+  elseif ready e then
+    range aa
+    movement aggressive
+  else
+    range e + 100
+    movement peel
+  end
+
+abilities:
+color 0.9, 0.9, 0.9, 0.9
+hard_follow true
+follow self
+
+aa:
+  cd 1.2
+  damage 195
+  range 175
+  cast melee_aa
+
+e:
+  cd 5.5
+  damage 200
+  range 925
+  size 370
+  deploy_time 0.6
+  persist_time 0.1
+  cast splash
+  use:
+    effect on self pull to cast.target speed 1550
+    proj = aoe at self
+    spawn proj
+  hit:
+    damage magic
+
+r:
+  cd 70
+  damage 91.2
+  size 370
+  range 200
+  deploy_time 0.5
+  persist_time 0.15
+  cast splash
+  use:
+    proj = aoe at self
+    self.spinning = true
+    spawn proj
+  hit:
+    damage physical
+    effect airborne 1s
+
+r_ticks:
+  damage 91.2
+  size 370
+  deploy_time 0
+  persist_time 0.15
+  cast with r
+  use:
+    local proj_one = aoe
+    r.proj.next = proj_one
+    local proj_temp = proj_one
+    for i = 1, 7 do
+        proj_temp.next = aoe
+        proj_temp = proj_temp.next
+    end
+    proj = proj_temp
+  hit:
+    damage physical
+
+r_end:
+  cast after r_ticks
+  use:
+    self.spinning = false

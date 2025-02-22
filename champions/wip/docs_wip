@@ -1,0 +1,355 @@
+# Champion Design Language (CDL) Documentation
+
+## 1. Introduction
+
+The Champion Design Language (CDL) is a domain-specific language designed for creating champions for a game (presumably a MOBA or similar).  CDL code is compiled into Lua code, which then runs within the game engine. This document describes the syntax and features of CDL, allowing you to define champion attributes, behavior, and abilities.
+
+## 2. File Structure
+
+A .champ file is organized into several top-level blocks: `champion`, `sprite`, `attributes`, `behavior`, and `abilities`.  The general syntax uses key-value pairs and colons to define blocks.
+
+```
+-- This is a comment
+
+champion champion_name -- Defines the champion's name
+sprite sprite_file.jpg -- Specifies the champion's sprite
+
+attributes: -- Defines base stats
+	health 1000
+	armor 50
+...
+
+behavior: -- Defines AI behavior (pseudo-code)
+	if ready q then ... end
+
+abilities: -- Defines abilities
+q: -- Ability 'q'
+	cd 4 -- Cooldown: 4
+	range 800
+	cast splash -- Cast type: splash
+	use: -- What happens on use (pseudo-code)
+		...
+	hit: -- What happens on hit (pseudo-code)
+		...
+my_custom_ability: ...
+```
+
+*   **Order doesn't matter:** The order of these top-level blocks doesn't matter, except for the global attributes (`champion`, `sprite`), those need to be defined before any block
+*   **Indentation doesn't matter:** Indentation is crucial for readability but is *not* required.
+*   **New lines matter:** Most things have to be separated by new lines
+*   **Comments:** Comments begin with `--` and continue to the end of the line.
+
+## 3. Global attributes
+
+*   The `champion` block declares the champion's name.  This name is used internally and should be a valid Lua identifier (alphanumeric and underscores, starting with a letter).
+
+    ```
+    champion myChampionName
+    ```
+
+*   The `sprite` block specifies the name of the image file used for the champion's sprite.
+
+    ```
+    sprite sprite.jpg
+    ```
+
+## 4. `attributes` Block
+
+The `attributes` block defines the champion's base statistics.  These are key-value pairs where the key is the attribute name and the value is a number. The following attributes are *required*:
+
+*   `health`:  The champion's base health.
+*   `armor`:   The champion's base armor.
+*   `mr`:   The champion's base magic resistance.
+*   `ms`:  The champion's base movement speed.
+
+```
+attributes:
+	health 1728.8
+	armor 72.5
+	mr 44.25
+	ms 375
+```
+
+
+## 5. `behavior` Block
+
+The `behavior` block defines the champion's AI using a Lua-based pseudo-code (see section 7 for details). This block determines how the champion acts in the game, which abilities it prioritizes, and its movement style.
+
+Useful aliases:
+*   `movement`: Determines the champion's movement style. Takes one of the following arguments:
+    *   `aggressive`:  The champion will move towards enemies.
+    *   `passive`: The champion will generally try to maintain its current position.
+    *   `peel`:  The champion will move with their team.
+* `range`: Sets the champion's attack range.
+    * Can get the value dynamically from abilities. i.e. `range q` will set the champion's range to q's range.
+    * Can perform additions on these dynamic ranges. i.e. `range q + 150 + e`.
+ 
+```
+behavior:
+	if ready e then
+		range e
+		movement aggressive
+	elseif ready q then
+		range q
+		movement passive
+	else
+		range q + 150
+		movement passive
+	end
+```
+
+
+## 6. `abilities` Block
+
+The `abilities` block is where you define the champion's abilities.  Each ability is defined by a name followed by a colon (e.g., `q:`, `w:`, `my_special_move:`).  Within each ability block, you can specify properties and sub-blocks.
+
+```
+abilities:
+	q: 
+		cd 4
+		range 900
+		cast splash
+		use:
+			...
+		hit:
+			...
+```
+
+
+*   **Ability Declaration:**  The ability name (e.g., `q`, `my_custom_ability`) must be a valid Lua identifier.
+
+*   **Ability Properties:**  These are key-value pairs that define characteristics of the ability, such as its cooldown (`cd`), range (`range`), damage (`damage`), etc. You can define custom properties as well.
+
+*   **Accessing Properties:** Within the pseudo-code (see section 7), you can access ability properties using dot notation. For example, `q.range` refers to the `range` property of the `q` ability.
+
+*   **Sub-blocks:**  There are three special sub-blocks:
+
+    *   **`cast` sub-block:**
+
+        Defines how the ability is activated.  Several built-in cast types are available:
+
+        *   `ranged`:  A standard ranged ability.  Requires `cd` (cooldown) and `range` properties.
+        *   `splash`:  An area-of-effect ability that is cast at a target location.  Requires `cd`, `range`, and  `size`.
+        *   `melee_aa`: A melee auto-attack ability. Requires `cd`, `range` and `damage`. Removes the need for a `use` and `hit` function.
+        *   `dash`: A movement ability. Requires `cd` and `dist` (distance). May include `range`, otherwise will use the champion's current range. `range` determines how close to an enemy the champion should dash.
+        *   `after <ability_name>`: This ability is cast *after* another specified ability's `proj` despawns. 
+        *   `with <ability_name>`: Is cast *with* the other designated ability.
+        *   Custom `cast` block:  You can write a custom cast function using the lua pseudo-code. This is useful for complex casting conditions or targeting logic.  The custom `cast` block should return a table with the relevant cast information (target, location, etc.) or `nil` if the cast should be canceled.
+
+          ```
+          cast:
+              for _, target in pairs(in_range_list) do
+                if target.health <= r.damage * r.projectiles then
+                    return { target = target }
+                end
+              end
+              return nil
+          ```
+    *   **`use` sub-block:**
+
+        Defines the actions that occur when the ability is successfully cast.  This is where you would define projectile creation, area-of-effect deployment, etc., using the pseudo-code.
+    *   **`hit` sub-block:**
+
+        Defines the actions that occur when the ability *hits* a target (or targets). This typically involves applying damage, crowd control, or other effects, using the pseudo-code.
+
+## 7. Lua Pseudo-code
+
+The `behavior`, `cast`, `use`, and `hit` blocks utilize a pseudo-code that is fundamentally Lua with some aliases and macros. This pseudo-code provides a simplified and safer way to define game logic without requiring full Lua expertise.
+
+*   **Aliases:**  The core of the pseudo-code is its alias system.  Certain keywords and identifiers are automatically translated to their Lua equivalents. This provides a more concise and readable syntax. The alias system is *consistent* across all pseudo-code blocks.
+*   **`local` Variables:** You can declare local variables using the `local` keyword. These variables are scoped to the current block.
+    ```
+    use:
+      local my_variable = 10
+      ...
+    ```
+* **`global` Variables:** When declaring variables for the first time, if the variable is not prefixed with `local`, nor aliased to anything else, then it becomes a `global` variable, accessible throughout the champion.
+```
+q:
+	use:
+		my_global = 10 -- first declaration does not have 'local' in front
+w:
+	use:
+		print(q.my_global) -- access the global. can be nil if q hasn't been used
+```
+## 7. Lua Pseudo-code
+
+The `behavior`, `use`, and `hit` blocks utilize a pseudo-code that is a *restricted subset* of Lua. This pseudo-code provides a simplified and safer way to define game logic.  While it resembles Lua, many Lua features are *not* supported.
+
+*   **Aliases:**  The core of the pseudo-code is its alias system. Certain keywords and identifiers are automatically translated to their Lua equivalents. This provides a more concise and readable syntax, shielding you from some of the complexities of Lua. The alias system is *consistent* across all pseudo-code blocks (`behavior`, `use`, `hit`).
+
+*   **Supported Lua Features:**  Only the following Lua features are available within the pseudo-code:
+
+    *   Conditional statements: `if`, `elseif`, `else`, `then`, `end`
+    *   Loops: `for`, `in`, `do`, `end` and `while`, `do`, `end`
+    *   Variable declaration: `local` (see below). *Global variable declaration is automatic.*
+    *   Arithmetic operators: `+`, `-`, `*`, `/`, `%`
+    *   Comparison operators: `<`, `>`, `<=`, `>=`, `==`, `~=`
+    *   Logical operators: `and`, `or`, `not`
+    * Function Calls: Calling functions by name.
+
+    **Important:**  Features *not* supported include (but are not limited to): table creation except with special constructors, arbitrary Lua functions, metatables, coroutines.
+
+*   **`local` Variables:** You *must* declare local variables using the `local` keyword.  These variables are scoped to the block in which they are defined (e.g., within a single `use` block, or within a specific `if` statement's body).
+
+    ```
+    use:
+      local my_variable = 10  -- my_variable is only accessible within this 'use' block
+      if some_condition then
+        local another_variable = 5 -- another_variable is only accessible within this 'if'
+      end
+    ```
+
+*   **`global` Variables:** Variables which are first defined without the `local` keyword, *and* are not an alias, automatically become global variables. These are available for the entire champion.
+
+    ```
+    use:
+      my_global_variable = 20 -- Declared globally
+      if other_condition then
+        my_global_variable = my_global_variable + 5  -- Access and modify the global
+      end
+    ```
+
+*   **Aliases and Built-in Functions:**
+
+    | CDL Alias / Function        | Lua Equivalent                              | Description                                                                                                |
+    | :--------------------------- | :----------------------------------------- | :--------------------------------------------------------------------------------------------------------- |
+    | `self`                       | `champ`                                     | Refers to the champion object itself.                                                                      |
+    | `pos`                        | `champ.pos`                                  | The champion's position (a table with `x` and `y` properties).                                             |
+    | `min`, `max`, `clamp`        | `math.min`, `math.max`, `math.clamp`          | Basic math functions.                                                                                       |
+    | `closest_enemy`              | `context.closest_enemy`                       | The closest enemy champion to the current champion (or `nil` if no enemies are in range).                   |
+    | `closest_ally`               | `context.closest_ally`                        | The closest allied champion to the current champion (or `nil` if no allies are nearby).                     |
+    | `closest_dist`              | `context.closest_dist`                       | The distance (number) to the closest enemy champion.                                                       |
+    | `allies`                    | `context.allies`                             | A list (table) of all allied champions.                                                       |
+    | `enemies`                   | `context.enemies`                            | A list (table) of all enemy champions.                                                          |
+    | `in_range(...)`              | `distances.in_range(...)`                  | Checks how many enemies are within the specified range.                  |
+    | `in_range_list(...)`         | `distances.in_range_list(...)`               | Returns a list of enemy champions within the specified range.     |
+    | `find_clump(...)`            | `distances.find_clump(...)`                 | Finds the largest clump of enemies within the specified range.           |
+    | `delay duration ...`          | `context.delay(duration, function() ... end)` | Executes the code (`...`) after a specified `duration` (in seconds).                                    |
+    | `spawn object`              | `context.spawn(object)`                       | Spawns a projectile.                 |
+    | `ready ability_name`       | `ready.ability_name`                         | Checks if the ability named `ability_name` is ready to be cast. *Only in `behavior` block.* |
+	|   `movement ...`                 |       `champ:change_movement(...)`                        | Changes champion's movement (see section 5).                                                                                                                                                               |
+    | `range ...`               | `champ.range = ...`       | Sets champion's range (see section 5).                                                                                                                          |
+
+*   **Automatic Argument Filling:**
+
+    Some functions have automatic argument filling to simplify common use-cases.  The compiler will transform these calls as follows:
+
+    *   `in_range`  ->  `distances.in_range(champ, context.enemies, ability_range)`.
+    *   `in_range_list`  ->  `distances.in_range_list(champ, context.enemies, ability_range)` 
+    *   `find_clump` -> `distances.find_clump(champ, context.enemies, ability_range, clump_range)`
+
+
+    For example:
+
+    ```
+    damage 500
+    cast:
+       for _, target in pairs(in_range_list) do
+			if target.health <= damage then
+            return { target = target }
+        end
+    end
+    return nil
+
+    ```
+
+*   **Special Constructors:**  CDL provides special constructors for commonly used game objects, making them easier to create without directly interacting with the underlying Lua API. These constructors are part of the pseudo-code and are *not* aliases in the same way as the keywords above.
+
+    *   **`missile` Constructor:**
+
+        Creates a new missile projectile.
+
+        Syntax: `missile [property] [value] ...`
+
+        | Property       | Required | Description                                                                                                            | Default Value    |
+        | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------- |
+        | `dir`          | No      | The direction of the missile (a direction vector).  Often obtained from `cast.dir` in the `use` block.                | *cast.dir*          |
+        | `size`         | Yes      | The size of the missile's hitbox (a number).                                                                           | *None*          |
+        | `speed`        | Yes      | The speed of the missile (a number).                                                                                 | *None*          |
+        | `color`       | Yes      | Color of missile                                          | *None*        |
+        | `colliders`    | No       | What the missile can collide with (a list of units, usually `context.enemies` or `context.allies`).                  | `context.enemies` |
+        | `range`        | No       | The maximum distance the missile can travel.                                                                            | *None*          |
+        | `stop_on_hit` | No      |  If `true`, the missile will be destroyed after hitting the first target.                                  | `false`         |
+        | `from`         | No       | The starting position of the missile (a position table with `x` and `y`).                                       | `None`            |
+        | `to`         | No         | An explicit target *end* position for the missile (a position table). Use of `to` changes the projectile's behavior.| *None*      |
+        | `hit_cols`     |No      | A table to keep track of collisions to avoid multiple damage from same missile to one target.                                                                       | *None*          |
+
+        Example:
+
+        ```
+        use:
+          local proj = missile dir cast.dir size 50 speed 1000 color { 1, 0, 0 } range 800 stop_on_hit true
+          spawn proj
+        ```
+
+    *   **`aoe` Constructor:**
+
+        Creates a new area-of-effect (AoE) object.
+
+        Syntax: `aoe [property value] ...`
+
+        | Property        | Required | Description                                                                                                          | Default Value    |
+        | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------- | ---------------- |
+        | `size`          | Yes      | The radius of the AoE (a number).                                                                                    | *None*          |
+        | `color`         | Yes      | Color of aoe.          | *None*  |
+        | `colliders`     | No      | What entities the AoE affects with hit.                                   | `context.enemies` |
+        | `deploy_time`     | No      | How long the aoe lasts (a number, in seconds).       | 0       |
+        |  `persist_time`               |  No      | How long the aoe's hit box lasts.   |0|
+        | `at`            | No       | The position where the AoE is centered (a position table).                                                        | `pos`            |
+        | `hit_cols`      |No      | A table to keep track of collisions to avoid multiple damage from same aoe to one target.                                                                       | *None*          |
+        |  `follow`       |No      | What entity the aoe follows.                                                                                                          | *None*          |
+        |  `hard_follow`               | No      | If aoe stops when `follow` stops moving.                   |`false`           |
+
+        Example:
+
+        ```
+        use:
+          local area = aoe size 200 color { 0, 1, 0, 0.5 } at cast.pos
+          spawn area
+        ```
+
+    *   **`effect` Constructor:**
+
+        Applies a status effect to a target.
+
+        Syntax: `effect effect_name [on target] to source [duration duration_value] [speed speed_value] [amount amount_value] [on finish do ...]`
+
+       * The `target` part can always be omitted and defaults to `target`.
+       * The `duration`, `speed`, and `amount` are not needed for all effects.
+        | Part           | Required | Description                                                                                                              |
+        | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+        | `effect_name`  | Yes      | The name of the effect (e.g., `charm`, `stun`, `pull`).  This corresponds to a Lua file named `effects.<effect_name>.lua`. |
+        | `target`       | No     | The entity the effect is applied *to*. Usually the target hit by and ability.                                |
+        | `source`         | Yes      | The entity that is applying the effect.  Often the champion (`self` or `champ`) or a projectile (`proj`).                       |
+        | `duration`       | No       | How long the effect lasts, in seconds (e.g., `1.5s`, `3s`).                                                           |
+        |`speed`      |   No  | Speed value for effect.                                                                                                                         |
+        | `amount`    |  No   |Amount expressed as a %, i.e , `100%`.  |
+        | `on finish do ...`| Optional      | This adds an action to be performed after the effect ends                                                                      |
+
+        Examples:
+
+        ```
+        hit:
+          effect charm to self 2s  -- Apply the 'charm' effect to the hit target, with origin "self" for 2 seconds
+          effect slow to self 1s speed 50 amount 30% -- Apply a slow for 1 second, speed 50, amount 30%
+          effect pull to cast.pos 0.5s speed 800 -- Pull the target to cast position
+        ```
+
+    * **`damage` Constructor:**
+
+      Deals damage to the target.
+
+       Syntax: `damage damage_amount damage_type`
+      * `damage_amount`: Number of damage to do done.
+      * `damage_type`: `magic`, `physical` or `true`.
+
+        Example:
+
+        ```
+        hit:
+          damage 100 magic  -- Deal 100 magic damage
+          damage my_damage_variable physical -- deal the value of my_damage_variable as physical
+        ```
+
+

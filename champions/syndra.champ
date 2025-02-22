@@ -1,0 +1,89 @@
+champion syndra
+sprite syndra.jpg
+
+attributes:
+    health 1701.8
+    armor 75.4
+    mr 44.25
+    ms 375
+
+behavior:
+  if ready r and closest_enemy.health <= r.damage * r.projectiles then
+    range r - 50
+    movement aggressive
+  elseif ready q then
+    range q
+    movement aggressive
+  else
+    range q + 150
+    movement passive
+  end
+
+abilities:
+color 0.8, 0.5, 0.8
+size 210 -- q and q_push size
+-- e and q_push stats
+cd 8
+damage 310
+speed 2000
+q:
+  cd 3.5
+  damage 350
+  range 1000
+  deploy_time 0.4
+  persist_time 0
+  cast splash
+ use:
+  proj = aoe at cast.pos
+  spawn proj
+ hit:
+  damage magic
+
+q_push:
+  range 200
+  cast after q
+  use:
+    local hit_cols = e.hit_cols
+    proj = missile from q.proj.pos
+    spawn proj
+  hit:
+    damage magic
+    effect stun 1s
+
+e:
+  size 120
+  range 700
+  cast with q
+  use:
+    hit_cols = {}  -- Store hits in the same object so enemies dont take extra damage
+    for angle = -0.2, 0.2, 0.1 do
+        local dir = cast.dir:rotate(angle)
+        spawn missile from self
+    end
+  hit:
+    damage magic
+    local push_pos = target.pos + (target.pos - pos):normalize() * 300
+    effect pull to push_pos speed 1500
+
+r:
+  cd 84
+  damage 214
+  range 675
+  speed 1500
+  size 100
+  projectiles 5
+  proj_interval 0.1
+  cast:
+    for _, target in pairs(in_range_list) do
+        if target.health <= r.damage * r.projectiles then
+            return { target = target }
+        end
+    end
+    return nil
+  use:
+    for i = 0, (projectiles - 1) * proj_interval, proj_interval do
+        local proj = missile from self to cast.target range nil
+        delay i spawn proj
+    end
+  hit:
+    damage magic
