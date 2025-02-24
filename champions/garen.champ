@@ -67,7 +67,7 @@ abilities:
     size 200
     deploy_time 0.5
     cast:
-       if self.target and self.target.pos:distance(pos) < range and self.target.health < damage then
+       if self.target and self.target.pos:distance(pos) < range and (self.target.health < damage or health% < 0.2) then
         return { target = self.target }
        end
        return nil

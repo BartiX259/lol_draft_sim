@@ -1,0 +1,48 @@
+champion varus
+sprite varus.jpg
+
+attributes:
+  health 1865
+  armor 116
+  mr 85
+  ms 385
+
+behavior:
+    range aa.range  -- auto attack range
+    movement passive
+
+abilities:
+  color 0.7, 0.1, 0.8
+
+   aa:
+      cd 0.74
+      damage 241
+      range 675
+      cast ranged_aa
+
+  q:
+    cd 12
+    damage 585
+    range 1595
+    speed 1900
+    size 140
+    cast ranged
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage physical
+
+  r:
+    cd 80
+    damage 550
+    range 1370
+    speed 1500
+    size 240
+    cast ranged
+    use:
+       proj = missile from self
+       spawn proj
+    hit:
+      damage magic
+      effect root 2s

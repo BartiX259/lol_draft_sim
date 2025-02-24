@@ -2,6 +2,9 @@
 import re
 import sys
 
+util_imports = {"vec2", "distances"}
+lua_keywords = {"and", "or", "not", "if", "elseif", "else", "then", "end", "for", "while", "do", "function", "nil", "local", "true", "false"}
+
 def custom_excepthook(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, CompilerError):
         print(exc_value)  # Only prints the error message, no traceback
@@ -63,11 +66,20 @@ def pseudo_tokens(line_tokens):
         i += 1
     return res
 
+def assert_tok_count(n, tok_count, line_nr):
+    if tok_count < n:
+        raise CompilerError("Too few tokens in this line", line_nr)
+    if tok_count > n:
+        raise CompilerError("Too many tokens in this line", line_nr)
+
+
+
 def build_champion_table(tokens):
     champion = {
         "attributes": {},
         "abilities": {},
         "behavior": [],
+        "imports": {"util": {"champion"}, "projectiles": set(), "abilities": set(), "effects": set()},
         "line_nrs": {}
     }
     current_block = "global"
@@ -141,10 +153,7 @@ def build_champion_table(tokens):
                                 raise CompilerError("Too many tokens in this line", line_nr)
                             champion["abilities"][current_ability][key] = (line_tokens[1], line_tokens[2])
                         elif line_tokens[1] == "if":
-                            if tok_count < 4:
-                                raise CompilerError("Too few tokens in this line", line_nr)
-                            if tok_count > 4:
-                                raise CompilerError("Too many tokens in this line", line_nr)
+                            assert_tok_count(4, tok_count, line_nr)
                             champion["abilities"][current_ability][":cast_join"] = line_tokens[2]
                             if line_tokens[3] != ":":
                                 raise CompilerError("Expected ':'", line_nr)
@@ -152,29 +161,32 @@ def build_champion_table(tokens):
                             champion["abilities"][current_ability][current_subsection] = []
                             champion["line_nrs"][current_ability][current_subsection] = line_nr
                         elif tok_count > 2 and line_tokens[2] == "if":
-                            if tok_count < 4:
-                                raise CompilerError("Too few tokens in this line", line_nr)
-                            if tok_count > 4:
-                                raise CompilerError("Too many tokens in this line", line_nr)
+                            assert_tok_count(4, tok_count, line_nr)
                             champion["abilities"][current_ability][key] = line_tokens[1]
                             champion["abilities"][current_ability][":cast_join"] = line_tokens[3]
                         else:
-                            if tok_count < 2:
-                                raise CompilerError("Too few tokens in this line", line_nr)
-                            if tok_count > 2:
-                                raise CompilerError("Too many tokens in this line", line_nr)
+                            assert_tok_count(2, tok_count, line_nr)
                             champion["abilities"][current_ability][key] = line_tokens[1]
                     elif key == "color":
                         champion["abilities"][current_ability][key] = "{ "
                         for token in line_tokens[1:]:
                             champion["abilities"][current_ability][key] += token
                         champion["abilities"][current_ability][key] += " }"
+                    elif key == "stats":
+                        assert_tok_count(2, tok_count, line_nr)
+                        if line_tokens[1] not in champion["abilities"]:
+                            raise CompilerError(f"Ability '{line_tokens[1]}' not defined", line_nr)
+                        for key, value in champion["abilities"][line_tokens[1]].items():
+                            if key not in ["cast", "use", "hit"]:
+                                champion["abilities"][current_ability][key] = value
                     else:
-                        champion["abilities"][current_ability][key] = line_tokens[1]
-                        if len(line_tokens) > 2:
-                            raise CompilerError("Too many tokens in this line", line_nr)
+                        assert_tok_count(2, tok_count, line_nr)
+                        if line_tokens[1] in champion["abilities"]:
+                            champion["abilities"][current_ability][key] = champion["abilities"][line_tokens[1]][key]
+                        else:
+                            champion["abilities"][current_ability][key] = line_tokens[1]
         else:
-            raise CompilerError("Invalid key '" + key + "'", line_nr)
+            raise CompilerError("Invalid key or syntax error", line_nr)
 
     # Use abilities global table
     for glob in champion["abilities"][":global"]:
@@ -189,8 +201,7 @@ def build_champion_table(tokens):
         for res in ["local", "global"]:
             if res in data:
                 raise CompilerError("'" + res + "' is reserved", champion["line_nrs"][ability][res])
-        data["local"] = []
-        data["global"] = []
+            data[res] = []
 
     return champion
 
@@ -204,7 +215,6 @@ def try_replace(word, match, replacement):
     return None
 
 def alias(word, champion, info):
-    lua_keywords = {"and", "or", "not", "if", "elseif", "else", "then", "end", "for", "while", "do", "function", "nil", "local", "true", "false"}
     if word in lua_keywords:
         return word
     if word in info["local"]:
@@ -223,6 +233,7 @@ def alias(word, champion, info):
             return "champ.abilities." + word
     replacements = {
         "self": "champ",
+        "health%": "champ.health / champ.max_health"
     }
     domains = {
         "champ": ["pos", "range"],
@@ -274,6 +285,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                 info["global"].append(token)
             match token:
                 case "missile":
+                    champion["imports"]["projectiles"].add("missile")
                     keys = ["dir", "size", "speed", "color", "colliders", "range", "stop_on_hit", "from", "to", "hit_cols"]
                     missile = { "dir": "cast.dir", "colliders": "context.enemies",}
                     for key in keys:
@@ -299,6 +311,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                         line += key + " = " + value + ",\n"
                     line += "})"
                 case "aoe":
+                    champion["imports"]["projectiles"].add("aoe")
                     keys = ["size", "color", "colliders", "deploy_time", "persist_time", "at", "hit_cols", "follow", "hard_follow"]
                     aoe = { "colliders": "context.enemies"}
                     on = None
@@ -348,7 +361,8 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                         line += "target"
                     else:
                         line += "cast.target"
-                    line += ":effect(require(\"effects." + token + "\").new("
+                    champion["imports"]["effects"].add(token)
+                    line += f":effect({token}.new("
                     effect = {}
                     i += 1
                     while i < tok_count:
@@ -409,6 +423,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     if i > 0:
                         line += alias(token, champion, info)
                     else:
+                        champion["imports"]["util"].add("damage")
                         damage = {}
                         if "damage" in info:
                             damage["damage"] = info["damage"]
@@ -458,6 +473,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                         line += alias(token, champion, info)
                     else:
                         i += 1
+                        champion["imports"]["util"].add("movement")
                         line += "champ:change_movement(movement." + stmt[i].upper() + ")"
                 case "for":
                     line += "for "
@@ -492,22 +508,6 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
 def generate_lua_code(champion):
     lua_code = []
 
-    # Global Block: Import necessary modules
-    lua_code.append("local champion = require('util.champion')")
-    lua_code.append("local aoe = require('projectiles.aoe')")
-    lua_code.append("local missile = require('projectiles.missile')")
-    lua_code.append("local ability = require('util.ability')")
-    lua_code.append("local ranged = require('abilities.ranged')")
-    lua_code.append("local splash = require('abilities.splash')")
-    lua_code.append("local dash = require('abilities.dash')")
-    lua_code.append("local melee_aa = require('abilities.melee_aa')")
-    lua_code.append("local buff = require('abilities.buff')")
-    lua_code.append("local none = require('abilities.none')")
-    lua_code.append("local damage = require('util.damage')")
-    lua_code.append("local movement = require('util.movement')")
-    lua_code.append("local distances = require('util.distances')")
-    lua_code.append("local vec2 = require('util.vec2')")
-
     # Champion Constructor
     lua_code.append(f"\nlocal {champion['name']} = {{}}")
 
@@ -526,6 +526,8 @@ def generate_lua_code(champion):
         line = f"    {ability} = "
         if "cd" not in ability_data and ability_data["cast"] != "none" and not isinstance(ability_data["cast"], tuple) and ":cast_join" not in ability_data:
             raise CompilerError("Couldn't find 'cd' for cast", champion["line_nrs"][ability]["cast"])
+        if isinstance(ability_data["cast"], str):
+            champion["imports"]["abilities"].add(ability_data["cast"]) 
         if ":cast_join" in ability_data:
             ability_data["cd"] = 0
         match ability_data["cast"]:
@@ -544,6 +546,11 @@ def generate_lua_code(champion):
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast melee_aa", champion["line_nrs"][ability]["cast"])
                 line += f"melee_aa.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']})"
+            case "ranged_aa":
+                for nec in ["range", "damage", "color"]:
+                    if nec not in ability_data:
+                        raise CompilerError("Couldn't find '" + nec + "' for cast ranged_aa", champion["line_nrs"][ability]["cast"])
+                line += f"ranged_aa.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']}, {ability_data['color']})"
             case "dash":
                 for nec in ["dist"]:
                     if nec not in ability_data:
@@ -562,10 +569,13 @@ def generate_lua_code(champion):
             case (_, _):
                 if "cd" in ability_data:
                     line += f"ability:new({ability_data['cd']})"
+                    champion["imports"]["util"].add("ability") 
                 else:
                     line += "none.new()"
+                    champion["imports"]["abilities"].add("none") 
             case _:
                 line += f"ability:new({ability_data['cd']})"
+                champion["imports"]["util"].add("ability") 
         line += ','
         lua_code.append(line)
     
@@ -580,10 +590,10 @@ def generate_lua_code(champion):
             lua_code.append(generate_pseudo_code(ability_data["cast"], ability_data, champion, "cast", champion["line_nrs"][ability]["cast"]))
             lua_code.append("end")
             lua_code.append("")
-        if ability_data["cast"] not in ["melee_aa", "none"]: # Has use function
+        if ability_data["cast"] not in ["melee_aa", "ranged_aa", "none"]: # Has use function
             if isinstance(ability_data["cast"], tuple): # Cast with another ability
                 lua_code.append("function champ.abilities." + ability + ":" + ability_data["cast"][0] + "_" + ability_data["cast"][1] + "(context, cast)")
-            elif ability_data["cast"] not in ["melee_aa"]: # Custom use function
+            else: # Custom use function
                 lua_code.append("function champ.abilities." + ability + ":use(context, cast)")
 
             # Generate use function
@@ -621,9 +631,19 @@ def generate_lua_code(champion):
     # Close the constructor
     lua_code.append(f"\n  return champ\nend")
     lua_code.append(f"\nreturn {champion['name']}")
+    
+    # Search for imports
+    for line in lua_code:
+        for i in util_imports:
+            if i in line:
+                champion["imports"]["util"].add(i)
 
     # Return the full Lua code
-    return '\n'.join(lua_code)
+    imports = ""
+    for key, values in champion["imports"].items():
+        for value in values:
+            imports += f"local {value} = require(\"{key}.{value}\")\n"
+    return imports + '\n'.join(lua_code)
 
 import argparse
 import os

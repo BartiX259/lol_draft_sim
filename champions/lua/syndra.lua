@@ -1,78 +1,57 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local damage = require("util.damage")
+local movement = require("util.movement")
+local distances = require("util.distances")
+local champion = require("util.champion")
+local ability = require("util.ability")
+local missile = require("projectiles.missile")
+local aoe = require("projectiles.aoe")
+local splash = require("abilities.splash")
+local ranged_aa = require("abilities.ranged_aa")
+local stun = require("effects.stun")
+local pull = require("effects.pull")
 
 local syndra = {}
 
 -- Constructor
 function syndra.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1701.8,
-    armor = 75.4,
-    mr = 44.25,
+    health = 1811,
+    armor = 80.2,
+    mr = 45.6,
     ms = 375,
     sprite = 'syndra.jpg',
   })
 
   champ.abilities = {
-    q = splash.new(3.5, 1000, 210),
-    q_push = ability:new(8),
-    e = ability:new(8),
-    r = ability:new(84),
+    aa = ranged_aa.new(1, 550, 150, { 0.8,0.5,0.8 }),
+    q = splash.new(2.9, 800, 210),
+    e = ability:new(6.7),
+    q_push = ability:new(6.7),
+    r = ability:new(70),
   }
+
 function champ.abilities.q:use(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 210,
 color = { 0.8,0.5,0.8 },
-deploy_time = 0.4,
-persist_time = 0,
+deploy_time = 0.6,
+persist_time = 2,
 at = cast.pos,
 })
 context.spawn( self.proj
 )
-if champ.abilities.q_push.timer <= 0 then
-champ.abilities.q_push.timer = champ.abilities.q_push.cd
-self.proj.after = function() champ.abilities.q_push:after_q(context, cast) end
-end
 if champ.abilities.e.timer <= 0 then
 champ.abilities.e.timer = champ.abilities.e.cd
 champ.abilities.e:with_q(context, cast)
 end
+if champ.abilities.q_push.timer <= 0 then
+champ.abilities.q_push.timer = champ.abilities.q_push.cd
+self.proj.after = function() champ.abilities.q_push:after_q(context, cast) end
+end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(350, damage.MAGIC):deal(champ, target)
-end
-
-function champ.abilities.q_push:after_q(context, cast)
-local hit_cols = champ.abilities.e.hit_cols
-self.proj = missile.new(self, { dir = cast.dir,
-colliders = context.enemies,
-size = 210,
-speed = 2000,
-color = { 0.8,0.5,0.8 },
-range = 200,
-hit_cols = hit_cols,
-from = champ.abilities.q.proj.pos,
-})
-context.spawn( self.proj
-)
-end
-
-function champ.abilities.q_push:hit(target)
-damage:new(310, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.stun").new(1.0))
+damage:new(470, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:with_q(context, cast)
@@ -82,7 +61,7 @@ local dir = cast.dir :rotate ( angle )
 context.spawn( missile.new(self, { dir = dir,
 colliders = context.enemies,
 size = 120,
-speed = 2000,
+speed = 2500,
 color = { 0.8,0.5,0.8 },
 range = 700,
 hit_cols = self.hit_cols,
@@ -93,14 +72,34 @@ end
 end
 
 function champ.abilities.e:hit(target)
-damage:new(310, damage.MAGIC):deal(champ, target)
+damage:new(441, damage.MAGIC):deal(champ, target)
 local push_pos = target.pos + ( target.pos - champ.pos ):normalize () * 300
-target:effect(require("effects.pull").new(1500.0, push_pos))
+target:effect(pull.new(1500.0, push_pos))
+end
+
+function champ.abilities.q_push:after_q(context, cast)
+local hit_cols = champ.abilities.e.hit_cols
+self.proj = missile.new(self, { dir = cast.dir,
+colliders = context.enemies,
+size = 210,
+speed = 2500,
+color = { 0.8,0.5,0.8 },
+range = 200,
+hit_cols = hit_cols,
+from = champ.abilities.q.proj.pos,
+})
+context.spawn( self.proj
+)
+end
+
+function champ.abilities.q_push:hit(target)
+damage:new(441, damage.MAGIC):deal(champ, target)
+target:effect(stun.new(1.0))
 end
 
 function champ.abilities.r:cast(context)
 for _,target in pairs ( distances.in_range_list(champ, context.enemies, 675) ) do
-if target.health <= 214 * 5 then
+if target.health <= 228 * 5 then
 return { target = target }
 end
 end
@@ -125,18 +124,18 @@ end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(214, damage.MAGIC):deal(champ, target)
+damage:new(228, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)
-if ready.r and context.closest_enemy.health <= 214 * 5 then
+if ready.r and context.closest_enemy.health <= 228 * 5 then
 champ.range = 675-50
 champ:change_movement(movement.AGGRESSIVE)
 elseif ready.q then
-champ.range = 1000
+champ.range = 800
 champ:change_movement(movement.AGGRESSIVE)
 else
-champ.range = 1000+150
+champ.range = 800+150
 champ:change_movement(movement.PASSIVE)
 end
 end

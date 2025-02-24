@@ -4,5 +4,7 @@ import glob
 
 champ_files = glob.glob("champions/*.champ")
 command = ["./scripts/compile_champ.py"] + champ_files + ["-o", "champions/lua/"]
-subprocess.run(command)
+ret = subprocess.run(command).returncode
+if ret != 0:
+    exit(ret)
 subprocess.run(["love", "."])

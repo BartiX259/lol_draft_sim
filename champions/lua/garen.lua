@@ -1,17 +1,12 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local champion = require("util.champion")
+local damage = require("util.damage")
+local ability = require("util.ability")
+local movement = require("util.movement")
+local aoe = require("projectiles.aoe")
+local melee_aa = require("abilities.melee_aa")
+local ranged = require("abilities.ranged")
+local speed = require("effects.speed")
+local silence = require("effects.silence")
 
 local garen = {}
 
@@ -36,13 +31,13 @@ champ.abilities.q_hit:join(champ.abilities.q)
 
 function champ.abilities.q:use(context, cast)
 self.active = true
-champ:effect(require("effects.speed").new(3.6, 0.35):on_finish(function() self.active = false
+champ:effect(speed.new(3.6, 0.35):on_finish(function() self.active = false
 end))
 end
 
 function champ.abilities.q_hit:use(context, cast)
 damage:new(264, damage.PHYSICAL):deal(champ, cast.target)
-cast.target:effect(require("effects.silence").new(1.5))
+cast.target:effect(silence.new(1.5))
 end
 
 function champ.abilities.e:use(context, cast)
@@ -72,7 +67,7 @@ damage:new(106.2, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.r:cast(context)
-if champ.target and champ.target.pos :distance ( champ.pos ) < 400 and champ.target.health < 550 then
+if champ.target and champ.target.pos :distance ( champ.pos ) < 400 and ( champ.target.health < 550 or champ.health / champ.max_health < 0.2 ) then
 return { target = champ.target }
 end
 return nil

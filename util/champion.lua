@@ -62,6 +62,9 @@ function champion:change_movement(scripts)
 end
 
 function champion:effect(effect)
+  if effect.tags["pull"] then -- Multiple pulls are bad
+    self:del_effect("pull")
+  end
   table.insert(self.effects, effect)
 end
 
@@ -82,6 +85,14 @@ function champion:get_effects(tag)
     end
   end
   return res
+end
+
+function champion:del_effect(tag)
+  for id, effect in pairs(self.effects) do
+    if effect.tags[tag] then
+      table.remove(self.effects, id)
+    end
+  end
 end
 
 return champion

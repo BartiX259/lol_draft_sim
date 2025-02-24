@@ -1,17 +1,12 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
+local aoe = require("projectiles.aoe")
+local melee_aa = require("abilities.melee_aa")
+local splash = require("abilities.splash")
+local none = require("abilities.none")
+local airborne = require("effects.airborne")
+local pull = require("effects.pull")
 
 local wukong = {}
 
@@ -34,7 +29,7 @@ function wukong.new(x, y)
   }
 
 function champ.abilities.e:use(context, cast)
-champ:effect(require("effects.pull").new(1550.0, cast.target))
+champ:effect(pull.new(1550.0, cast.target))
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 370,
 color = { 0.9,0.9,0.9,0.9 },
@@ -70,7 +65,7 @@ end
 
 function champ.abilities.r:hit(target)
 damage:new(91.2, damage.PHYSICAL):deal(champ, target)
-target:effect(require("effects.airborne").new(1.0))
+target:effect(airborne.new(1.0))
 end
 
 function champ.abilities.r_ticks:with_r(context, cast)

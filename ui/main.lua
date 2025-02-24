@@ -38,7 +38,9 @@ function ui.clear()
 end
 
 function ui.update()
-  screen:update()
+  if screen then
+    screen:update()
+  end
 end
 
 return ui

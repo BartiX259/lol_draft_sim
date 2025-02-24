@@ -1,17 +1,13 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
+local missile = require("projectiles.missile")
+local aoe = require("projectiles.aoe")
+local splash = require("abilities.splash")
+local none = require("abilities.none")
+local slow = require("effects.slow")
+local airborne = require("effects.airborne")
+local pull = require("effects.pull")
 
 local ornn = {}
 
@@ -41,12 +37,12 @@ hard_follow = true,
 })
 context.spawn( self.proj
 )
-champ:effect(require("effects.pull").new(1600.0, cast.pos))
+champ:effect(pull.new(1600.0, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
 damage:new(260, damage.PHYSICAL):deal(champ, target)
-target:effect(require("effects.airborne").new(1.25))
+target:effect(airborne.new(1.25))
 end
 
 function champ.abilities.r:use(context, cast)
@@ -66,7 +62,7 @@ end
 
 function champ.abilities.r:hit(target)
 damage:new(175, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.slow").new(2.0, 0.5))
+target:effect(slow.new(2.0, 0.5))
 end
 
 function champ.abilities.r_recast:after_r(context, cast)
@@ -84,7 +80,7 @@ end
 
 function champ.abilities.r_recast:hit(target)
 damage:new(350, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.airborne").new(1.0))
+target:effect(airborne.new(1.0))
 end
 
 function champ.behaviour(ready, context)

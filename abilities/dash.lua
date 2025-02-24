@@ -10,13 +10,19 @@ function dash.new(cd, dash_range, champ_range)
     for _, projectile in pairs(context.projectiles) do
       dodge_dir = dodge_dir + projectile:dodge_dir(context.champ)
     end
-    if dodge_dir:is_zero() then
+    if dodge_dir:is_zero() and context.closest_dist > champ_range / 2 then
       return nil
     end
     local target = context.closest_enemy
     local dir = target.pos - context.champ.pos
     local mag = dir:mag()
     dir = dir:normalize()
+    dodge_dir = dodge_dir:normalize()
+    local fallback = {
+      dir = dodge_dir,
+      mag = dash_range,
+      pos = context.champ.pos + dodge_dir * dash_range
+    }
     local pos
     local x = (mag * mag + champ_range * champ_range - dash_range * dash_range) / (2 * mag)
     if champ_range >= x then
@@ -25,19 +31,18 @@ function dash.new(cd, dash_range, champ_range)
       dir = pos - context.champ.pos
       mag = dir:mag()
       dir = dir:normalize()
+      if dir:dot(dodge_dir) < -0.2 then
+        return fallback
+      end
+      return {
+        target = target,
+        pos = pos,
+        dir = dir,
+        mag = mag
+      }
     else
-      target = nil
-      dir = dodge_dir:normalize()
-      mag = dash_range
-      pos = context.champ.pos + dir * mag
+      return fallback
     end
-
-    return {
-      target = target,
-      pos = pos,
-      dir = dir,
-      mag = mag
-    }
   end
 
   return self

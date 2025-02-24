@@ -1,17 +1,13 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local damage = require("util.damage")
+local movement = require("util.movement")
+local distances = require("util.distances")
+local champion = require("util.champion")
+local ability = require("util.ability")
+local missile = require("projectiles.missile")
+local aoe = require("projectiles.aoe")
+local splash = require("abilities.splash")
+local slow = require("effects.slow")
+local pull = require("effects.pull")
 
 local orianna = {}
 
@@ -72,7 +68,7 @@ end
 
 function champ.abilities.w:hit(target)
 damage:new(400, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.slow").new(1.0, 0.2))
+target:effect(slow.new(1.0, 0.2))
 end
 
 function champ.abilities.r:cast(context)
@@ -93,7 +89,7 @@ end
 
 function champ.abilities.r:hit(target)
 damage:new(650, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.pull").new(1200.0, self.proj))
+target:effect(pull.new(1200.0, self.proj))
 end
 
 function champ.behaviour(ready, context)

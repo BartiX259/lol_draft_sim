@@ -1,17 +1,13 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
+local missile = require("projectiles.missile")
+local aoe = require("projectiles.aoe")
+local buff = require("abilities.buff")
+local ranged = require("abilities.ranged")
+local slow = require("effects.slow")
+local root = require("effects.root")
+local shield = require("effects.shield")
 
 local ivern = {}
 
@@ -45,11 +41,11 @@ end
 
 function champ.abilities.q:hit(target)
 damage:new(281, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.root").new(2.0))
+target:effect(root.new(2.0))
 end
 
 function champ.abilities.e:use(context, cast)
-cast.target:effect(require("effects.shield").new(2.0, 414.0))
+cast.target:effect(shield.new(2.0, 414.0))
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 300,
 color = { 0.2,0.8,0.4 },
@@ -64,7 +60,7 @@ end
 
 function champ.abilities.e:hit(target)
 damage:new(277, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.slow").new(2.0, 0.6))
+target:effect(slow.new(2.0, 0.6))
 end
 
 function champ.behaviour(ready, context)

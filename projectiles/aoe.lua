@@ -65,7 +65,7 @@ function aoe:dodge_dir(champ)
   local to_champ = champ.pos - self.pos
   local dist = to_champ:mag()
 
-  local danger_radius = self.size + champ.size
+  local danger_radius = (self.size + champ.size) / 2 + 30
   if dist > danger_radius or self.cur_time >= self.deploy_time then
     return vec2.new(0, 0) -- No dodge needed
   end

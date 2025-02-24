@@ -1,17 +1,13 @@
-local champion = require('util.champion')
-local aoe = require('projectiles.aoe')
-local missile = require('projectiles.missile')
-local ability = require('util.ability')
-local ranged = require('abilities.ranged')
-local splash = require('abilities.splash')
-local dash = require('abilities.dash')
-local melee_aa = require('abilities.melee_aa')
-local buff = require('abilities.buff')
-local none = require('abilities.none')
-local damage = require('util.damage')
-local movement = require('util.movement')
-local distances = require('util.distances')
-local vec2 = require('util.vec2')
+local champion = require("util.champion")
+local damage = require("util.damage")
+local ability = require("util.ability")
+local movement = require("util.movement")
+local missile = require("projectiles.missile")
+local dash = require("abilities.dash")
+local splash = require("abilities.splash")
+local ranged = require("abilities.ranged")
+local charm = require("effects.charm")
+local pull = require("effects.pull")
 
 local ahri = {}
 
@@ -27,7 +23,7 @@ function ahri.new(x, y)
 
   champ.abilities = {
     q = splash.new(4, 900, 200),
-    q_ret = none.new(),
+    q_ret = ability:new(4),
     e = ranged.new(8, 1000),
     r = dash.new(8, 500, champ.range),
   }
@@ -42,7 +38,10 @@ from = champ.pos,
 })
 context.spawn( self.proj
 )
+if champ.abilities.q_ret.timer <= 0 then
+champ.abilities.q_ret.timer = champ.abilities.q_ret.cd
 self.proj.after = function() champ.abilities.q_ret:after_q(context, cast) end
+end
 end
 
 function champ.abilities.q:hit(target)
@@ -55,6 +54,7 @@ colliders = context.enemies,
 size = 200,
 speed = 1750,
 color = { 0.4,0.5,0.9 },
+range = nil,
 from = champ.abilities.q.proj,
 to = champ,
 })
@@ -82,11 +82,11 @@ end
 
 function champ.abilities.e:hit(target)
 damage:new(270, damage.MAGIC):deal(champ, target)
-target:effect(require("effects.charm").new(1.5, 100.0, champ))
+target:effect(charm.new(1.5, 100.0, champ))
 end
 
 function champ.abilities.r:use(context, cast)
-champ:effect(require("effects.pull").new(1300.0, cast.pos):on_finish(function()
+champ:effect(pull.new(1300.0, cast.pos):on_finish(function()
 if context.closest_dist < 900 then
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,

@@ -2,26 +2,27 @@ champion ezreal
 sprite ezreal.jpg
 
 attributes:
-    health 1604.2
-    armor 70.3
-    mr 42.8
-    ms 370
+    health 1824
+    armor 80.4
+    mr 45.6
+    ms 385
 
 behavior:
-  if ready q then
-    range q - 100
-    movement aggressive
-  else
-    range q + 50
-    movement passive
-  end
+  movement kite
+  range q
 
 abilities:
 color 0.8, 0.8, 0.4
+aa:
+  cd 1
+  range 550
+  damage 203
+  cast ranged_aa
+
 q:
-  cd 4
-  damage 380
-  range 1300
+  cd 4.5
+  damage 489
+  range 1200
   size 120
   speed 2000
   stop_on_hit true
@@ -36,9 +37,9 @@ q:
   end
 
 e:
-  cd 11.5
+  cd 14
   size 120
-  damage 340
+  damage 387
   speed 2000
   dist 475
   range 700
@@ -51,4 +52,3 @@ e:
     end
   hit:
     damage magic
-

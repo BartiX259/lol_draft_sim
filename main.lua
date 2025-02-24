@@ -22,18 +22,22 @@ function new_game()
   ui.clear()
   BlueTeam = {}
   RedTeam = {}
-  -- table.insert(BlueTeam, require("champions.lua.ornn").new(-600, 900))
-  -- table.insert(BlueTeam, require("champions.lua.ahri").new(-400, 900))
-  table.insert(BlueTeam, require("champions.lua.orianna").new(-200, 900))
-  table.insert(BlueTeam, require("champions.lua.nautilus").new(0, 900))
-  -- table.insert(BlueTeam, require("champions.lua.ezreal").new(200, 900))
-  -- table.insert(RedTeam, require("champions.lua.syndra").new(400, -900))
-  -- table.insert(RedTeam, require("champions.lua.ahri").new(600, -900))
-  table.insert(RedTeam, require("champions.lua.garen").new(1000, -900))
-  table.insert(RedTeam, require("champions.lua.ivern").new(1200, -900))
-  -- table.insert(RedTeam, require("champions.lua.lulu").new(1400, -900))
+  table.insert(BlueTeam, require("champions.lua.ornn").new(-600, 900))
+  table.insert(BlueTeam, require("champions.lua.ahri").new(-400, 1100))
+  table.insert(BlueTeam, require("champions.lua.orianna").new(-200, 1100))
+  table.insert(BlueTeam, require("champions.lua.nautilus").new(0, 1100))
+  table.insert(BlueTeam, require("champions.lua.ezreal").new(200, 1100))
+  -- table.insert(RedTeam, require("champions.lua.syndra").new(400, -1100))
+  table.insert(RedTeam, require("champions.lua.ahri").new(600, -900))
+  table.insert(RedTeam, require("champions.lua.garen").new(1000, -1100))
+  table.insert(RedTeam, require("champions.lua.ivern").new(1200, -1100))
+  table.insert(RedTeam, require("champions.lua.varus").new(1400, -1100))
   BlueProjectiles = {}
   RedProjectiles = {}
+  Capture = 0
+  CaptureRadius = 200
+  CaptureSpeed = 0.05
+  CaptureFade = CaptureSpeed / 2
   Delays = {}
   BlueTeamAll = table.shallow_copy(BlueTeam)
   RedTeamAll = table.shallow_copy(RedTeam)
@@ -57,18 +61,23 @@ function love.update(dt)
   if GameState == GLITCH then
     return
   end
+
+  if Capture >= 1 then
+    GameState = BLUE_WIN
+  elseif Capture <= -1 then
+    GameState = RED_WIN
+  elseif rawequal(next(RedTeam), nil) then
+    GameState = BLUE_WIN
+  elseif rawequal(next(BlueTeam), nil) then
+    GameState = RED_WIN
+  end
+
   if GameState ~= PLAYING then
     ui.update()
     return
   end
-  if rawequal(next(BlueTeam), nil) then
-    GameState = RED_WIN
-    return
-  end
-  if rawequal(next(RedTeam), nil) then
-    GameState = BLUE_WIN
-    return
-  end
+
+  -- dt = dt / 4
 
   -- Handle delays
   for id, delay in pairs(Delays) do
@@ -79,6 +88,7 @@ function love.update(dt)
     end
   end
 
+  local objective_count = 0
   -- Update champions
   for _, team in ipairs({ { BlueTeam, RedTeam, true }, { RedTeam, BlueTeam, false } }) do
     local allies, enemies, is_blue = team[1], team[2], team[3]
@@ -94,6 +104,7 @@ function love.update(dt)
         closest_enemy = distances.find_closest(champ, enemies),
         allies_avg_pos = distances.weighted_position(champ, allies),
         enemies_avg_pos = distances.weighted_position(champ, enemies),
+        capture = Capture,
         spawn = is_blue and SpawnBlue or SpawnRed,
         delay = Delay,
         dt = dt
@@ -103,6 +114,10 @@ function love.update(dt)
         return
       end
       context.closest_dist = context.closest_enemy.pos:distance(champ.pos)
+      if champ.pos:mag() < CaptureRadius then
+        local dir = is_blue and 1 or -1
+        objective_count = objective_count + dir
+      end
       local move_mult = 1
       local can_cast = true
       -- Effects
@@ -123,7 +138,7 @@ function love.update(dt)
           if effect.tags["root"] then
             move_mult = 0
           end
-          if effect.tags["slow"] then
+          if effect.tags["slow"] or effect.tags["speed"] then
             move_mult = move_mult * effect.amount
           end
         end
@@ -204,9 +219,19 @@ function love.update(dt)
       end
     end
   end
+
+  -- Update objective
+  if objective_count == 0 then
+    local dir = Capture > 0 and -1 or 1
+    Capture = Capture + dir * math.min(math.abs(Capture), CaptureFade * dt)
+  else
+    local dir = objective_count / (1 + math.abs(objective_count) / 4)
+    Capture = Capture + dir * CaptureSpeed * dt
+  end
 end
 
 function love.draw()
+  -- UI
   if GameState == BLUE_WIN then
     ui.end_screen(ui.BLUE, BlueTeamAll, RedTeamAll)
     return
@@ -217,6 +242,18 @@ function love.draw()
   end
 
   Camera:attach()
+
+  -- Objective
+  love.graphics.setColor({ 1, 1, 1, 1 })
+  love.graphics.arc("fill", 0, 0, CaptureRadius + 10, -math.pi / 2, -math.pi / 2 + Capture * 2 * math.pi)
+  if Capture > 0 then
+    love.graphics.setColor({ 0.4, 0.4, 0.8 })
+  elseif Capture < 0 then
+    love.graphics.setColor({ 0.8, 0.4, 0.4 })
+  else
+    love.graphics.setColor({ 0.4, 0.4, 0.4 })
+  end
+  love.graphics.circle("fill", 0, 0, CaptureRadius)
 
   -- Draw projectiles
   for _, list in ipairs({ BlueProjectiles, RedProjectiles }) do
