@@ -1,14 +1,14 @@
-local vec2 = require("util.vec2")
-local champion = require("util.champion")
-local damage = require("util.damage")
-local movement = require("util.movement")
-local missile = require("projectiles.missile")
 local ranged = require("abilities.ranged")
 local buff = require("abilities.buff")
-local shield = require("effects.shield")
-local damage_buff = require("effects.damage_buff")
-local speed = require("effects.speed")
 local slow = require("effects.slow")
+local shield = require("effects.shield")
+local speed = require("effects.speed")
+local damage_buff = require("effects.damage_buff")
+local missile = require("projectiles.missile")
+local movement = require("util.movement")
+local damage = require("util.damage")
+local champion = require("util.champion")
+local vec2 = require("util.vec2")
 
 local lulu = {}
 

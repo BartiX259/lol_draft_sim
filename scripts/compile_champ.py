@@ -640,7 +640,7 @@ def generate_lua_code(champion):
 
     # Return the full Lua code
     imports = ""
-    for key, values in champion["imports"].items():
+    for key, values in sorted(champion["imports"].items()):
         for value in values:
             imports += f"local {value} = require(\"{key}.{value}\")\n"
     return imports + '\n'.join(lua_code)

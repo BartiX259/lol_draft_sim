@@ -1,14 +1,14 @@
-local damage = require("util.damage")
-local movement = require("util.movement")
-local ability = require("util.ability")
-local champion = require("util.champion")
-local distances = require("util.distances")
-local aoe = require("projectiles.aoe")
-local missile = require("projectiles.missile")
 local splash = require("abilities.splash")
 local ranged_aa = require("abilities.ranged_aa")
-local stun = require("effects.stun")
 local pull = require("effects.pull")
+local stun = require("effects.stun")
+local missile = require("projectiles.missile")
+local aoe = require("projectiles.aoe")
+local movement = require("util.movement")
+local damage = require("util.damage")
+local champion = require("util.champion")
+local distances = require("util.distances")
+local ability = require("util.ability")
 
 local syndra = {}
 

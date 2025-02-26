@@ -12,7 +12,8 @@ local DRAFT = 3
 local GLITCH = 4
 
 function love.load()
- love.window.setFullscreen(true)
+  love.window.setMode(1000, 600, {resizable = true})
+  love.window.maximize()
  Draft = {blue = {}, red = {}}
  GameState = DRAFT
 end
@@ -33,7 +34,6 @@ function new_game()
   BlueTeam = {}
   RedTeam = {}
     x = -600
-  dump.dump(Draft.blue)
   for _, champ in pairs(Draft.blue) do
      table.insert(BlueTeam, require("champions.lua."..champ).new(x, 1100))
      x = x + 200
@@ -262,9 +262,9 @@ function love.draw()
   love.graphics.setColor({ 1, 1, 1, 1 })
   love.graphics.arc("fill", 0, 0, CaptureRadius + 10, -math.pi / 2, -math.pi / 2 + Capture * 2 * math.pi)
   if Capture > 0 then
-    love.graphics.setColor({ 0.4, 0.4, 0.8 })
+    love.graphics.setColor({ 0.3, 0.3, 0.6 })
   elseif Capture < 0 then
-    love.graphics.setColor({ 0.8, 0.4, 0.4 })
+    love.graphics.setColor({ 0.6, 0.3, 0.3 })
   else
     love.graphics.setColor({ 0.4, 0.4, 0.4 })
   end

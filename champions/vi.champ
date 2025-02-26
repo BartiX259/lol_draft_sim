@@ -1,0 +1,59 @@
+champion vi
+sprite vi.jpg
+
+attributes:
+  health 2543
+  armor 86.4
+  mr 56.6
+  ms 424
+
+behavior:
+  if ready r then
+    range r
+    movement aggressive
+  elseif ready q then
+    range q
+    movement aggressive
+  else
+    range aa.range + 100
+    movement peel
+  end
+
+abilities:
+  color 0.9, 0.2, 0.2
+
+  aa:
+    cd 1
+    damage 300
+    range 150
+    cast melee_aa
+
+  q:
+    cd 6
+    damage 450
+    range 725
+    size 120
+    cast ranged
+    use:
+      effect on self pull to cast.pos speed 1400 on finish do
+        effect on self shield 305 1s -- passive shield
+        spawn aoe at pos
+      end
+    hit:
+      damage physical
+      effect airborne 1s
+
+  r:
+    cd 115
+    damage 360
+    range 800
+    size 220
+    cast ranged
+    use:
+      --effect on self unstoppable duration 1.5s
+      effect on self pull to cast.target speed 1400 on finish do
+        spawn aoe at pos
+      end
+    hit:
+      damage physical
+      effect airborne 1.25s

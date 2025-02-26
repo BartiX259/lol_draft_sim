@@ -29,7 +29,7 @@ function badr:new(t)
 end
 
 function badr.__add(self, component)
-  if type(component) ~= "table" or component == nil then return end
+  if type(component) ~= "table" or component == nil then return self end
 
   component.parent = self
   component.x = self.x + component.x
@@ -49,11 +49,13 @@ function badr.__add(self, component)
     if #self.children > 0 then
       component.y = component.y + gap
         if self.center then
-          if component.width < self.width then
-            component.x = (self.width - component.width) / 2
+          if component.width <= self.width then
+            local target = (self.width - component.width) / 2
+            component:updatePosition(target - component.x, 0)
           else
             for _, child in ipairs(self.children) do
-              child.x = (component.width - child.width) / 2
+              local target = (component.width - child.width) / 2
+              child:updatePosition(target - child.x, 0)
             end
           end
         end
@@ -66,11 +68,13 @@ function badr.__add(self, component)
     if #self.children > 0 then
       component.x = component.x + gap
       if self.center then
-          if component.height < self.height then
-            component.y = (self.height - component.height) / 2
+          if component.height <= self.height then
+            local target = (self.height - component.height) / 2
+            component:updatePosition(0, target - component.y)
           else
             for _, child in ipairs(self.children) do
-              child.y = (component.height - child.height) / 2
+              local target = (component.height - child.height) / 2
+              child:updatePosition(0, target - child.y)
             end
           end
         end
@@ -92,7 +96,7 @@ function badr.__add(self, component)
 end
 
 function badr.__mul(self, component)
-  if type(component) ~= "table" or component == nil then return end
+  if type(component) ~= "table" or component == nil then return self end
   component:updatePosition((self.width - component.width) / 2, 0)
   table.insert(self.blends, component)
   return self
@@ -132,12 +136,32 @@ function badr:draw()
   for _, child in ipairs(self.children) do
     if child.bg then
       love.graphics.setColor(child.bg)
-      love.graphics.rectangle("fill", child.x + (child.bgOffset or 0), child.y, child.bgWidth or child.width, child.height)
+      love.graphics.rectangle("fill", child.x, child.y, child.width, child.height)
     end
     child:draw()
   end
   for _, blend in ipairs(self.blends) do
     blend:draw()
+  end
+end
+
+function badr:fitScreen()
+  local screenWidth = love.graphics.getWidth()
+  local screenHeight = love.graphics.getHeight()
+
+  local scaleX = screenWidth / self.width
+  local scaleY = screenHeight / self.height
+
+  local scaleFactor = math.min(scaleX, scaleY) * 0.95
+
+  local targetX = (screenWidth - self.width * scaleFactor) * 0.5
+  local targetY = (screenHeight - self.height * scaleFactor) * 0.5
+
+  if self.x ~= targetX or self.y ~= targetY then
+    self:updatePosition(targetX - self.x, targetY - self.y)
+  end
+  if math.abs(scaleFactor - 1) > 0.001 then
+    self:scale(scaleFactor)
   end
 end
 
@@ -149,6 +173,19 @@ function badr:updatePosition(x, y)
   end
   for _, blend in ipairs(self.blends) do
     blend:updatePosition(x, y)
+  end
+end
+
+function badr:scale(value)
+  self.x = self.x * value
+  self.y = self.y * value
+  self.width = self.width * value
+  self.height = self.height * value
+  for _, child in ipairs(self.children) do
+    child:scale(value)
+  end
+  for _, blend in ipairs(self.blends) do
+    blend:scale(value)
   end
 end
 

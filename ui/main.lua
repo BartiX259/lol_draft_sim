@@ -26,11 +26,8 @@ function ui.end_screen(winner, blue_team, red_team)
     end
     STATE = END_SCREEN
     screen = require("ui.end")(winner, blue_team, red_team)
-    screen:updatePosition(
-      (love.graphics.getWidth() - screen.width) * 0.5,
-      (love.graphics.getHeight() - screen.height) * 0.5
-    )
   end
+  screen:fitScreen()
   screen:draw()
 end
 
@@ -39,13 +36,10 @@ function ui.draft()
     STATE = DRAFT
     if not draft_screen then
       draft_screen = require("ui.draft")()
-      draft_screen:updatePosition(
-        (love.graphics.getWidth() - draft_screen.width) * 0.5,
-        (love.graphics.getHeight() - draft_screen.height) * 0.5
-      )
     end
     screen = draft_screen
   end
+  screen:fitScreen()
   screen:draw()
 end
 

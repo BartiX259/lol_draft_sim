@@ -26,25 +26,22 @@ function draft:__call()
   local res = component { column = true, gap = 10, center = true }
 
   local bar = component { row = true, gap = 0, center = true }
-    + label { text = "Blue side", color = {1, 1, 1}, bg = {0, 0, 1}, width = 640 }
-    + label { text = "Red side", color = {1, 1, 1}, bg = {1, 0, 0}, width = 640, right = true }
+    + label { text = "Blue side", color = {1, 1, 1}, bg = {0.2, 0.2, 0.8}, width = 640 }
+    + label { text = "Red side", color = {1, 1, 1}, bg = {0.8, 0.2, 0.2}, width = 640, right = true }
   res = res + bar
 
   for _, file in ipairs(love.filesystem.getDirectoryItems(moduleDir)) do
     if file:match("%.lua$") then
       local name = file:gsub("%.lua$", "")
-      local success, _ = pcall(require, moduleDir .. "." .. name)
-      if success then
-        table.insert(info.champs, {
-          name = name,
-          image = love.graphics.newImage(spriteDir .. "/" .. name .. ".jpg"),
-          color = {1, 1, 1}
-        })
-      end
+      table.insert(info.champs, {
+        name = name,
+        image = love.graphics.newImage(spriteDir .. "/" .. name .. ".jpg"),
+        color = {1, 1, 1}
+      })
     end
   end
 
-  local champs = component { column = true, gap = 10 }
+  local champs = component { column = true, gap = 10 } + component {height = 40}
   local row
   local rowWidth = 6
   local font = love.graphics.newFont(18)
@@ -93,7 +90,7 @@ function draft:__call()
         local id = #info.slots
 
         local slot = component { row = true, gap = 10, center = true }
-            + label { text = label_text, color = mod.color }
+            + (is_blue and label { text = label_text, color = mod.color } or nil)
             + (image { image = mod, width = 110, height = 110 }
                 + button {
                     text = "", width = 110, height = 110,
@@ -126,6 +123,7 @@ function draft:__call()
                     end
                 }
             )
+            + (not is_blue and label { text = label_text, color = mod.color } or nil)
         row = row + slot
     end
     slots = slots + row

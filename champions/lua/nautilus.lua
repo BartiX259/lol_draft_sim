@@ -1,12 +1,12 @@
-local champion = require("util.champion")
-local damage = require("util.damage")
-local movement = require("util.movement")
-local missile = require("projectiles.missile")
-local ranged = require("abilities.ranged")
 local none = require("abilities.none")
-local airborne = require("effects.airborne")
-local stun = require("effects.stun")
+local ranged = require("abilities.ranged")
 local pull = require("effects.pull")
+local stun = require("effects.stun")
+local airborne = require("effects.airborne")
+local missile = require("projectiles.missile")
+local movement = require("util.movement")
+local damage = require("util.damage")
+local champion = require("util.champion")
 
 local nautilus = {}
 
