@@ -1,12 +1,12 @@
 local champion = require("util.champion")
 local damage = require("util.damage")
 local movement = require("util.movement")
-local missile = require("projectiles.missile")
 local aoe = require("projectiles.aoe")
+local missile = require("projectiles.missile")
 local splash = require("abilities.splash")
 local none = require("abilities.none")
-local slow = require("effects.slow")
 local airborne = require("effects.airborne")
+local slow = require("effects.slow")
 local pull = require("effects.pull")
 
 local ornn = {}

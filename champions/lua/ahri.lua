@@ -1,11 +1,11 @@
+local ability = require("util.ability")
 local champion = require("util.champion")
 local damage = require("util.damage")
-local ability = require("util.ability")
 local movement = require("util.movement")
 local missile = require("projectiles.missile")
+local ranged = require("abilities.ranged")
 local dash = require("abilities.dash")
 local splash = require("abilities.splash")
-local ranged = require("abilities.ranged")
 local charm = require("effects.charm")
 local pull = require("effects.pull")
 

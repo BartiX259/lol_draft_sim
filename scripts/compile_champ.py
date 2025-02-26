@@ -451,7 +451,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                             raise CompilerError("Couldn't find 'damage' for damage constructor", line_nr)
                         if "type" not in damage:
                             raise CompilerError("Couldn't find damage type in constructor", line_nr)
-                        line += f"damage:new({str(damage["damage"])}, damage.{damage["type"]}):deal(champ, {damage["target"]})"
+                        line += f"damage:new({str(damage['damage'])}, damage.{damage['type']}):deal(champ, {damage['target']})"
                 case "ready":
                     line += "ready." + stmt[i+1]
                     i += 1

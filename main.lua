@@ -8,11 +8,21 @@ local camera = require("util.camera")
 local PLAYING = 0
 local BLUE_WIN = 1
 local RED_WIN = 2
-local GLITCH = 3
+local DRAFT = 3
+local GLITCH = 4
 
 function love.load()
-  love.window.setFullscreen(true)
-  new_game()
+ love.window.setFullscreen(true)
+ Draft = {blue = {}, red = {}}
+ GameState = DRAFT
+end
+
+function set_draft(draft)
+  Draft = draft
+end
+
+function draft()
+  GameState = DRAFT
 end
 
 function new_game()
@@ -22,16 +32,17 @@ function new_game()
   ui.clear()
   BlueTeam = {}
   RedTeam = {}
-  table.insert(BlueTeam, require("champions.lua.ornn").new(-600, 900))
-  table.insert(BlueTeam, require("champions.lua.ahri").new(-400, 1100))
-  table.insert(BlueTeam, require("champions.lua.orianna").new(-200, 1100))
-  table.insert(BlueTeam, require("champions.lua.nautilus").new(0, 1100))
-  table.insert(BlueTeam, require("champions.lua.ezreal").new(200, 1100))
-  -- table.insert(RedTeam, require("champions.lua.syndra").new(400, -1100))
-  table.insert(RedTeam, require("champions.lua.ahri").new(600, -900))
-  table.insert(RedTeam, require("champions.lua.garen").new(1000, -1100))
-  table.insert(RedTeam, require("champions.lua.ivern").new(1200, -1100))
-  table.insert(RedTeam, require("champions.lua.varus").new(1400, -1100))
+    x = -600
+  dump.dump(Draft.blue)
+  for _, champ in pairs(Draft.blue) do
+     table.insert(BlueTeam, require("champions.lua."..champ).new(x, 1100))
+     x = x + 200
+  end
+  x = -600
+  for _, champ in pairs(Draft.red) do
+     table.insert(RedTeam, require("champions.lua."..champ).new(x, -1100))
+     x = x + 200
+  end
   BlueProjectiles = {}
   RedProjectiles = {}
   Capture = 0
@@ -44,6 +55,8 @@ function new_game()
 end
 
 ui.new_game = new_game
+ui.set_draft = set_draft
+ui.draft_mode = draft
 
 function SpawnBlue(projectile)
   table.insert(BlueProjectiles, projectile)
@@ -62,22 +75,20 @@ function love.update(dt)
     return
   end
 
-  if Capture >= 1 then
-    GameState = BLUE_WIN
-  elseif Capture <= -1 then
-    GameState = RED_WIN
-  elseif rawequal(next(RedTeam), nil) then
-    GameState = BLUE_WIN
-  elseif rawequal(next(BlueTeam), nil) then
-    GameState = RED_WIN
-  end
-
   if GameState ~= PLAYING then
-    ui.update()
-    return
+      ui.update()
+      return
   end
 
-  -- dt = dt / 4
+  if Capture >= 1 or rawequal(next(RedTeam), nil) then
+      GameState = BLUE_WIN
+      ui.update()
+      return
+  elseif Capture <= -1 or rawequal(next(BlueTeam), nil) then
+      GameState = RED_WIN
+      ui.update()
+      return
+  end
 
   -- Handle delays
   for id, delay in pairs(Delays) do
@@ -232,6 +243,10 @@ end
 
 function love.draw()
   -- UI
+  if GameState == DRAFT then
+    ui.draft()
+    return
+  end
   if GameState == BLUE_WIN then
     ui.end_screen(ui.BLUE, BlueTeamAll, RedTeamAll)
     return

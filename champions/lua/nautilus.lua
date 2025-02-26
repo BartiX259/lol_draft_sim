@@ -4,8 +4,8 @@ local movement = require("util.movement")
 local missile = require("projectiles.missile")
 local ranged = require("abilities.ranged")
 local none = require("abilities.none")
-local stun = require("effects.stun")
 local airborne = require("effects.airborne")
+local stun = require("effects.stun")
 local pull = require("effects.pull")
 
 local nautilus = {}

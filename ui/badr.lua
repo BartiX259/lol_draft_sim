@@ -20,6 +20,7 @@ function badr:new(t)
     id = tostring(love.timer.getTime()),
     visible = true,
     children = {},
+    blends = {}
   }
   for key, value in pairs(t) do
     _default[key] = value
@@ -47,31 +48,53 @@ function badr.__add(self, component)
     component.y = (lastChild.height or 0) + (lastChild.y or self.y)
     if #self.children > 0 then
       component.y = component.y + gap
+        if self.center then
+          if component.width < self.width then
+            component.x = (self.width - component.width) / 2
+          else
+            for _, child in ipairs(self.children) do
+              child.x = (component.width - child.width) / 2
+            end
+          end
+        end
     end
     self.height = math.max(self.height, childrenSize.hight + component.height + gap * #self.children)
     self.width = math.max(self.width, component.width)
-    if self.center then
-      component.x = component.x - component.width / 2
-    end
   end
   if self.row then
     component.x = (lastChild.width or 0) + (lastChild.x or self.x)
     if #self.children > 0 then
       component.x = component.x + gap
+      if self.center then
+          if component.height < self.height then
+            component.y = (self.height - component.height) / 2
+          else
+            for _, child in ipairs(self.children) do
+              child.y = (component.height - child.height) / 2
+            end
+          end
+        end
     end
     self.width = math.max(self.width, childrenSize.width + component.width + gap * #self.children)
     self.height = math.max(self.height, component.height)
-    if self.center then
-      component.y = component.y - component.height / 2
-    end
   end
 
   if #component.children > 0 then
     for _, child in ipairs(component.children) do
       child:updatePosition(component.x, component.y)
     end
+    for _, blend in ipairs(component.blends) do
+      blend:updatePosition(component.x, component.y)
+    end
   end
   table.insert(self.children, component)
+  return self
+end
+
+function badr.__mul(self, component)
+  if type(component) ~= "table" or component == nil then return end
+  component:updatePosition((self.width - component.width) / 2, 0)
+  table.insert(self.blends, component)
   return self
 end
 
@@ -106,10 +129,15 @@ end
 
 function badr:draw()
   if not self.visible then return end;
-  if #self.children > 0 then
-    for _, child in ipairs(self.children) do
-      child:draw()
+  for _, child in ipairs(self.children) do
+    if child.bg then
+      love.graphics.setColor(child.bg)
+      love.graphics.rectangle("fill", child.x + (child.bgOffset or 0), child.y, child.bgWidth or child.width, child.height)
     end
+    child:draw()
+  end
+  for _, blend in ipairs(self.blends) do
+    blend:draw()
   end
 end
 
@@ -118,6 +146,9 @@ function badr:updatePosition(x, y)
   self.y = self.y + y
   for _, child in ipairs(self.children) do
     child:updatePosition(x, y)
+  end
+  for _, blend in ipairs(self.blends) do
+    blend:updatePosition(x, y)
   end
 end
 
@@ -134,6 +165,9 @@ function badr:update()
   end
   for _, child in ipairs(self.children) do
     child:update()
+  end
+   for _, blend in ipairs(self.blends) do
+    blend:update()
   end
 end
 

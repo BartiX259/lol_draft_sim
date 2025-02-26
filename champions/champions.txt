@@ -1,0 +1,717 @@
+champion ahri
+sprite ahri.jpg
+
+attributes:
+  health 1728.8
+  armor 72.5
+  mr 44.25
+  ms 375
+
+behavior:
+  if ready e then
+    range e
+    movement aggressive
+  elseif ready q then
+    range q
+    movement passive
+  else
+    range q + 150
+    movement passive
+  end
+
+abilities:
+color 0.4, 0.5, 0.9
+q:
+  cd 4
+  range 900
+  damage 280
+  speed 1750
+  size 200
+  cast splash
+ use:
+  proj = missile from pos
+  spawn proj
+ hit:
+  damage magic
+
+q_ret:
+  stats q
+  range nil
+  cast after q
+  use:
+    proj = missile from q.proj to self
+    spawn proj
+  hit:
+   damage true
+
+e:
+  cd 8
+  damage 270
+  range 1000
+  speed 1550
+  size 120
+  stop_on_hit true
+  color 1, 0.2, 0.8 
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage magic
+    effect charm to self 1.5s speed 100
+
+r:
+  cd 8
+  damage 200
+  dist 500
+  size 100
+  speed 1000
+  cast dash
+  use:
+    effect on self pull to cast.pos speed 1300 on finish do
+        if closest_dist < q.range then
+            proj = missile from pos to cast.target range nil
+            spawn proj
+        end
+    end
+  hit:
+    damage magic
+champion ezreal
+sprite ezreal.jpg
+
+attributes:
+    health 1824
+    armor 80.4
+    mr 45.6
+    ms 385
+
+behavior:
+  movement kite
+  range q
+
+abilities:
+color 0.8, 0.8, 0.4
+aa:
+  cd 1
+  range 550
+  damage 203
+  cast ranged_aa
+
+q:
+  cd 4.5
+  damage 489
+  range 1200
+  size 120
+  speed 2000
+  stop_on_hit true
+  cast ranged
+ use:
+  proj = missile from pos
+  spawn proj
+ hit:
+  damage physical
+  for _, ability in pairs(self.abilities) do
+    ability.timer = ability.timer - 1.5
+  end
+
+e:
+  cd 14
+  size 120
+  damage 387
+  speed 2000
+  dist 475
+  range 700
+  cast dash
+  use:
+    pos = cast.pos
+    if closest_dist < range + 50 then
+      proj = missile from pos to closest_enemy colliders nil
+      spawn proj
+    end
+  hit:
+    damage magic
+champion garen
+sprite garen.jpg
+
+attributes:
+  health 2616
+  armor 88.4
+  mr 50.6
+  ms 424
+
+behavior:
+    if q.active or closest_dist < 200 then
+      self.target = closest_enemy
+      range aa.range * 2 - 20
+    else
+      range 600
+      movement peel
+    end
+
+abilities:
+  aa:
+    damage 228
+    cd 1.11
+    range 175
+    cast melee_aa
+
+  q:
+    cd 5.6
+    range 400
+    cast ranged
+    use:
+      active = true
+      effect on self speed 35% 3.6s on finish active = false
+
+  q_hit:
+    range 200
+    damage 264
+    cast ranged if q
+    use:
+        damage physical
+        effect silence 1.5s
+
+  e:
+    cd 6.3
+    damage 106.2
+    range 150
+    size 300
+    duration 3
+    color 0.9, 0.7, 0.5
+    cast ranged
+    use:
+      proj = aoe follow self hard_follow true
+      local num_ticks = 9
+      local current_proj = proj
+      for i = 1, num_ticks - 1 do
+        current_proj.next = aoe follow self hard_follow true
+        current_proj = current_proj.next
+      end
+      spawn proj
+    hit:
+      damage physical
+
+  r:
+    cd 56
+    damage 550
+    range 400
+    color 1, 1, 1
+    size 200
+    deploy_time 0.5
+    cast:
+       if self.target and self.target.pos:distance(pos) < range and (self.target.health < damage or health% < 0.2) then
+        return { target = self.target }
+       end
+       return nil
+    use:
+        proj = aoe follow cast.target colliders nil on impact do -- visual
+            damage true
+        end
+        spawn proj
+champion ivern
+sprite ivern.jpg
+
+attributes:
+  health 2217  -- 630 (Base) + (99 * 12) = 1818
+  armor 93.4      -- 27 (Base) + (4.7 * 12) = 83.4.  +10 from Ionian Boots.
+  mr 47.6     -- 30 (Base) + (1.3 * 12) = 45.6. +2 from Null-magic mantle
+  ms 375      -- 330 (Base) + 45 (Boots)
+
+behavior:
+    if ready q then
+        range q - 50
+        movement aggressive
+    else
+      range q + 150
+      movement peel
+    end
+
+abilities:
+  color 0.2, 0.8, 0.4
+
+  q:
+    cd 6.86  -- (10 (Base at Rank 5) / (1 + (45/100))) = 6.89.  45 AH from Items.
+    damage 281  -- 260 (Base at Rank 5) + (0.7 * 30) = 281.  30 AP from Items.
+    range 1150
+    speed 1300
+    size 140 --80*2 (The size references to the diameter, ingame is the radius)
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage magic
+      effect root 2s  -- Max rank root duration.
+
+  e:
+    cd 4.83  -- (7 (Base at Rank 5) / (1 + (45/100))) = 4.83.  45 AH from Items.
+    damage 277  -- 150 (Base at Rank 5) + (0.8 * 30) + 103 = 277.  30 AP from items.  103 is 8% Max HP (from Daisy Hit)
+    range 750
+    shield_amount 414 -- 235 (Base at rank 5) + 80 (Imperial Mandate base) + (0.5 * 30) = 330 + (60 * 0.8) +35.5 (Ionian Boots 15% Shield Power, only on allies)
+    deploy_time 0.1
+    persist_time 0.2
+    size 300
+    cast buff
+    use:
+      effect shield shield_amount 2s -- Apply shield to the target
+      proj = aoe follow cast.target
+      delay 2 spawn proj
+    hit:
+      damage magic
+      effect slow 60% 2s -- Max rank slow.
+champion lulu
+sprite lulu.jpg
+
+attributes:
+    health 1602.4
+    armor 70
+    mr 41
+    ms 375
+
+behavior:
+    range q
+    movement passive
+
+abilities:
+  color 0.8, 0.5, 0.8 
+  q:
+    cd 5.1
+    damage 156
+    range 925
+    speed 1600
+    size 120
+    cast ranged
+    use:
+        local dir = (cast.dir + vec2.random() / 5):normalize()
+        spawn missile from pos
+        dir = (cast.dir + vec2.random() / 5):normalize()
+        delay 0.1 spawn missile from pos
+    hit:
+        damage magic
+        effect slow 1s 20%
+  we:
+      cd 6
+      range 650
+      cast buff
+      use:
+        effect shield 2.5s 303
+        effect speed 3.5s 25%
+        effect damage_buff 3.5s 30%
+champion nautilus
+sprite nautilus.jpg
+
+attributes:
+  health 2494
+  armor 159.4
+  mr 86.6
+  ms 440 --OOC, 350 in combat.
+
+behavior:
+  if ready q then
+    range q - 50
+    movement aggressive
+  else
+    range q + 150
+    movement peel -- This is good
+  end
+
+abilities:
+color 0.3, 0.9, 0.9
+  aa:
+    damage 100.6
+    stun 1.18  -- Stun duration at level 13
+    cd 1.41
+    cast none
+  q:
+      cd 8.57  -- Corrected CD with Ability Haste
+      damage 90  -- Corrected base damage
+      range 1100
+      speed 2000
+      size 180
+      stop_on_hit true
+      pull_speed 1300
+      pull_distance_fraction 0.5
+      cast ranged
+      use:
+        proj = missile from pos
+        spawn proj
+      hit:
+        damage magic
+        -- Calculate pull distance and direction
+        local distance = (target.pos - pos):mag()
+        local pull_direction = (target.pos - pos):normalize()
+        local pull_target = target.pos - pull_direction * (distance * (1 - pull_distance_fraction))
+        local pull_self = pos + pull_direction * (distance * pull_distance_fraction)
+        effect pull to pull_target speed pull_speed on finish do
+            damage magic --changed to magic. it would do no damage
+            effect stun duration aa.stun
+        end
+        effect on self pull to pull_self speed pull_speed
+
+  r:
+      cd 85.7  -- Corrected CD with Ability Haste
+      damage 250  -- Corrected base damage at level 13
+      range 850
+      airborne_duration 1
+      size 150
+      speed 500
+      cast ranged
+      use:
+        proj = missile from pos to cast.target -- to cast.target, this is correct.
+        spawn proj
+      hit:
+        damage magic
+        effect airborne duration airborne_duration
+
+champion orianna
+sprite orianna.jpg
+
+attributes:
+  health 1789.5
+  armor 66
+  mr 40
+  ms 370
+
+behavior:
+  if ready q then
+    range q - 50
+    movement aggressive
+  else
+    range q + 200
+    movement passive
+  end
+
+abilities:
+  color 0.3, 0.5, 0.8 
+  q:
+    cd 2.7
+    range 1025
+    damage 300
+    speed 1400
+    size 175
+    persist_time 1
+    cast splash
+    use:
+      local cast_pos = cast.pos -- + cast.dir * 100
+      proj = missile from pos to cast_pos
+      proj.next = aoe at cast_pos colliders nil
+      spawn proj
+    hit:
+      damage magic
+  w:
+    cd 5
+    damage 400
+    size 225
+    cast:
+      return q.proj and in_range(q.proj, enemies, size / 2 + 30) >= 1
+    use:
+        proj = aoe at q.proj follow q.proj
+        spawn proj
+    hit:
+      damage magic
+      effect slow 20% 1s
+  r:
+    cd 90
+    damage 650
+    size 415
+    deploy_time 0.2
+    color 0.3, 0.5, 0.8, 0.7 
+    cast:
+      return q.proj and in_range(q.proj, enemies, size / 2) >= clamp(#enemies - 1, 1, 3)
+    use:
+      proj = aoe at q.proj follow q.proj
+      spawn proj
+    hit:
+      damage magic
+      effect pull to proj speed 1200
+champion ornn
+sprite ornn.jpg
+
+attributes:
+  health 3030
+  armor 237
+  mr 115.6
+  ms 380
+
+behavior:
+  if ready e then
+     range e
+     movement aggressive
+  else
+    range e + 250
+    movement peel
+  end
+
+abilities:
+  color 0.8, 0.4, 0.2
+
+  e:
+    cd 12
+    damage 260
+    range 800
+    speed 1600
+    size 360
+    deploy_time 0.35
+    cast splash
+    use:
+      proj = aoe at self follow self hard_follow true
+      spawn proj
+      effect on self pull to cast.pos speed speed
+    hit:
+      damage physical
+      effect airborne 1.25s
+
+  r:
+    cd 120
+    damage 175
+    range 2500
+    speed 1200
+    size 340
+    cast splash
+    use:
+        proj = missile from cast.pos to self
+        spawn proj
+
+    hit:
+      damage magic
+      effect slow 50% 2s
+
+  r_recast:
+     damage 350
+     speed 1900
+     size 340
+     cast after r
+     use:
+         proj = missile from r.proj to closest_enemy.pos
+         spawn proj
+     hit:
+      damage magic
+      effect airborne 1schampion syndra
+sprite syndra.jpg
+
+attributes:
+    health 1811
+    armor 80.2
+    mr 45.6
+    ms 375
+
+behavior:
+  if ready r and closest_enemy.health <= r.damage * r.projectiles then
+    range r - 50
+    movement aggressive
+  elseif ready q then
+    range q
+    movement aggressive
+  else
+    range q + 150
+    movement passive
+  end
+
+abilities:
+color 0.8, 0.5, 0.8
+aa: -- auto attack
+  cd 1
+  range 550
+  damage 150
+  cast ranged_aa
+q:
+  cd 2.9
+  damage 470
+  range 800
+  size 210
+  deploy_time 0.6
+  persist_time 2
+  cast splash
+ use:
+  proj = aoe at cast.pos
+  spawn proj
+ hit:
+  damage magic
+
+e:
+  cd 6.7
+  damage 441
+  speed 2500
+  size 120
+  range 700
+  cast with q
+  use:
+    hit_cols = {}  -- Store hits in the same object so enemies dont take extra damage
+    for angle = -0.2, 0.2, 0.1 do
+        local dir = cast.dir:rotate(angle)
+        spawn missile from self
+    end
+  hit:
+    damage magic
+    local push_pos = target.pos + (target.pos - pos):normalize() * 300
+    effect pull to push_pos speed 1500
+
+q_push:
+    stats e
+    size q
+    range 200
+    cast after q
+    use:
+        local hit_cols = e.hit_cols
+        proj = missile from q.proj.pos
+        spawn proj
+    hit:
+        damage magic
+        effect stun 1s
+
+r:
+  cd 70
+  damage 228
+  range 675
+  speed 1500
+  size 100
+  projectiles 5
+  proj_interval 0.1
+  cast:
+    for _, target in pairs(in_range_list) do
+        if target.health <= r.damage * r.projectiles then
+            return { target = target }
+        end
+    end
+    return nil
+  use:
+    for i = 0, (projectiles - 1) * proj_interval, proj_interval do
+        local proj = missile from self to cast.target range nil
+        delay i spawn proj
+    end
+  hit:
+    damage magic
+champion varus
+sprite varus.jpg
+
+attributes:
+  health 1865
+  armor 116
+  mr 85
+  ms 385
+
+behavior:
+    range aa.range  -- auto attack range
+    movement passive
+
+abilities:
+  color 0.7, 0.1, 0.8
+
+   aa:
+      cd 0.74
+      damage 241
+      range 675
+      cast ranged_aa
+
+  q:
+    cd 12
+    damage 585
+    range 1595
+    speed 1900
+    size 140
+    cast ranged
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage physical
+
+  r:
+    cd 80
+    damage 550
+    range 1370
+    speed 1500
+    size 240
+    cast ranged
+    use:
+       proj = missile from self
+       spawn proj
+    hit:
+      damage magic
+      effect root 2s
+champion wukong
+sprite wukong.jpg
+
+attributes:
+  health 1694
+  armor 162.5
+  mr 50.45
+  ms 385
+
+behavior:
+  if self.spinning or closest_dist < aa.range + 100 then
+    range aa
+    self.target = closest_enemy
+  elseif ready e then
+    range aa
+    movement aggressive
+  else
+    range e + 100
+    movement peel
+  end
+
+abilities:
+color 0.9, 0.9, 0.9, 0.9
+hard_follow true
+follow self
+
+aa:
+  cd 1.2
+  damage 195
+  range 175
+  cast melee_aa
+
+e:
+  cd 5.5
+  damage 200
+  range 925
+  size 370
+  deploy_time 0.6
+  persist_time 0.1
+  cast splash
+  use:
+    effect on self pull to cast.target speed 1550
+    proj = aoe at self
+    spawn proj
+  hit:
+    damage magic
+
+r:
+  cd 70
+  damage 91.2
+  size 370
+  range 200
+  deploy_time 0.5
+  persist_time 0.15
+  cast splash
+  use:
+    proj = aoe at self
+    self.spinning = true
+    spawn proj
+  hit:
+    damage physical
+    effect airborne 1s
+
+r_ticks:
+  damage 91.2
+  size 370
+  deploy_time 0
+  persist_time 0.15
+  cast with r
+  use:
+    local proj_one = aoe
+    r.proj.next = proj_one
+    local proj_temp = proj_one
+    for i = 1, 7 do
+        proj_temp.next = aoe
+        proj_temp = proj_temp.next
+    end
+    proj = proj_temp
+  hit:
+    damage physical
+
+r_end:
+  cast after r_ticks
+  use:
+    self.spinning = false

@@ -3,12 +3,12 @@ local champion = require("util.champion")
 local damage = require("util.damage")
 local movement = require("util.movement")
 local missile = require("projectiles.missile")
-local buff = require("abilities.buff")
 local ranged = require("abilities.ranged")
-local damage_buff = require("effects.damage_buff")
-local slow = require("effects.slow")
-local speed = require("effects.speed")
+local buff = require("abilities.buff")
 local shield = require("effects.shield")
+local damage_buff = require("effects.damage_buff")
+local speed = require("effects.speed")
+local slow = require("effects.slow")
 
 local lulu = {}
 

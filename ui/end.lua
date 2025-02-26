@@ -18,6 +18,9 @@ function end_ui:__call(winner, blue_team, red_team)
       + button { text = "Restart", onClick = function()
         ui.new_game()
       end }
+       + button { text = "Draft", onClick = function()
+        ui.draft_mode()
+      end }
       + label { text = "" }
       + label { text = "Blue team", color = { 1, 1, 1 } }
   for _, champ in pairs(blue_team) do

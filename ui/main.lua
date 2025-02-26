@@ -4,11 +4,13 @@ ui.BLUE = 0
 ui.RED = 1
 
 local NONE = 0
-local END_SCREEN = 1
+local DRAFT = 1
+local END_SCREEN = 2
 
 local STATE = NONE
 
 local screen
+local draft_screen
 
 love.graphics.setFont(love.graphics.newFont(25))
 
@@ -25,9 +27,24 @@ function ui.end_screen(winner, blue_team, red_team)
     STATE = END_SCREEN
     screen = require("ui.end")(winner, blue_team, red_team)
     screen:updatePosition(
-      love.graphics.getWidth() * 0.5,
-      love.graphics.getHeight() * 0.5
+      (love.graphics.getWidth() - screen.width) * 0.5,
+      (love.graphics.getHeight() - screen.height) * 0.5
     )
+  end
+  screen:draw()
+end
+
+function ui.draft()
+  if STATE ~= DRAFT then
+    STATE = DRAFT
+    if not draft_screen then
+      draft_screen = require("ui.draft")()
+      draft_screen:updatePosition(
+        (love.graphics.getWidth() - draft_screen.width) * 0.5,
+        (love.graphics.getHeight() - draft_screen.height) * 0.5
+      )
+    end
+    screen = draft_screen
   end
   screen:draw()
 end

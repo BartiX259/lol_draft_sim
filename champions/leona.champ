@@ -1,0 +1,60 @@
+champion leona
+sprite leona.jpg
+
+attributes:
+  health 1858
+  armor 181
+  mr 117
+  ms 380
+
+behavior:
+  if ready e then
+    range e
+    movement aggressive
+  else
+    range q.range + 100
+    movement peel
+  end
+
+abilities:
+  color 1, 0.8, 0.2
+
+  q:
+    cd 5
+    range 175
+    damage 110
+    stun 1s
+    cast melee_aa
+    use:
+      damage magic
+      effect stun duration stun
+
+  e:
+    cd 6
+    damage 210
+    range 900
+    speed 2000
+    size 140
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect root 0.5s
+      effect on self pull to target.pos speed 1500
+
+  r:
+    cd 75
+    damage 225
+    range 1200
+    size 325
+    deploy_time 0.625
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage magic
+      effect stun 1.75s

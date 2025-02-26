@@ -44,6 +44,7 @@ return function(props)
         scale = props.scale or 1,
         -- logic
         onClick = props.onClick,
+        onRightClick = props.onRightClick,
         onHover = props.onHover,
         disabled = props.disabled or false,
         hoverCalled = false,
@@ -55,6 +56,14 @@ return function(props)
                 end
             else
                 self.mousePressed = false
+            end
+            if love.mouse.isDown(2) then
+                if self.rightPressed == false and self:isMouseInside() and self.parent.visible then
+                    self.rightPressed = true
+                    if props.onRightClick then self:onRightClick() end
+                end
+            else
+                self.rightPressed = false
             end
         end,
         --
