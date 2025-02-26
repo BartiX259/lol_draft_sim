@@ -2,6 +2,7 @@
 import re
 import sys
 
+subsections = ["use", "cast", "hit", "pre-cast"]
 util_imports = {"vec2", "distances"}
 lua_keywords = {"and", "or", "not", "if", "elseif", "else", "then", "end", "for", "while", "do", "function", "nil", "local", "true", "false"}
 
@@ -30,12 +31,13 @@ import re
 def tokenize_file(file_path):
     all_tokens = []
 
-    # Regular expression to handle:
+    # Updated regex pattern:
+    # - Captures "pre-cast" as a single token
     # - Words (alphanumeric and _)
     # - Symbols (including # as a separate token)
     # - Multi-character symbols like >=, <=, etc.
     # - Percentages and numbers together (e.g., 75%)
-    pattern = r"[\w.]+(?:%?)|[^\w\s#]+|#|\d+[%]?"
+    pattern = r"pre-cast|[\w.]+(?:%?)|[^\w\s#]+|#|\d+[%]?"
 
     with open(file_path, "r", encoding="utf-8") as file:
         for line in file:
@@ -124,7 +126,7 @@ def build_champion_table(tokens):
             champion["behavior"].append(pseudo_tokens(line_tokens))
         elif current_block == "abilities":
             if is_colon:
-                if key in ["cast", "use", "hit"]:
+                if key in subsections:
                     if current_ability == ":global":
                         raise CompilerError(key + " not in ability block!", line_nr)
                     current_subsection = key
@@ -177,7 +179,7 @@ def build_champion_table(tokens):
                         if line_tokens[1] not in champion["abilities"]:
                             raise CompilerError(f"Ability '{line_tokens[1]}' not defined", line_nr)
                         for key, value in champion["abilities"][line_tokens[1]].items():
-                            if key not in ["cast", "use", "hit"]:
+                            if key not in subsections:
                                 champion["abilities"][current_ability][key] = value
                     else:
                         assert_tok_count(2, tok_count, line_nr)
@@ -223,7 +225,7 @@ def alias(word, champion, info):
         rep = try_replace(word, match, "self." + word.split(".", 1)[0])
         if rep != None:
             return rep
-    if word in info and isinstance(info[word], str):
+    if word in info and isinstance(info[word], str) and word not in subsections:
         return info[word]
     for ability, data in champion["abilities"].items():
         if word.startswith(ability + "."):
@@ -590,6 +592,11 @@ def generate_lua_code(champion):
             lua_code.append(generate_pseudo_code(ability_data["cast"], ability_data, champion, "cast", champion["line_nrs"][ability]["cast"]))
             lua_code.append("end")
             lua_code.append("")
+        if "pre-cast" in ability_data: # Generat pre-cast
+            lua_code.append("function champ.abilities." + ability + ":precast(context, cast)")
+            lua_code.append(generate_pseudo_code(ability_data["pre-cast"], ability_data, champion, "pre-cast", champion["line_nrs"][ability]["pre-cast"]))
+            lua_code.append("end")
+            lua_code.append("")
         if ability_data["cast"] not in ["melee_aa", "ranged_aa", "none"]: # Has use function
             if isinstance(ability_data["cast"], tuple): # Cast with another ability
                 lua_code.append("function champ.abilities." + ability + ":" + ability_data["cast"][0] + "_" + ability_data["cast"][1] + "(context, cast)")
@@ -641,7 +648,7 @@ def generate_lua_code(champion):
     # Return the full Lua code
     imports = ""
     for key, values in sorted(champion["imports"].items()):
-        for value in values:
+        for value in sorted(values):
             imports += f"local {value} = require(\"{key}.{value}\")\n"
     return imports + '\n'.join(lua_code)
 

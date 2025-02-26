@@ -65,6 +65,9 @@ function champion:effect(effect)
   if effect.tags["pull"] then -- Multiple pulls are bad
     self:del_effect("pull")
   end
+  if self:has_effect("unstoppable") and not effect.tags["dash"] and (effect.tags["stun"] or effect.tags["slow"]) then
+    return
+  end
   table.insert(self.effects, effect)
 end
 

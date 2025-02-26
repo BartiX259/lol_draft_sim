@@ -1,14 +1,14 @@
-local splash = require("abilities.splash")
-local ranged = require("abilities.ranged")
 local melee_aa = require("abilities.melee_aa")
-local root = require("effects.root")
+local ranged = require("abilities.ranged")
+local splash = require("abilities.splash")
 local pull = require("effects.pull")
+local root = require("effects.root")
 local stun = require("effects.stun")
-local missile = require("projectiles.missile")
 local aoe = require("projectiles.aoe")
-local movement = require("util.movement")
-local damage = require("util.damage")
+local missile = require("projectiles.missile")
 local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
 
 local leona = {}
 

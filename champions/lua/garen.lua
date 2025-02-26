@@ -1,12 +1,12 @@
-local ranged = require("abilities.ranged")
 local melee_aa = require("abilities.melee_aa")
+local ranged = require("abilities.ranged")
 local silence = require("effects.silence")
 local speed = require("effects.speed")
 local aoe = require("projectiles.aoe")
 local ability = require("util.ability")
-local movement = require("util.movement")
-local damage = require("util.damage")
 local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
 
 local garen = {}
 

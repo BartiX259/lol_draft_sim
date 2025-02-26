@@ -2,9 +2,9 @@ local dash = require("abilities.dash")
 local ranged = require("abilities.ranged")
 local ranged_aa = require("abilities.ranged_aa")
 local missile = require("projectiles.missile")
-local movement = require("util.movement")
-local damage = require("util.damage")
 local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
 
 local ezreal = {}
 

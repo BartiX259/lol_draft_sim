@@ -1,12 +1,12 @@
+local melee_aa = require("abilities.melee_aa")
 local none = require("abilities.none")
 local splash = require("abilities.splash")
-local melee_aa = require("abilities.melee_aa")
-local pull = require("effects.pull")
 local airborne = require("effects.airborne")
+local pull = require("effects.pull")
 local aoe = require("projectiles.aoe")
-local movement = require("util.movement")
-local damage = require("util.damage")
 local champion = require("util.champion")
+local damage = require("util.damage")
+local movement = require("util.movement")
 
 local wukong = {}
 

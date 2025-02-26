@@ -2,20 +2,20 @@ champion vi
 sprite vi.jpg
 
 attributes:
-  health 2543
-  armor 86.4
+  health 1843
+  armor 106.4
   mr 56.6
-  ms 424
+  ms 412
 
 behavior:
-  if ready r then
-    range r
-    movement aggressive
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
   elseif ready q then
     range q
     movement aggressive
   else
-    range aa.range + 100
+    range q + 100
     movement peel
   end
 
@@ -24,7 +24,7 @@ abilities:
 
   aa:
     cd 1
-    damage 300
+    damage 195
     range 150
     cast melee_aa
 
@@ -34,8 +34,13 @@ abilities:
     range 725
     size 120
     cast ranged
+    pre-cast:
+      if cast.target:has_effect("stun") or r.active then
+        return nil
+      end
+      return cast
     use:
-      effect on self pull to cast.pos speed 1400 on finish do
+      effect on self dash to cast.pos speed 1400 on finish do
         effect on self shield 305 1s -- passive shield
         spawn aoe at pos
       end
@@ -47,13 +52,16 @@ abilities:
     cd 115
     damage 360
     range 800
-    size 220
+    size 150
     cast ranged
     use:
-      --effect on self unstoppable duration 1.5s
-      effect on self pull to cast.target speed 1400 on finish do
+      effect on self unstoppable 1.5s
+      active = true
+      effect on self dash to cast.target speed 1400 on finish do
+        self:del_effect("unstoppable")
         spawn aoe at pos
       end
     hit:
       damage physical
-      effect airborne 1.25s
+      active = false
+      effect airborne 1.3s

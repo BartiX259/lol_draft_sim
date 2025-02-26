@@ -24,7 +24,7 @@ function end_ui:__call(winner, blue_team, red_team)
       + label { text = "" }
       + label { text = "Blue team", color = { 1, 1, 1 } }
   for _, champ in pairs(blue_team) do
-    res = res + (component { row = true, gap = 10 }
+    res = res + (component { row = true, gap = 10, center = true }
       + label { text = champ.name, color = { 1, 1, 1 } }
       + image { image = champ.sprite, width = 40, height = 40 }
       + label { text = tostring(champ.damage_dealt), color = { 1, 1, 1 } })

@@ -173,6 +173,9 @@ function love.update(dt)
           end
           if check then
             local cast = ability:cast(context)
+            if cast and ability.precast then
+              cast = ability:precast(context, cast)
+            end
             if cast then
               ability:use(context, cast)
               if ability.joined then
