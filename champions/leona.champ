@@ -2,10 +2,10 @@ champion leona
 sprite leona.jpg
 
 attributes:
-  health 1858
-  armor 181
-  mr 117
-  ms 380
+  health 2558
+  armor 146
+  mr 87
+  ms 395
 
 behavior:
   if ready e then
@@ -19,9 +19,15 @@ behavior:
 abilities:
   color 1, 0.8, 0.2
 
+  aa:
+    cd 1.19
+    damage 116
+    range 125
+    cast melee_aa
+
   q:
-    cd 5
-    range 175
+    cd 4.06
+    range 125
     damage 110
     stun 1s
     cast melee_aa
@@ -30,7 +36,7 @@ abilities:
       effect stun duration stun
 
   e:
-    cd 6
+    cd 4.87
     damage 210
     range 900
     speed 2000
@@ -43,10 +49,10 @@ abilities:
     hit:
       damage magic
       effect root 0.5s
-      effect on self pull to target.pos speed 1500
+      effect on self dash to target.pos speed 1500
 
   r:
-    cd 75
+    cd 60.94
     damage 225
     range 1200
     size 325

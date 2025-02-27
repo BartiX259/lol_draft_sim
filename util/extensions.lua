@@ -6,6 +6,12 @@ function table.shallow_copy(t)
   return t2
 end
 
+function table.copy_items(from, to)
+  for k,v in pairs(from) do
+    to[k] = v
+  end
+end
+
 function math.clamp(num, min, max)
   return math.max(math.min(num, max), min)
 end

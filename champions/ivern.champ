@@ -2,10 +2,10 @@ champion ivern
 sprite ivern.jpg
 
 attributes:
-  health 2217  -- 630 (Base) + (99 * 12) = 1818
-  armor 93.4      -- 27 (Base) + (4.7 * 12) = 83.4.  +10 from Ionian Boots.
-  mr 47.6     -- 30 (Base) + (1.3 * 12) = 45.6. +2 from Null-magic mantle
-  ms 375      -- 330 (Base) + 45 (Boots)
+  health 2568
+  armor 98.4
+  mr 65.6
+  ms 330
 
 behavior:
     if ready q then
@@ -18,13 +18,17 @@ behavior:
 
 abilities:
   color 0.2, 0.8, 0.4
-
+  aa:
+    cd 1
+    range 475
+    damage 88.8
+    cast ranged_aa
   q:
-    cd 6.86  -- (10 (Base at Rank 5) / (1 + (45/100))) = 6.89.  45 AH from Items.
-    damage 281  -- 260 (Base at Rank 5) + (0.7 * 30) = 281.  30 AP from Items.
+    cd 8.33
+    damage 288
     range 1150
     speed 1300
-    size 140 --80*2 (The size references to the diameter, ingame is the radius)
+    size 160
     stop_on_hit true
     cast ranged
     use:
@@ -32,21 +36,21 @@ abilities:
       spawn proj
     hit:
       damage magic
-      effect root 2s  -- Max rank root duration.
+      effect root 2s
 
   e:
-    cd 4.83  -- (7 (Base at Rank 5) / (1 + (45/100))) = 4.83.  45 AH from Items.
-    damage 277  -- 150 (Base at Rank 5) + (0.8 * 30) + 103 = 277.  30 AP from items.  103 is 8% Max HP (from Daisy Hit)
+    cd 5.83
+    damage 182
     range 750
-    shield_amount 414 -- 235 (Base at rank 5) + 80 (Imperial Mandate base) + (0.5 * 30) = 330 + (60 * 0.8) +35.5 (Ionian Boots 15% Shield Power, only on allies)
+    shield_amount 255
     deploy_time 0.1
     persist_time 0.2
-    size 300
+    size 500
     cast buff
     use:
-      effect shield shield_amount 2s -- Apply shield to the target
+      effect shield shield_amount 2s
       proj = aoe follow cast.target
       delay 2 spawn proj
     hit:
       damage magic
-      effect slow 60% 2s -- Max rank slow.
+      effect slow 60% 2s

@@ -13,19 +13,19 @@ local garen = {}
 -- Constructor
 function garen.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2616,
-    armor = 88.4,
-    mr = 50.6,
-    ms = 424,
+    health = 2316,
+    armor = 154.4,
+    mr = 105.6,
+    ms = 385,
     sprite = 'garen.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1.11, 175, 228),
-    q = ranged.new(5.6, 400),
+    aa = melee_aa.new(0.83, 175, 373),
+    q = ranged.new(6.15, 400),
     q_hit = ranged.new(0, 200),
-    e = ranged.new(6.3, 150),
-    r = ability:new(56),
+    e = ranged.new(6.92, 325),
+    r = ability:new(76.9),
   }
 champ.abilities.q_hit:join(champ.abilities.q)
 
@@ -36,38 +36,28 @@ end))
 end
 
 function champ.abilities.q_hit:use(context, cast)
-damage:new(264, damage.PHYSICAL):deal(champ, cast.target)
+damage:new(337, damage.PHYSICAL):deal(champ, cast.target)
 cast.target:effect(silence.new(1.5))
 end
 
 function champ.abilities.e:use(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
-size = 300,
+size = 325,
 color = { 0.9,0.7,0.5 },
+persist_time = 3,
+tick = 0.375,
 follow = champ,
-hard_follow = true,
 })
-local num_ticks = 9
-local current_proj = self.proj
-for i = 1 , num_ticks - 1 do
-current_proj.next = aoe:new(self, { colliders = context.enemies,
-size = 300,
-color = { 0.9,0.7,0.5 },
-follow = champ,
-hard_follow = true,
-})
-current_proj = current_proj.next
-end
 context.spawn( self.proj
 )
 end
 
 function champ.abilities.e:hit(target)
-damage:new(106.2, damage.PHYSICAL):deal(champ, target)
+damage:new(163.4, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.r:cast(context)
-if champ.target and champ.target.pos :distance ( champ.pos ) < 400 and ( champ.target.health < 550 or champ.health / champ.max_health < 0.2 ) then
+if champ.target and champ.target.pos :distance ( champ.pos ) < 400 and ( champ.target.health < 697 or champ.health / champ.max_health < 0.2 ) then
 return { target = champ.target }
 end
 return nil
@@ -79,8 +69,9 @@ size = 200,
 color = { 1,1,1 },
 deploy_time = 0.5,
 follow = cast.target,
+soft_follow = true,
 }):on_impact(function()
-damage:new(550, damage.TRUE):deal(champ, cast.target)
+damage:new(697, damage.TRUE):deal(champ, cast.target)
 end)
 context.spawn( self.proj
 )

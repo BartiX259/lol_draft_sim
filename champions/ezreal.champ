@@ -2,10 +2,10 @@ champion ezreal
 sprite ezreal.jpg
 
 attributes:
-    health 1824
+    health 2274
     armor 80.4
     mr 45.6
-    ms 385
+    ms 370
 
 behavior:
   movement kite
@@ -14,14 +14,14 @@ behavior:
 abilities:
 color 0.8, 0.8, 0.4
 aa:
-  cd 1
+  cd 1.23
   range 550
-  damage 203
+  damage 163
   cast ranged_aa
 
 q:
-  cd 4.5
-  damage 489
+  cd 3.75
+  damage 332
   range 1200
   size 120
   speed 2000
@@ -37,9 +37,9 @@ q:
   end
 
 e:
-  cd 14
+  cd 11.7
   size 120
-  damage 387
+  damage 280
   speed 2000
   dist 475
   range 700
@@ -47,7 +47,7 @@ e:
   use:
     pos = cast.pos
     if closest_dist < range + 50 then
-      proj = missile from pos to closest_enemy colliders nil
+      proj = missile from pos to closest_enemy colliders nil range nil
       spawn proj
     end
   hit:

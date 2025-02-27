@@ -23,8 +23,9 @@ function aoe:new(ability, data)
       ability = ability,
       persist_time = data.persist_time or 0.5,
       follow = data.follow,
-      hard_follow = data.hard_follow or false,
+      soft_follow = data.soft_follow or false,
       color = data.color,
+      tick_time = data.tick,
       hit_cols = data.hit_cols or {},
       after_hit = false,
       cur_time = 0
@@ -39,14 +40,21 @@ function aoe:update(dt)
   self.cur_time = self.cur_time + dt
   if self.follow ~= nil then
     self.pos = self.follow.pos
-    if self.hard_follow and self.follow.health <= 0 then
+    if not self.soft_follow and self.follow.health <= 0 then
       self.next = nil
       return true
     end
   end
 
+  if self.tick_time and self.after_hit then
+    if self.cur_time - self.hit_time > self.tick_time then
+      self.after_hit = false
+    end
+  end
+
   if not self.after_hit and self.cur_time >= self.deploy_time then
     self.after_hit = true
+    self.hit_time = self.cur_time
     if self.impact then
       self.impact()
     end

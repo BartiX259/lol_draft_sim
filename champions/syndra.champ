@@ -2,9 +2,9 @@ champion syndra
 sprite syndra.jpg
 
 attributes:
-    health 1811
-    armor 80.2
-    mr 45.6
+    health 1961
+    armor 95.2
+    mr 65.6
     ms 375
 
 behavior:
@@ -21,18 +21,18 @@ behavior:
 
 abilities:
 color 0.8, 0.5, 0.8
-aa: -- auto attack
+aa:
   cd 1
   range 550
-  damage 150
+  damage 88.8
   cast ranged_aa
 q:
-  cd 2.9
-  damage 470
+  cd 6.087
+  damage 356.6
   range 800
   size 210
   deploy_time 0.6
-  persist_time 2
+  persist_time 0
   cast splash
  use:
   proj = aoe at cast.pos
@@ -41,15 +41,15 @@ q:
   damage magic
 
 e:
-  cd 6.7
-  damage 441
+  cd 14.78
+  damage 341.2
   speed 2500
   size 120
   range 700
   cast with q
   use:
-    hit_cols = {}  -- Store hits in the same object so enemies dont take extra damage
-    for angle = -0.2, 0.2, 0.1 do
+    hit_cols = {}
+    for angle = -0.4, 0.4, 0.2 do
         local dir = cast.dir:rotate(angle)
         spawn missile from self
     end
@@ -72,8 +72,8 @@ q_push:
         effect stun 1s
 
 r:
-  cd 70
-  damage 228
+  cd 86.95
+  damage 180.12
   range 675
   speed 1500
   size 100

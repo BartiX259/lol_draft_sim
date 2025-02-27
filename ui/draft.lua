@@ -22,6 +22,10 @@ local function def_color(color)
   color[3] = 1
 end
 
+local function get_team(text)
+  return string.find(text, "B") and "blue" or "red"
+end
+
 function draft:__call()
   local res = component { column = true, gap = 10, center = true }
 
@@ -70,7 +74,7 @@ function draft:__call()
       else
         info.slots[info.slot].image = mod.image
         def_color(info.slots[info.slot].color)
-        picks[(is_blue and "blue" or "red")][info.slots[info.slot].text] = mod.name
+        picks[get_team(info.slots[info.slot].text)][info.slots[info.slot].text] = mod.name
         info.slot = -1
       end
     end} )
@@ -84,6 +88,7 @@ function draft:__call()
     local row = component { row = true, gap = 1000}
     for _, is_blue in ipairs({ true, false }) do
         local label_text = (is_blue and "B" or "R") .. tostring(i)
+        local team = is_blue and "blue" or "red"
         local col = {1, 1, 1}
         local mod = {image = champ_icon, color = {1, 1, 1}, text = label_text}
         table.insert(info.slots, mod)
@@ -100,15 +105,28 @@ function draft:__call()
                             info.slot = -1
                             def_color(mod.color)
                           else
-                            if not (info.slot == -1) then
-                              def_color(info.slots[info.slot].color)
+                            if info.slot ~= -1 then
+                              local other = info.slots[info.slot]
+                              local other_team = get_team(other.text)
+                              def_color(other.color)
+                              if picks[other_team][other.text] or picks[team][label_text] then
+                                -- Swap slots
+                                local temp = mod.image
+                                mod.image = other.image
+                                other.image = temp
+                                temp = picks[team][label_text]
+                                picks[team][label_text] = picks[other_team][other.text]
+                                picks[other_team][other.text] = temp
+                                info.slot = -1
+                                return
+                              end
                             end
                             info.slot = id
                             sel_color(mod.color)
                           end
                         else
                           mod.image = info.champs[info.champ].image
-                          picks[(is_blue and "blue" or "red")][label_text] = info.champs[info.champ].name
+                          picks[team][label_text] = info.champs[info.champ].name
                           def_color(info.champs[info.champ].color)
                           info.champ = -1
                         end
@@ -119,7 +137,7 @@ function draft:__call()
                         def_color(mod.color)
                         info.slot = -1
                       end
-                      picks[(is_blue and "blue" or "red")][label_text] = nil
+                      picks[team][label_text] = nil
                     end
                 }
             )

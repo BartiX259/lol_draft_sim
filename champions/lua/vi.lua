@@ -14,17 +14,17 @@ local vi = {}
 -- Constructor
 function vi.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1843,
-    armor = 106.4,
+    health = 2193,
+    armor = 121.4,
     mr = 56.6,
-    ms = 412,
+    ms = 340,
     sprite = 'vi.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1, 150, 195),
-    q = ranged.new(6, 725),
-    r = ranged.new(115, 800),
+    aa = melee_aa.new(1.25, 125, 158),
+    q = ranged.new(4.3, 725),
+    r = ranged.new(82.1, 800),
   }
 
 function champ.abilities.q:precast(context, cast)
@@ -35,19 +35,20 @@ return cast
 end
 
 function champ.abilities.q:use(context, cast)
-champ:effect(dash.new(1400.0, cast.pos):on_finish(function()
-champ:effect(shield.new(1.0, 305.0))
 context.spawn( aoe:new(self, { colliders = context.enemies,
 size = 120,
 color = { 0.9,0.2,0.2 },
-at = champ.pos,
+follow = champ,
+tick = 0,
 })
 )
-end))
+champ:effect(dash.new(1400.0, cast.pos))
 end
 
 function champ.abilities.q:hit(target)
-damage:new(450, damage.PHYSICAL):deal(champ, target)
+damage:new(302, damage.PHYSICAL):deal(champ, target)
+champ:effect(shield.new(3.0, 263.0))
+champ :del_effect (" dash ")
 target:effect(airborne.new(1.0))
 end
 
@@ -66,14 +67,14 @@ end))
 end
 
 function champ.abilities.r:hit(target)
-damage:new(360, damage.PHYSICAL):deal(champ, target)
+damage:new(353, damage.PHYSICAL):deal(champ, target)
 self.active = false
 target:effect(airborne.new(1.3))
 end
 
 function champ.behaviour(ready, context)
-if context.closest_dist < 150 + 50 then
-champ.range = 150
+if context.closest_dist < 125 + 50 then
+champ.range = 125
 champ.target = context.closest_enemy
 elseif ready.q then
 champ.range = 725

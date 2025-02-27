@@ -1,3 +1,4 @@
+local ranged_aa = require("abilities.ranged_aa")
 local splash = require("abilities.splash")
 local pull = require("effects.pull")
 local slow = require("effects.slow")
@@ -14,18 +15,20 @@ local orianna = {}
 -- Constructor
 function orianna.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1789.5,
-    armor = 66,
-    mr = 40,
+    health = 2055,
+    armor = 70,
+    mr = 42,
     ms = 370,
     sprite = 'orianna.jpg',
   })
 
   champ.abilities = {
-    q = splash.new(2.7, 1025, 175),
-    w = ability:new(5),
-    r = ability:new(90),
+    aa = ranged_aa.new(1, 525, 160, { 0.3,0.5,0.8 }),
+    q = splash.new(1.67, 825, 175),
+    w = ability:new(3.92),
+    r = ability:new(52.83),
   }
+
 function champ.abilities.q:use(context, cast)
 local cast_pos = cast.pos
 self.proj = missile.new(self, { dir = cast.dir,
@@ -33,7 +36,7 @@ colliders = context.enemies,
 size = 175,
 speed = 1400,
 color = { 0.3,0.5,0.8 },
-range = 1025,
+range = 825,
 from = champ.pos,
 to = cast_pos,
 })
@@ -48,7 +51,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(300, damage.MAGIC):deal(champ, target)
+damage:new(279, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:cast(context)
@@ -61,13 +64,14 @@ size = 225,
 color = { 0.3,0.5,0.8 },
 at = champ.abilities.q.proj,
 follow = champ.abilities.q.proj,
+soft_follow = true,
 })
 context.spawn( self.proj
 )
 end
 
 function champ.abilities.w:hit(target)
-damage:new(400, damage.MAGIC):deal(champ, target)
+damage:new(396, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.0, 0.2))
 end
 
@@ -82,22 +86,23 @@ color = { 0.3,0.5,0.8,0.7 },
 deploy_time = 0.2,
 at = champ.abilities.q.proj,
 follow = champ.abilities.q.proj,
+soft_follow = true,
 })
 context.spawn( self.proj
 )
 end
 
 function champ.abilities.r:hit(target)
-damage:new(650, damage.MAGIC):deal(champ, target)
+damage:new(571, damage.MAGIC):deal(champ, target)
 target:effect(pull.new(1200.0, self.proj))
 end
 
 function champ.behaviour(ready, context)
 if ready.q then
-champ.range = 1025-50
+champ.range = 825-50
 champ:change_movement(movement.AGGRESSIVE)
 else
-champ.range = 1025+200
+champ.range = 825+200
 champ:change_movement(movement.PASSIVE)
 end
 end

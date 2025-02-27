@@ -13,8 +13,11 @@ local GLITCH = 4
 
 function love.load()
   love.window.setMode(1000, 600, {resizable = true})
-  love.window.maximize()
+  -- love.window.maximize()
  Draft = {blue = {}, red = {}}
+ Simulations = 100
+ BlueWins = 0
+ RedWins = 0
  GameState = DRAFT
 end
 
@@ -70,7 +73,33 @@ function Delay(time, func)
   table.insert(Delays, { time = time, func = func })
 end
 
+function sim_result(res)
+  if res == BLUE_WIN then
+    BlueWins = BlueWins + 1
+  elseif res == RED_WIN then
+    RedWins = RedWins + 1
+  end
+  Simulations = Simulations - 1
+  if Simulations == 0 then
+    GameState = res
+    print("Blue: " .. tostring(BlueWins))
+    print("Red: " .. tostring(RedWins))
+  else
+    new_game()
+  end
+end
+
 function love.update(dt)
+  if Simulations > 0 and GameState == PLAYING then
+    for i = 1, 1000 do
+      game_tick(0.02)
+    end
+  else
+    game_tick(dt)
+  end
+end
+
+function game_tick(dt)
   if GameState == GLITCH then
     return
   end
@@ -81,12 +110,20 @@ function love.update(dt)
   end
 
   if Capture >= 1 or rawequal(next(RedTeam), nil) then
-      GameState = BLUE_WIN
-      ui.update()
+      if Simulations > 0 then
+        sim_result(BLUE_WIN)
+      else
+        GameState = BLUE_WIN
+        ui.update()
+      end
       return
   elseif Capture <= -1 or rawequal(next(BlueTeam), nil) then
-      GameState = RED_WIN
-      ui.update()
+      if Simulations > 0 then
+        sim_result(RED_WIN)
+      else
+        GameState = RED_WIN
+        ui.update()
+      end
       return
   end
 
@@ -281,7 +318,7 @@ function love.draw()
   end
 
   -- Iterate over both teams
-  for _, team in ipairs({ { BlueTeam, { 0.6, 0.6, 1 } }, { RedTeam, { 1, 0.6, 0.6 } } }) do
+  for _, team in ipairs({ { BlueTeam, { 0.4, 0.4, 1 } }, { RedTeam, { 1, 0.4, 0.4 } } }) do
     local champs, color = team[1], team[2]
 
     -- Draw champions
@@ -291,13 +328,17 @@ function love.draw()
       if champ:has_effect("stun") then
         love.graphics.setColor({ 1000, 1000, 1000 })
       end
+      -- Move direction
       love.graphics.line(champ.pos.x, champ.pos.y, champ.pos.x + champ.move_dir.x, champ.pos.y + champ.move_dir.y)
-      -- Mask circle
+      -- Outline
+      love.graphics.circle("fill", champ.pos.x, champ.pos.y, champ.size / 2 + 5)
+      -- Circle mask
       love.graphics.stencil(function()
         love.graphics.circle("fill", champ.pos.x, champ.pos.y, champ.size / 2)
       end, "replace", 1)
       love.graphics.setStencilTest("equal", 1)
       -- Draw sprite
+      love.graphics.setColor({ 1, 1, 1 })
       love.graphics.draw(champ.sprite, champ.pos.x, champ.pos.y, 0, champ.size / champ.sprite:getWidth(),
         champ.size / champ.sprite:getHeight(), champ.sprite:getWidth() / 2, champ.sprite:getHeight() / 2)
       -- Reset the mask
@@ -320,7 +361,7 @@ function love.draw()
           ((champ.health + amount) / champ.max_health) * champ.size, 10)
       end
       -- Green
-      love.graphics.setColor(0, 1, 0)
+      love.graphics.setColor(0.1, 0.9, 0.1)
       love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2,
         (champ.health / champ.max_health) * champ.size, 10)
     end

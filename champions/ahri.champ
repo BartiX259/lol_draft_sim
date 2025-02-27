@@ -2,9 +2,9 @@ champion ahri
 sprite ahri.jpg
 
 attributes:
-  health 1728.8
-  armor 72.5
-  mr 44.25
+  health 1838
+  armor 77.4
+  mr 45.6
   ms 375
 
 behavior:
@@ -21,10 +21,15 @@ behavior:
 
 abilities:
 color 0.4, 0.5, 0.9
+aa:
+  cd 1.185
+  range 550
+  damage 89
+  cast ranged_aa
 q:
-  cd 4
+  cd 7
   range 900
-  damage 280
+  damage 266
   speed 1750
   size 200
   cast splash
@@ -42,33 +47,33 @@ q_ret:
     proj = missile from q.proj to self
     spawn proj
   hit:
-   damage true
+   damage magic
 
 e:
-  cd 8
-  damage 270
+  cd 12
+  damage 429
   range 1000
   speed 1550
   size 120
   stop_on_hit true
-  color 1, 0.2, 0.8 
+  color 1, 0.2, 0.8
   cast ranged
   use:
     proj = missile from pos
     spawn proj
   hit:
     damage magic
-    effect charm to self 1.5s speed 100
+    effect charm to self 2s speed 244
 
 r:
-  cd 8
-  damage 200
+  cd 115
+  damage 208
   dist 500
   size 100
-  speed 1000
+  speed 1400
   cast dash
   use:
-    effect on self pull to cast.pos speed 1300 on finish do
+    effect on self dash to cast.pos speed 1300 on finish do
         if closest_dist < q.range then
             proj = missile from pos to cast.target range nil
             spawn proj

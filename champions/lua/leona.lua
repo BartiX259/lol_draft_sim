@@ -15,18 +15,20 @@ local leona = {}
 -- Constructor
 function leona.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1858,
-    armor = 181,
-    mr = 117,
-    ms = 380,
+    health = 2558,
+    armor = 146,
+    mr = 87,
+    ms = 395,
     sprite = 'leona.jpg',
   })
 
   champ.abilities = {
-    q = melee_aa.new(5, 175, 110),
-    e = ranged.new(6, 900),
-    r = splash.new(75, 1200, 325),
+    aa = melee_aa.new(1.19, 125, 116),
+    q = melee_aa.new(4.06, 125, 110),
+    e = ranged.new(4.87, 900),
+    r = splash.new(60.94, 1200, 325),
   }
+
 
 function champ.abilities.e:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
@@ -69,7 +71,7 @@ if ready.e then
 champ.range = 900
 champ:change_movement(movement.AGGRESSIVE)
 else
-champ.range = 175+100
+champ.range = 125+100
 champ:change_movement(movement.PEEL)
 end
 end

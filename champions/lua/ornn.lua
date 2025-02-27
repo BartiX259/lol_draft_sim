@@ -1,3 +1,4 @@
+local melee_aa = require("abilities.melee_aa")
 local none = require("abilities.none")
 local splash = require("abilities.splash")
 local airborne = require("effects.airborne")
@@ -14,26 +15,26 @@ local ornn = {}
 -- Constructor
 function ornn.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 3030,
-    armor = 237,
-    mr = 115.6,
+    health = 2518,
+    armor = 270,
+    mr = 117,
     ms = 380,
     sprite = 'ornn.jpg',
   })
 
   champ.abilities = {
+    aa = melee_aa.new(1.2, 175, 111),
     e = splash.new(12, 800, 360),
-    r = splash.new(120, 2500, 340),
+    r = splash.new(100, 2500, 340),
     r_recast = none.new(),
   }
+
 function champ.abilities.e:use(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 360,
 color = { 0.8,0.4,0.2 },
 deploy_time = 0.35,
-at = champ,
 follow = champ,
-hard_follow = true,
 })
 context.spawn( self.proj
 )
@@ -41,7 +42,7 @@ champ:effect(pull.new(1600.0, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
-damage:new(260, damage.PHYSICAL):deal(champ, target)
+damage:new(348, damage.PHYSICAL):deal(champ, target)
 target:effect(airborne.new(1.25))
 end
 

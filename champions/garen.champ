@@ -2,10 +2,10 @@ champion garen
 sprite garen.jpg
 
 attributes:
-  health 2616
-  armor 88.4
-  mr 50.6
-  ms 424
+  health 2316
+  armor 154.4
+  mr 105.6
+  ms 385
 
 behavior:
     if q.active or closest_dist < 200 then
@@ -18,13 +18,13 @@ behavior:
 
 abilities:
   aa:
-    damage 228
-    cd 1.11
+    damage 373
+    cd 0.83
     range 175
     cast melee_aa
 
   q:
-    cd 5.6
+    cd 6.15
     range 400
     cast ranged
     use:
@@ -33,35 +33,30 @@ abilities:
 
   q_hit:
     range 200
-    damage 264
+    damage 337
     cast ranged if q
     use:
         damage physical
         effect silence 1.5s
 
   e:
-    cd 6.3
-    damage 106.2
-    range 150
-    size 300
-    duration 3
+    cd 6.92
+    damage 163.4
+    range 325
+    size 325
+    tick 0.375
+    persist_time 3
     color 0.9, 0.7, 0.5
     cast ranged
     use:
-      proj = aoe follow self hard_follow true
-      local num_ticks = 9
-      local current_proj = proj
-      for i = 1, num_ticks - 1 do
-        current_proj.next = aoe follow self hard_follow true
-        current_proj = current_proj.next
-      end
+      proj = aoe follow self
       spawn proj
     hit:
       damage physical
 
   r:
-    cd 56
-    damage 550
+    cd 76.9
+    damage 697
     range 400
     color 1, 1, 1
     size 200
@@ -72,7 +67,7 @@ abilities:
        end
        return nil
     use:
-        proj = aoe follow cast.target colliders nil on impact do -- visual
+        proj = aoe follow cast.target soft_follow true colliders nil on impact do -- visual
             damage true
         end
         spawn proj

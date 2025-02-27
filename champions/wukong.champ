@@ -2,9 +2,9 @@ champion wukong
 sprite wukong.jpg
 
 attributes:
-  health 1694
-  armor 162.5
-  mr 50.45
+  health 2198
+  armor 150.4
+  mr 52.65
   ms 385
 
 behavior:
@@ -15,71 +15,71 @@ behavior:
     range aa
     movement aggressive
   else
-    range e + 100
+    range e
     movement peel
   end
 
 abilities:
 color 0.9, 0.9, 0.9, 0.9
-hard_follow true
-follow self
 
 aa:
   cd 1.2
-  damage 195
+  damage 203
   range 175
   cast melee_aa
 
 e:
-  cd 5.5
+  cd 5.6
   damage 200
-  range 925
-  size 370
-  deploy_time 0.6
+  range 625
+  size 190
+  deploy_time 0.1
   persist_time 0.1
   cast splash
   use:
-    effect on self pull to cast.target speed 1550
-    proj = aoe at self
+    effect on self dash to cast.target speed 1550
+    proj = aoe follow self
     spawn proj
   hit:
     damage magic
 
 r:
-  cd 70
-  damage 91.2
-  size 370
+  cd 72
+  damage 120
+  size 165
   range 200
-  deploy_time 0.5
-  persist_time 0.15
+  deploy_time 0
+  persist_time 2
   cast splash
   use:
-    proj = aoe at self
+    proj = aoe follow self
     self.spinning = true
     spawn proj
   hit:
     damage physical
-    effect airborne 1s
+    effect airborne 0.6s
 
 r_ticks:
-  damage 91.2
-  size 370
+  damage 120
+  size 165
   deploy_time 0
-  persist_time 0.15
+  tick 0.25
+  persist_time 2
   cast with r
   use:
-    local proj_one = aoe
-    r.proj.next = proj_one
-    local proj_temp = proj_one
-    for i = 1, 7 do
-        proj_temp.next = aoe
-        proj_temp = proj_temp.next
-    end
-    proj = proj_temp
+    proj = aoe follow self
+    r.proj.next = proj
   hit:
     damage physical
 
 r_end:
+  cd 10
   cast after r_ticks
   use:
     self.spinning = false
+    delay 1 r.timer = 0
+    delay 8 do
+      if r.timer <= 0 then
+        r.timer = r.cd
+      end
+    end

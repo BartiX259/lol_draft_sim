@@ -15,19 +15,19 @@ local syndra = {}
 -- Constructor
 function syndra.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1811,
-    armor = 80.2,
-    mr = 45.6,
+    health = 1961,
+    armor = 95.2,
+    mr = 65.6,
     ms = 375,
     sprite = 'syndra.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1, 550, 150, { 0.8,0.5,0.8 }),
-    q = splash.new(2.9, 800, 210),
-    e = ability:new(6.7),
-    q_push = ability:new(6.7),
-    r = ability:new(70),
+    aa = ranged_aa.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
+    q = splash.new(6.087, 800, 210),
+    e = ability:new(14.78),
+    q_push = ability:new(14.78),
+    r = ability:new(86.95),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -35,7 +35,7 @@ self.proj = aoe:new(self, { colliders = context.enemies,
 size = 210,
 color = { 0.8,0.5,0.8 },
 deploy_time = 0.6,
-persist_time = 2,
+persist_time = 0,
 at = cast.pos,
 })
 context.spawn( self.proj
@@ -51,12 +51,12 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(470, damage.MAGIC):deal(champ, target)
+damage:new(356.6, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:with_q(context, cast)
 self.hit_cols = {}
-for angle = - 0.2 , 0.2 , 0.1 do
+for angle = - 0.4 , 0.4 , 0.2 do
 local dir = cast.dir :rotate ( angle )
 context.spawn( missile.new(self, { dir = dir,
 colliders = context.enemies,
@@ -72,7 +72,7 @@ end
 end
 
 function champ.abilities.e:hit(target)
-damage:new(441, damage.MAGIC):deal(champ, target)
+damage:new(341.2, damage.MAGIC):deal(champ, target)
 local push_pos = target.pos + ( target.pos - champ.pos ):normalize () * 300
 target:effect(pull.new(1500.0, push_pos))
 end
@@ -93,13 +93,13 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q_push:hit(target)
-damage:new(441, damage.MAGIC):deal(champ, target)
+damage:new(341.2, damage.MAGIC):deal(champ, target)
 target:effect(stun.new(1.0))
 end
 
 function champ.abilities.r:cast(context)
 for _,target in pairs ( distances.in_range_list(champ, context.enemies, 675) ) do
-if target.health <= 228 * 5 then
+if target.health <= 180.12 * 5 then
 return { target = target }
 end
 end
@@ -124,11 +124,11 @@ end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(228, damage.MAGIC):deal(champ, target)
+damage:new(180.12, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)
-if ready.r and context.closest_enemy.health <= 228 * 5 then
+if ready.r and context.closest_enemy.health <= 180.12 * 5 then
 champ.range = 675-50
 champ:change_movement(movement.AGGRESSIVE)
 elseif ready.q then

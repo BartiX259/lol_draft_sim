@@ -2,9 +2,9 @@ champion ornn
 sprite ornn.jpg
 
 attributes:
-  health 3030
-  armor 237
-  mr 115.6
+  health 2518
+  armor 270
+  mr 117
   ms 380
 
 behavior:
@@ -19,24 +19,30 @@ behavior:
 abilities:
   color 0.8, 0.4, 0.2
 
+  aa:
+    cd 1.2
+    damage 111
+    range 175
+    cast melee_aa
+
   e:
     cd 12
-    damage 260
+    damage 348
     range 800
     speed 1600
     size 360
     deploy_time 0.35
     cast splash
     use:
-      proj = aoe at self follow self hard_follow true
+      proj = aoe follow self
       spawn proj
-      effect on self pull to cast.pos speed speed
+      effect on self dash to cast.pos speed speed
     hit:
       damage physical
       effect airborne 1.25s
 
   r:
-    cd 120
+    cd 100
     damage 175
     range 2500
     speed 1200

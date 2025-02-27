@@ -1,5 +1,6 @@
 local dash = require("abilities.dash")
 local ranged = require("abilities.ranged")
+local ranged_aa = require("abilities.ranged_aa")
 local splash = require("abilities.splash")
 local charm = require("effects.charm")
 local pull = require("effects.pull")
@@ -14,19 +15,21 @@ local ahri = {}
 -- Constructor
 function ahri.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1728.8,
-    armor = 72.5,
-    mr = 44.25,
+    health = 1838,
+    armor = 77.4,
+    mr = 45.6,
     ms = 375,
     sprite = 'ahri.jpg',
   })
 
   champ.abilities = {
-    q = splash.new(4, 900, 200),
-    q_ret = ability:new(4),
-    e = ranged.new(8, 1000),
-    r = dash.new(8, 500, champ.range),
+    aa = ranged_aa.new(1.185, 550, 89, { 0.4,0.5,0.9 }),
+    q = splash.new(7, 900, 200),
+    q_ret = ability:new(7),
+    e = ranged.new(12, 1000),
+    r = dash.new(115, 500, champ.range),
   }
+
 function champ.abilities.q:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
@@ -45,7 +48,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(280, damage.MAGIC):deal(champ, target)
+damage:new(266, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.q_ret:after_q(context, cast)
@@ -63,7 +66,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q_ret:hit(target)
-damage:new(280, damage.TRUE):deal(champ, target)
+damage:new(266, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -81,8 +84,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.e:hit(target)
-damage:new(270, damage.MAGIC):deal(champ, target)
-target:effect(charm.new(1.5, 100.0, champ))
+damage:new(429, damage.MAGIC):deal(champ, target)
+target:effect(charm.new(2.0, 244.0, champ))
 end
 
 function champ.abilities.r:use(context, cast)
@@ -91,7 +94,7 @@ if context.closest_dist < 900 then
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
 size = 100,
-speed = 1000,
+speed = 1400,
 color = { 0.4,0.5,0.9 },
 from = champ.pos,
 to = cast.target,
@@ -104,7 +107,7 @@ end))
 end
 
 function champ.abilities.r:hit(target)
-damage:new(200, damage.MAGIC):deal(champ, target)
+damage:new(208, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

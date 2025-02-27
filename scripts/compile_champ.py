@@ -139,7 +139,7 @@ def build_champion_table(tokens):
                     current_ability = key
                     current_subsection = None
                     champion["abilities"][current_ability] = {}
-                    champion["line_nrs"][current_ability] = {}
+                    champion["line_nrs"][current_ability] = {":main": line_nr}
             else:
                 if current_subsection:
                     champion["abilities"][current_ability][current_subsection].append(pseudo_tokens(line_tokens))
@@ -314,7 +314,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     line += "})"
                 case "aoe":
                     champion["imports"]["projectiles"].add("aoe")
-                    keys = ["size", "color", "colliders", "deploy_time", "persist_time", "at", "hit_cols", "follow", "hard_follow"]
+                    keys = ["size", "color", "colliders", "deploy_time", "persist_time", "at", "hit_cols", "follow", "soft_follow", "tick"]
                     aoe = { "colliders": "context.enemies"}
                     on = None
                     for key in keys:
@@ -341,7 +341,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                             else:
                                 raise CompilerError("Expected 'on finish' or 'on impact'", line_nr)
                         else:
-                            raise CompilerError("Unexpected aoe argument '" + token + "'", line_nr)
+                            raise CompilerError("Unexpected aoe argument '" + key + "'", line_nr)
                         i += 2
                     for nec in ["size", "color"]:
                         if nec not in aoe:
@@ -526,6 +526,8 @@ def generate_lua_code(champion):
     
     for ability, ability_data in champion['abilities'].items():
         line = f"    {ability} = "
+        if "cast" not in ability_data:
+            raise CompilerError("Couldn't find 'cast' for ability " + ability, champion["line_nrs"][ability][":main"])
         if "cd" not in ability_data and ability_data["cast"] != "none" and not isinstance(ability_data["cast"], tuple) and ":cast_join" not in ability_data:
             raise CompilerError("Couldn't find 'cd' for cast", champion["line_nrs"][ability]["cast"])
         if isinstance(ability_data["cast"], str):

@@ -2,10 +2,10 @@ champion varus
 sprite varus.jpg
 
 attributes:
-  health 1865
-  armor 116
-  mr 85
-  ms 385
+  health 1860
+  armor 82.2
+  mr 45.6
+  ms 375
 
 behavior:
     range aa.range  -- auto attack range
@@ -15,14 +15,14 @@ abilities:
   color 0.7, 0.1, 0.8
 
    aa:
-      cd 0.74
-      damage 241
-      range 675
+      cd 0.645
+      damage 276
+      range 575
       cast ranged_aa
 
   q:
-    cd 12
-    damage 585
+    cd 10.908
+    damage 709
     range 1595
     speed 1900
     size 140
@@ -34,8 +34,8 @@ abilities:
       damage physical
 
   r:
-    cd 80
-    damage 550
+    cd 72.72
+    damage 250
     range 1370
     speed 1500
     size 240

@@ -2,22 +2,28 @@ champion lulu
 sprite lulu.jpg
 
 attributes:
-    health 1602.4
-    armor 70
-    mr 41
-    ms 375
+    health 1699
+    armor 84.8
+    mr 45.6
+    ms 370
 
 behavior:
-    range q
+    range 550
     movement passive
 
 abilities:
-  color 0.8, 0.5, 0.8 
+  color 0.8, 0.5, 0.8
+  aa:
+    cd 1
+    range 550
+    damage 84
+    cast ranged_aa
   q:
-    cd 5.1
-    damage 156
-    range 925
-    speed 1600
+    cd 5.83
+    damage 270
+    damage2 135
+    range 950
+    speed 1450
     size 120
     cast ranged
     use:
@@ -27,12 +33,16 @@ abilities:
         delay 0.1 spawn missile from pos
     hit:
         damage magic
-        effect slow 1s 20%
-  we:
-      cd 6
-      range 650
-      cast buff
-      use:
-        effect shield 2.5s 303
-        effect speed 3.5s 25%
-        effect damage_buff 3.5s 30%
+        effect slow 2s 80%
+  w:
+    cd 12.5
+    cast with e
+    use:
+        effect speed 4s 31%
+        effect damage_buff 4s 35%
+  e:
+    cd 6.67
+    range 650
+    cast buff
+    use:
+        effect shield 2.5s 326

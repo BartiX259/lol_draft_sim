@@ -2,10 +2,10 @@ champion vi
 sprite vi.jpg
 
 attributes:
-  health 1843
-  armor 106.4
+  health 2193
+  armor 121.4
   mr 56.6
-  ms 412
+  ms 340
 
 behavior:
   if closest_dist < aa.range + 50 then
@@ -23,14 +23,14 @@ abilities:
   color 0.9, 0.2, 0.2
 
   aa:
-    cd 1
-    damage 195
-    range 150
+    cd 1.25
+    damage 158
+    range 125
     cast melee_aa
 
   q:
-    cd 6
-    damage 450
+    cd 4.3
+    damage 302
     range 725
     size 120
     cast ranged
@@ -40,17 +40,17 @@ abilities:
       end
       return cast
     use:
-      effect on self dash to cast.pos speed 1400 on finish do
-        effect on self shield 305 1s -- passive shield
-        spawn aoe at pos
-      end
+      spawn aoe follow self tick 0 -- Check for collision every frame
+      effect on self dash to cast.pos speed 1400
     hit:
       damage physical
+      effect on self shield 263 3s -- passive shield
+      self:del_effect("dash")
       effect airborne 1s
 
   r:
-    cd 115
-    damage 360
+    cd 82.1
+    damage 353
     range 800
     size 150
     cast ranged
