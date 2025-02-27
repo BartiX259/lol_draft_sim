@@ -1,5 +1,5 @@
-local melee_aa = require("abilities.melee_aa")
-local ranged = require("abilities.ranged")
+local melee_aa_cast = require("abilities.melee_aa")
+local ranged_cast = require("abilities.ranged")
 local airborne = require("effects.airborne")
 local dash = require("effects.dash")
 local shield = require("effects.shield")
@@ -22,9 +22,9 @@ function vi.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1.25, 125, 158),
-    q = ranged.new(4.3, 725),
-    r = ranged.new(82.1, 800),
+    aa = melee_aa_cast.new(1.25, 125, 158),
+    q = ranged_cast.new(4.3, 725),
+    r = ranged_cast.new(82.1, 800),
   }
 
 function champ.abilities.q:precast(context, cast)

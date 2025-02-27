@@ -1,5 +1,5 @@
-local ranged = require("abilities.ranged")
-local ranged_aa = require("abilities.ranged_aa")
+local ranged_cast = require("abilities.ranged")
+local ranged_aa_cast = require("abilities.ranged_aa")
 local root = require("effects.root")
 local missile = require("projectiles.missile")
 local champion = require("util.champion")
@@ -19,9 +19,9 @@ function varus.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(0.645, 575, 276, { 0.7,0.1,0.8 }),
-    q = ranged.new(10.908, 1595),
-    r = ranged.new(72.72, 1370),
+    aa = ranged_aa_cast.new(0.645, 575, 276, { 0.7,0.1,0.8 }),
+    q = ranged_cast.new(10.908, 1595),
+    r = ranged_cast.new(72.72, 1370),
   }
 
 function champ.abilities.q:use(context, cast)

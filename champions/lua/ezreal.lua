@@ -1,6 +1,6 @@
-local dash = require("abilities.dash")
-local ranged = require("abilities.ranged")
-local ranged_aa = require("abilities.ranged_aa")
+local dash_cast = require("abilities.dash")
+local ranged_cast = require("abilities.ranged")
+local ranged_aa_cast = require("abilities.ranged_aa")
 local missile = require("projectiles.missile")
 local champion = require("util.champion")
 local damage = require("util.damage")
@@ -19,9 +19,9 @@ function ezreal.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1.23, 550, 163, { 0.8,0.8,0.4 }),
-    q = ranged.new(3.75, 1200),
-    e = dash.new(11.7, 475, 700),
+    aa = ranged_aa_cast.new(1.23, 550, 163, { 0.8,0.8,0.4 }),
+    q = ranged_cast.new(3.75, 1200),
+    e = dash_cast.new(11.7, 475, 700),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -53,7 +53,7 @@ colliders = nil,
 size = 120,
 speed = 2000,
 color = { 0.8,0.8,0.4 },
-range = 700,
+range = nil,
 from = champ.pos,
 to = context.closest_enemy,
 })

@@ -1,5 +1,5 @@
-local ranged_aa = require("abilities.ranged_aa")
-local splash = require("abilities.splash")
+local ranged_aa_cast = require("abilities.ranged_aa")
+local splash_cast = require("abilities.splash")
 local pull = require("effects.pull")
 local stun = require("effects.stun")
 local aoe = require("projectiles.aoe")
@@ -23,8 +23,8 @@ function syndra.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
-    q = splash.new(6.087, 800, 210),
+    aa = ranged_aa_cast.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
+    q = splash_cast.new(6.087, 800, 210),
     e = ability:new(14.78),
     q_push = ability:new(14.78),
     r = ability:new(86.95),

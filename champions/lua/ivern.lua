@@ -1,6 +1,6 @@
-local buff = require("abilities.buff")
-local ranged = require("abilities.ranged")
-local ranged_aa = require("abilities.ranged_aa")
+local buff_cast = require("abilities.buff")
+local ranged_cast = require("abilities.ranged")
+local ranged_aa_cast = require("abilities.ranged_aa")
 local root = require("effects.root")
 local shield = require("effects.shield")
 local slow = require("effects.slow")
@@ -23,9 +23,9 @@ function ivern.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1, 475, 88.8, { 0.2,0.8,0.4 }),
-    q = ranged.new(8.33, 1150),
-    e = buff.new(5.83, 750),
+    aa = ranged_aa_cast.new(1, 475, 88.8, { 0.2,0.8,0.4 }),
+    q = ranged_cast.new(8.33, 1150),
+    e = buff_cast.new(5.83, 750),
   }
 
 function champ.abilities.q:use(context, cast)

@@ -1,8 +1,8 @@
-local melee_aa = require("abilities.melee_aa")
-local none = require("abilities.none")
-local splash = require("abilities.splash")
+local melee_aa_cast = require("abilities.melee_aa")
+local none_cast = require("abilities.none")
+local splash_cast = require("abilities.splash")
 local airborne = require("effects.airborne")
-local pull = require("effects.pull")
+local dash = require("effects.dash")
 local slow = require("effects.slow")
 local aoe = require("projectiles.aoe")
 local missile = require("projectiles.missile")
@@ -23,10 +23,10 @@ function ornn.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1.2, 175, 111),
-    e = splash.new(12, 800, 360),
-    r = splash.new(100, 2500, 340),
-    r_recast = none.new(),
+    aa = melee_aa_cast.new(1.2, 175, 111),
+    e = splash_cast.new(12, 800, 360),
+    r = splash_cast.new(100, 2500, 340),
+    r_recast = none_cast.new(),
   }
 
 function champ.abilities.e:use(context, cast)
@@ -38,7 +38,7 @@ follow = champ,
 })
 context.spawn( self.proj
 )
-champ:effect(pull.new(1600.0, cast.pos))
+champ:effect(dash.new(1600.0, cast.pos))
 end
 
 function champ.abilities.e:hit(target)

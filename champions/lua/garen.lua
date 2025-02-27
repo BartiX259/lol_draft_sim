@@ -1,5 +1,5 @@
-local melee_aa = require("abilities.melee_aa")
-local ranged = require("abilities.ranged")
+local melee_aa_cast = require("abilities.melee_aa")
+local ranged_cast = require("abilities.ranged")
 local silence = require("effects.silence")
 local speed = require("effects.speed")
 local aoe = require("projectiles.aoe")
@@ -21,10 +21,10 @@ function garen.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa.new(0.83, 175, 373),
-    q = ranged.new(6.15, 400),
-    q_hit = ranged.new(0, 200),
-    e = ranged.new(6.92, 325),
+    aa = melee_aa_cast.new(0.83, 175, 373),
+    q = ranged_cast.new(6.15, 400),
+    q_hit = ranged_cast.new(0, 200),
+    e = ranged_cast.new(6.92, 325),
     r = ability:new(76.9),
   }
 champ.abilities.q_hit:join(champ.abilities.q)

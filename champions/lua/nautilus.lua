@@ -1,6 +1,7 @@
-local melee_aa = require("abilities.melee_aa")
-local ranged = require("abilities.ranged")
+local melee_aa_cast = require("abilities.melee_aa")
+local ranged_cast = require("abilities.ranged")
 local airborne = require("effects.airborne")
+local dash = require("effects.dash")
 local pull = require("effects.pull")
 local root = require("effects.root")
 local missile = require("projectiles.missile")
@@ -21,9 +22,9 @@ function nautilus.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1, 175, 101),
-    q = ranged.new(8.33, 1122),
-    r = ranged.new(83.33, 825),
+    aa = melee_aa_cast.new(1, 175, 101),
+    q = ranged_cast.new(8.33, 1122),
+    r = ranged_cast.new(83.33, 825),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -49,7 +50,7 @@ local pull_self = champ.pos + pull_direction * ( distance * 0.5 )
 target:effect(pull.new(1300.0, pull_target):on_finish(function()
 target:effect(root.new(1.3))
 end))
-champ:effect(pull.new(1300.0, pull_self))
+champ:effect(dash.new(1300.0, pull_self))
 end
 
 function champ.abilities.r:use(context, cast)

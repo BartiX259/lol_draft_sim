@@ -1,7 +1,7 @@
-local melee_aa = require("abilities.melee_aa")
-local ranged = require("abilities.ranged")
-local splash = require("abilities.splash")
-local pull = require("effects.pull")
+local melee_aa_cast = require("abilities.melee_aa")
+local ranged_cast = require("abilities.ranged")
+local splash_cast = require("abilities.splash")
+local dash = require("effects.dash")
 local root = require("effects.root")
 local stun = require("effects.stun")
 local aoe = require("projectiles.aoe")
@@ -23,10 +23,10 @@ function leona.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1.19, 125, 116),
-    q = melee_aa.new(4.06, 125, 110),
-    e = ranged.new(4.87, 900),
-    r = splash.new(60.94, 1200, 325),
+    aa = melee_aa_cast.new(1.19, 125, 116),
+    q = melee_aa_cast.new(4.06, 125, 110),
+    e = ranged_cast.new(4.87, 900),
+    r = splash_cast.new(60.94, 1200, 325),
   }
 
 
@@ -47,7 +47,7 @@ end
 function champ.abilities.e:hit(target)
 damage:new(210, damage.MAGIC):deal(champ, target)
 target:effect(root.new(0.5))
-champ:effect(pull.new(1500.0, target.pos))
+champ:effect(dash.new(1500.0, target.pos))
 end
 
 function champ.abilities.r:use(context, cast)

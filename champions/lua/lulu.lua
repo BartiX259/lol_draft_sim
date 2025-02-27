@@ -1,6 +1,6 @@
-local buff = require("abilities.buff")
-local ranged = require("abilities.ranged")
-local ranged_aa = require("abilities.ranged_aa")
+local buff_cast = require("abilities.buff")
+local ranged_cast = require("abilities.ranged")
+local ranged_aa_cast = require("abilities.ranged_aa")
 local damage_buff = require("effects.damage_buff")
 local shield = require("effects.shield")
 local slow = require("effects.slow")
@@ -25,10 +25,10 @@ function lulu.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1, 550, 84, { 0.8,0.5,0.8 }),
-    q = ranged.new(5.83, 950),
+    aa = ranged_aa_cast.new(1, 550, 84, { 0.8,0.5,0.8 }),
+    q = ranged_cast.new(5.83, 950),
     w = ability:new(12.5),
-    e = buff.new(6.67, 650),
+    e = buff_cast.new(6.67, 650),
   }
 
 function champ.abilities.q:use(context, cast)

@@ -1,5 +1,5 @@
-local ranged_aa = require("abilities.ranged_aa")
-local splash = require("abilities.splash")
+local ranged_aa_cast = require("abilities.ranged_aa")
+local splash_cast = require("abilities.splash")
 local pull = require("effects.pull")
 local slow = require("effects.slow")
 local aoe = require("projectiles.aoe")
@@ -23,8 +23,8 @@ function orianna.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1, 525, 160, { 0.3,0.5,0.8 }),
-    q = splash.new(1.67, 825, 175),
+    aa = ranged_aa_cast.new(1, 525, 160, { 0.3,0.5,0.8 }),
+    q = splash_cast.new(1.67, 825, 175),
     w = ability:new(3.92),
     r = ability:new(52.83),
   }

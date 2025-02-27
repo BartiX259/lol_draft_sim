@@ -1,9 +1,10 @@
-local dash = require("abilities.dash")
-local ranged = require("abilities.ranged")
-local ranged_aa = require("abilities.ranged_aa")
-local splash = require("abilities.splash")
+local dash_cast = require("abilities.dash")
+local none_cast = require("abilities.none")
+local ranged_cast = require("abilities.ranged")
+local ranged_aa_cast = require("abilities.ranged_aa")
+local splash_cast = require("abilities.splash")
 local charm = require("effects.charm")
-local pull = require("effects.pull")
+local dash = require("effects.dash")
 local missile = require("projectiles.missile")
 local ability = require("util.ability")
 local champion = require("util.champion")
@@ -23,11 +24,12 @@ function ahri.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa.new(1.185, 550, 89, { 0.4,0.5,0.9 }),
-    q = splash.new(7, 900, 200),
+    aa = ranged_aa_cast.new(1.185, 550, 89, { 0.4,0.5,0.9 }),
+    q = splash_cast.new(7, 900, 200),
     q_ret = ability:new(7),
-    e = ranged.new(12, 1000),
-    r = dash.new(115, 500, champ.range),
+    e = ranged_cast.new(12, 1000),
+    r = dash_cast.new(115, 500, champ.range),
+    r_charges = none_cast.new(),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -89,7 +91,7 @@ target:effect(charm.new(2.0, 244.0, champ))
 end
 
 function champ.abilities.r:use(context, cast)
-champ:effect(pull.new(1300.0, cast.pos):on_finish(function()
+champ:effect(dash.new(1300.0, cast.pos):on_finish(function()
 if context.closest_dist < 900 then
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
@@ -104,10 +106,25 @@ context.spawn( self.proj
 )
 end
 end))
+champ.abilities.r_charges:with_r(context, cast)
 end
 
 function champ.abilities.r:hit(target)
 damage:new(208, damage.MAGIC):deal(champ, target)
+end
+
+function champ.abilities.r_charges:start()
+self.charges = 3
+end
+
+function champ.abilities.r_charges:with_r(context, cast)
+self.charges = self.charges - 1
+if self.charges > 0 then
+context.delay(1, function() champ.abilities.r.timer = 0
+end)
+else
+self.charges = 3
+end
 end
 
 function champ.behaviour(ready, context)

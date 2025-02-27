@@ -81,3 +81,15 @@ r:
     end
   hit:
     damage magic
+
+r_charges:
+  cast with r
+  start:
+    charges = 3
+  use:
+    charges = charges - 1
+    if charges > 0 then
+      delay 1 r.timer = 0
+    else
+      charges = 3
+    end

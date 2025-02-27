@@ -2,7 +2,7 @@
 import re
 import sys
 
-subsections = ["use", "cast", "hit", "pre-cast"]
+subsections = ["use", "cast", "hit", "pre-cast", "start"]
 util_imports = {"vec2", "distances"}
 lua_keywords = {"and", "or", "not", "if", "elseif", "else", "then", "end", "for", "while", "do", "function", "nil", "local", "true", "false"}
 
@@ -539,43 +539,43 @@ def generate_lua_code(champion):
                 for nec in ["range"]:
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast ranged", champion["line_nrs"][ability]["cast"])
-                line += f"ranged.new({ability_data['cd']}, {ability_data['range']})"
+                line += f"ranged_cast.new({ability_data['cd']}, {ability_data['range']})"
             case "splash":
                 for nec in ["range", "size"]:
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast splash", champion["line_nrs"][ability]["cast"])
-                line += f"splash.new({ability_data['cd']}, {ability_data['range']}, {ability_data['size']})"
+                line += f"splash_cast.new({ability_data['cd']}, {ability_data['range']}, {ability_data['size']})"
             case "melee_aa":
                 for nec in ["range", "damage"]:
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast melee_aa", champion["line_nrs"][ability]["cast"])
-                line += f"melee_aa.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']})"
+                line += f"melee_aa_cast.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']})"
             case "ranged_aa":
                 for nec in ["range", "damage", "color"]:
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast ranged_aa", champion["line_nrs"][ability]["cast"])
-                line += f"ranged_aa.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']}, {ability_data['color']})"
+                line += f"ranged_aa_cast.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']}, {ability_data['color']})"
             case "dash":
                 for nec in ["dist"]:
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast dash", champion["line_nrs"][ability]["cast"])
                 if "range" in ability_data:
-                    line += f"dash.new({ability_data['cd']}, {ability_data['dist']}, {ability_data['range']})"
+                    line += f"dash_cast.new({ability_data['cd']}, {ability_data['dist']}, {ability_data['range']})"
                 else:
-                    line += f"dash.new({ability_data['cd']}, {ability_data['dist']}, champ.range)"
+                    line += f"dash_cast.new({ability_data['cd']}, {ability_data['dist']}, champ.range)"
             case "buff":
                 for nec in ["range"]:
                     if nec not in ability_data:
                         raise CompilerError("Couldn't find '" + nec + "' for cast buff", champion["line_nrs"][ability]["cast"])
-                line += f"buff.new({ability_data['cd']}, {ability_data['range']})"
+                line += f"buff_cast.new({ability_data['cd']}, {ability_data['range']})"
             case "none":
-                line += "none.new()"
+                line += "none_cast.new()"
             case (_, _):
                 if "cd" in ability_data:
                     line += f"ability:new({ability_data['cd']})"
                     champion["imports"]["util"].add("ability") 
                 else:
-                    line += "none.new()"
+                    line += "none_cast.new()"
                     champion["imports"]["abilities"].add("none") 
             case _:
                 line += f"ability:new({ability_data['cd']})"
@@ -589,6 +589,11 @@ def generate_lua_code(champion):
             lua_code.append("champ.abilities." + ability + ":join(champ.abilities." + ability_data[":cast_join"] + ")")
 
     for ability, ability_data in champion['abilities'].items():
+        if "start" in ability_data:
+            lua_code.append("function champ.abilities." + ability + ":start()")
+            lua_code.append(generate_pseudo_code(ability_data["start"], ability_data, champion, "start", champion["line_nrs"][ability]["start"]))
+            lua_code.append("end")
+            lua_code.append("")
         if isinstance(ability_data["cast"], list): # Custom cast
             lua_code.append("function champ.abilities." + ability + ":cast(context)")
             lua_code.append(generate_pseudo_code(ability_data["cast"], ability_data, champion, "cast", champion["line_nrs"][ability]["cast"]))
@@ -651,7 +656,10 @@ def generate_lua_code(champion):
     imports = ""
     for key, values in sorted(champion["imports"].items()):
         for value in sorted(values):
-            imports += f"local {value} = require(\"{key}.{value}\")\n"
+            imports += f"local {value}"
+            if key == "abilities":
+                imports += "_cast"
+            imports += f" = require(\"{key}.{value}\")\n"
     return imports + '\n'.join(lua_code)
 
 import argparse

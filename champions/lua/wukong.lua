@@ -1,6 +1,6 @@
-local melee_aa = require("abilities.melee_aa")
-local none = require("abilities.none")
-local splash = require("abilities.splash")
+local melee_aa_cast = require("abilities.melee_aa")
+local none_cast = require("abilities.none")
+local splash_cast = require("abilities.splash")
 local airborne = require("effects.airborne")
 local dash = require("effects.dash")
 local aoe = require("projectiles.aoe")
@@ -22,10 +22,10 @@ function wukong.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa.new(1.2, 175, 203),
-    e = splash.new(5.6, 625, 190),
-    r = splash.new(72, 200, 165),
-    r_ticks = none.new(),
+    aa = melee_aa_cast.new(1.2, 175, 203),
+    e = splash_cast.new(5.6, 625, 190),
+    r = splash_cast.new(72, 200, 165),
+    r_ticks = none_cast.new(),
     r_end = ability:new(10),
   }
 

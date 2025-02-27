@@ -15,7 +15,7 @@ function love.load()
   love.window.setMode(1000, 600, {resizable = true})
   -- love.window.maximize()
  Draft = {blue = {}, red = {}}
- Simulations = 100
+ Simulations = 0
  BlueWins = 0
  RedWins = 0
  GameState = DRAFT
@@ -36,15 +36,27 @@ function new_game()
   ui.clear()
   BlueTeam = {}
   RedTeam = {}
-    x = -600
+  x = -600
   for _, champ in pairs(Draft.blue) do
-     table.insert(BlueTeam, require("champions.lua."..champ).new(x, 1100))
-     x = x + 200
+    local champ = require("champions.lua."..champ).new(x, 1100)
+    for _, ability in pairs(champ.abilities) do
+      if ability.start then
+        ability:start()
+      end
+    end
+    table.insert(BlueTeam, champ)
+    x = x + 200
   end
   x = -600
   for _, champ in pairs(Draft.red) do
-     table.insert(RedTeam, require("champions.lua."..champ).new(x, -1100))
-     x = x + 200
+    local champ = require("champions.lua."..champ).new(x, -1100)
+    for _, ability in pairs(champ.abilities) do
+      if ability.start then
+        ability:start()
+      end
+    end
+    table.insert(RedTeam, champ)
+    x = x + 200
   end
   BlueProjectiles = {}
   RedProjectiles = {}
