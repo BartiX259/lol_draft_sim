@@ -2,9 +2,9 @@ champion orianna
 sprite orianna.jpg
 
 attributes:
-  health 2055
-  armor 70
-  mr 42
+  health 1905
+  armor 70.4
+  mr 41.6
   ms 370
 
 behavior:
@@ -22,12 +22,12 @@ abilities:
   aa:
     cd 1
     range 525
-    damage 160
+    damage 113
     cast ranged_aa
   q:
-    cd 1.67
+    cd 2.5
     range 825
-    damage 279
+    damage 290
     speed 1400
     size 175
     persist_time 1
@@ -40,8 +40,8 @@ abilities:
     hit:
       damage magic
   w:
-    cd 3.92
-    damage 396
+    cd 5.83
+    damage 410
     size 225
     cast:
       return q.proj and in_range(q.proj, enemies, size / 2 + 30) >= 1
@@ -52,8 +52,8 @@ abilities:
       damage magic
       effect slow 20% 1s
   r:
-    cd 52.83
-    damage 571
+    cd 66.66
+    damage 590
     size 415
     deploy_time 0.2
     color 0.3, 0.5, 0.8, 0.7

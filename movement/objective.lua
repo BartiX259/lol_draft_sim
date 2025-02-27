@@ -4,7 +4,7 @@ local objective = {}
 function objective:__call(context)
   local cap = math.abs(context.capture)
   local dir = vec2.new(0, 0) - context.champ.pos
-  local free = math.clamp(context.closest_dist / (dir:mag() + 100), 0, 1)
+  local free = math.clamp(context.closest_dist / (dir:mag() + 100), 0, 1.5)
   return dir:softcap(30) * (1+cap) * (1+free)
 end
 

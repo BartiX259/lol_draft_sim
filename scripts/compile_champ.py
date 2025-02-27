@@ -291,12 +291,12 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     keys = ["dir", "size", "speed", "color", "colliders", "range", "stop_on_hit", "from", "to", "hit_cols"]
                     missile = { "dir": "cast.dir", "colliders": "context.enemies",}
                     for key in keys:
-                        if key in info:
-                            missile[key] = alias(info[key], champion, info)
-                        elif key in info["local"]:
+                        if key in info["local"]:
                             missile[key] = key
                         elif key in info["global"]:
                             missile[key] = "self." + key
+                        elif key in info:
+                            missile[key] = alias(info[key], champion, info)
                     i += 1
                     while i < tok_count:
                         key = stmt[i]
@@ -318,12 +318,12 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     aoe = { "colliders": "context.enemies"}
                     on = None
                     for key in keys:
-                        if key in info:
-                            aoe[key] = alias(info[key], champion, info)
-                        elif key in info["local"]:
+                        if key in info["local"]:
                             aoe[key] = key
                         elif key in info["global"]:
                             aoe[key] = "self." + key
+                        elif key in info:
+                            aoe[key] = alias(info[key], champion, info)
                     i += 1
                     while i < tok_count:
                         key = stmt[i]

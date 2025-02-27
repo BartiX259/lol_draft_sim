@@ -1,0 +1,60 @@
+champion ziggs
+sprite ziggs.jpg
+
+attributes:
+  health 1878
+  armor 77.4
+  mr 45.6
+  ms 340
+
+behavior:
+  range q
+  movement passive
+
+abilities:
+  color 0.8, 0.5, 0.2
+
+  aa:
+    cd 1.5
+    damage 335
+    range 550
+    cast ranged_aa
+    hit:
+      damage magic
+
+  q:
+    cd 3.2
+    damage 382.5
+    range 1400 -- max range
+    speed 1700
+    size 240
+    deploy_time 0.2
+    cast ranged
+    use:
+      local range = min(850, cast.mag) -- first bounce range
+      proj = missile from pos size 180 colliders nil -- visual
+      proj.after = function()
+        spawn aoe at proj.pos
+      end
+      proj.next = missile range 300 size 180 colliders nil
+      proj.next.after = function()
+        spawn aoe at proj.pos
+      end
+      proj.next.next = missile range 250 size 180 colliders nil
+      proj.next.next.next = aoe
+      spawn proj
+    hit:
+      damage magic
+
+  r:
+    cd 76
+    damage 615
+    range 5000
+    size 525
+    deploy_time 1.2
+    cast splash
+    use:
+      proj = aoe at cast.pos size 525
+      spawn proj
+    hit:
+      damage magic

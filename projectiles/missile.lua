@@ -67,9 +67,6 @@ function missile:update(dt)
         return true
       end
     end
-    if self.traveled >= self.range then
-      return true
-    end
   elseif self.to then
     if self.pos:distance(self.to.pos) < ds then
       self.ability:hit(self.to)
@@ -85,6 +82,9 @@ function missile:update(dt)
       return true
     end
     self.pos = self.pos + dir * ds
+  end
+  if self.traveled >= self.range then
+    return true
   end
   return false
 end

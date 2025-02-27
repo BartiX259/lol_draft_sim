@@ -15,18 +15,18 @@ local orianna = {}
 -- Constructor
 function orianna.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2055,
-    armor = 70,
-    mr = 42,
+    health = 1905,
+    armor = 70.4,
+    mr = 41.6,
     ms = 370,
     sprite = 'orianna.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1, 525, 160, { 0.3,0.5,0.8 }),
-    q = splash_cast.new(1.67, 825, 175),
-    w = ability:new(3.92),
-    r = ability:new(52.83),
+    aa = ranged_aa_cast.new(1, 525, 113, { 0.3,0.5,0.8 }),
+    q = splash_cast.new(2.5, 825, 175),
+    w = ability:new(5.83),
+    r = ability:new(66.66),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -51,7 +51,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(279, damage.MAGIC):deal(champ, target)
+damage:new(290, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:cast(context)
@@ -71,7 +71,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.w:hit(target)
-damage:new(396, damage.MAGIC):deal(champ, target)
+damage:new(410, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.0, 0.2))
 end
 
@@ -93,7 +93,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(571, damage.MAGIC):deal(champ, target)
+damage:new(590, damage.MAGIC):deal(champ, target)
 target:effect(pull.new(1200.0, self.proj))
 end
 
