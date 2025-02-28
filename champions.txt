@@ -1,4 +1,3 @@
-
 champion ahri
 sprite ahri.jpg
 
@@ -94,7 +93,6 @@ r_charges:
     else
       charges = 3
     end
-
 champion ezreal
 sprite ezreal.jpg
 
@@ -148,9 +146,7 @@ e:
       spawn proj
     end
   hit:
-    damage magic
-
-champion garen
+    damage magicchampion garen
 sprite garen.jpg
 
 attributes:
@@ -222,9 +218,7 @@ abilities:
         proj = aoe follow cast.target soft_follow true colliders nil on impact do -- visual
             damage true
         end
-        spawn proj
-
-champion ivern
+        spawn projchampion ivern
 sprite ivern.jpg
 
 attributes:
@@ -279,9 +273,7 @@ abilities:
       delay 2 spawn proj
     hit:
       damage magic
-      effect slow 60% 2s
-
-champion leona
+      effect slow 60% 2schampion leona
 sprite leona.jpg
 
 attributes:
@@ -346,9 +338,7 @@ abilities:
       spawn proj
     hit:
       damage magic
-      effect stun 1.75s
-
-champion lulu
+      effect stun 1.75schampion lulu
 sprite lulu.jpg
 
 attributes:
@@ -395,9 +385,7 @@ abilities:
     range 650
     cast buff
     use:
-        effect shield 2.5s 326
-
-champion nautilus
+        effect shield 2.5s 326champion nautilus
 sprite nautilus.jpg
 
 attributes:
@@ -461,15 +449,13 @@ color 0.3, 0.9, 0.9
         spawn proj
       hit:
         damage magic
-        effect airborne duration airborne_duration
-
-champion orianna
+        effect airborne duration airborne_durationchampion orianna
 sprite orianna.jpg
 
 attributes:
-  health 2055
-  armor 70
-  mr 42
+  health 1905
+  armor 70.4
+  mr 41.6
   ms 370
 
 behavior:
@@ -487,12 +473,12 @@ abilities:
   aa:
     cd 1
     range 525
-    damage 160
+    damage 113
     cast ranged_aa
   q:
-    cd 1.67
+    cd 2.5
     range 825
-    damage 279
+    damage 290
     speed 1400
     size 175
     persist_time 1
@@ -505,8 +491,8 @@ abilities:
     hit:
       damage magic
   w:
-    cd 3.92
-    damage 396
+    cd 5.83
+    damage 410
     size 225
     cast:
       return q.proj and in_range(q.proj, enemies, size / 2 + 30) >= 1
@@ -517,8 +503,8 @@ abilities:
       damage magic
       effect slow 20% 1s
   r:
-    cd 52.83
-    damage 571
+    cd 66.66
+    damage 590
     size 415
     deploy_time 0.2
     color 0.3, 0.5, 0.8, 0.7
@@ -529,9 +515,7 @@ abilities:
       spawn proj
     hit:
       damage magic
-      effect pull to proj speed 1200
-
-champion ornn
+      effect pull to proj speed 1200champion ornn
 sprite ornn.jpg
 
 attributes:
@@ -599,16 +583,14 @@ abilities:
          spawn proj
      hit:
       damage magic
-      effect airborne 1s
-
-champion syndra
+      effect airborne 1schampion syndra
 sprite syndra.jpg
 
 attributes:
-    health 1961
-    armor 95.2
-    mr 65.6
-    ms 375
+    health 1811
+    armor 80.2
+    mr 45.6
+    ms 390
 
 behavior:
   if ready r and closest_enemy.health <= r.damage * r.projectiles then
@@ -630,11 +612,11 @@ aa:
   damage 88.8
   cast ranged_aa
 q:
-  cd 6.087
-  damage 356.6
+  cd 5.187
+  damage 325.4
   range 800
   size 210
-  deploy_time 0.6
+  deploy_time 0.4
   persist_time 0
   cast splash
  use:
@@ -644,15 +626,15 @@ q:
   damage magic
 
 e:
-  cd 14.78
-  damage 341.2
+  cd 12.6
+  damage 317.8
   speed 2500
   size 120
   range 700
   cast with q
   use:
     hit_cols = {}
-    for angle = -0.4, 0.4, 0.2 do
+    for angle = -0.733, 0.733, 0.2 do
         local dir = cast.dir:rotate(angle)
         spawn missile from self
     end
@@ -660,6 +642,7 @@ e:
     damage magic
     local push_pos = target.pos + (target.pos - pos):normalize() * 300
     effect pull to push_pos speed 1500
+    effect stun 1s
 
 q_push:
     stats e
@@ -675,8 +658,8 @@ q_push:
         effect stun 1s
 
 r:
-  cd 86.95
-  damage 180.12
+  cd 74.1
+  damage 171.28
   range 675
   speed 1500
   size 100
@@ -696,7 +679,6 @@ r:
     end
   hit:
     damage magic
-
 champion varus
 sprite varus.jpg
 
@@ -744,9 +726,7 @@ abilities:
        spawn proj
     hit:
       damage magic
-      effect root 2s
-
-champion vi
+      effect root 2schampion vi
 sprite vi.jpg
 
 attributes:
@@ -812,9 +792,7 @@ abilities:
     hit:
       damage physical
       active = false
-      effect airborne 1.3s
-
-champion wukong
+      effect airborne 1.3schampion wukong
 sprite wukong.jpg
 
 attributes:
@@ -898,4 +876,100 @@ r_end:
       if r.timer <= 0 then
         r.timer = r.cd
       end
-    end
+    endchampion ziggs
+sprite ziggs.jpg
+
+attributes:
+  health 1878
+  armor 77.4
+  mr 45.6
+  ms 325
+
+behavior:
+  range q
+  movement passive
+
+abilities:
+  color 0.8, 0.5, 0.2
+
+  aa:
+    cd 1.5
+    damage 298
+    range 550
+    cast ranged_aa
+    hit:
+      damage magic
+
+  q:
+    cd 3.6
+    damage 402
+    range 1400 -- max range
+    speed 1700
+    size 240
+    deploy_time 0.2
+    cast ranged
+    use:
+      local range = min(850, cast.mag) -- first bounce range
+      proj = missile from pos size 180 colliders nil -- visual
+      proj.after = function()
+        spawn aoe at proj.pos
+      end
+      proj.next = missile range 300 size 180 colliders nil
+      proj.next.after = function()
+        spawn aoe at proj.pos
+      end
+      proj.next.next = missile range 250 size 180 colliders nil
+      proj.next.next.next = aoe
+      spawn proj
+    hit:
+      damage magic
+  
+  e:
+    cd 5
+    range 1000
+    speed 1500
+    size 300 -- Total size
+    cast splash
+    use:
+      proj = missile from pos to cast.pos size 70 colliders nil -- visual
+      spawn proj
+    
+  e_bombs:
+    damage 244
+    size 100
+    tick 0
+    -- persist_time 10
+    deploy_time 0.2
+    cast after e
+    use:
+      for i = 1, 3 do
+          local pos = cast.pos + cast.dir:rotate(i * math.pi * 2/3) * 80
+          local proj = aoe at pos
+          proj.on_hit = function()
+            despawn proj
+          end
+          spawn proj
+        end
+        for i = 1, 8 do
+          local pos = cast.pos + cast.dir:rotate(i * math.pi * 1/4) * 200
+          local proj = aoe at pos
+          proj.on_hit = function()
+            despawn proj
+          end
+          spawn proj
+        end
+    hit:
+      damage magic
+
+  r:
+    cd 85.5
+    damage 432
+    range 5000
+    size 525
+    deploy_time 1.2
+    cast splash
+    use:
+      proj = aoe at cast.pos size 525
+      spawn proj
+    hit:
+      damage magic

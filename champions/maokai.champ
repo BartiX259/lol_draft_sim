@@ -1,0 +1,61 @@
+champion maokai
+sprite maokai.jpg
+
+attributes:
+  health 3023
+  armor 127.4
+  mr 161.6
+  ms 360
+
+behavior:
+  if ready w then
+    range w
+    movement aggressive
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.2, 0.6, 0.2
+
+  q:
+    cd 4
+    damage 325
+    range 600
+    size 300
+    cast ranged
+    use:
+      proj = aoe follow self
+      spawn proj
+    hit:
+      damage magic
+      local dir = (target.pos - proj.pos):normalize() * 100
+      local pos = target.pos + dir
+      effect pull to pos speed 1000
+
+  w:
+    cd 8
+    damage 160
+    range 525
+    cast ranged
+    use:
+      effect on self dash to cast.target speed 1500 on finish do
+        effect root 1.4s
+      end
+    hit:
+      damage magic
+
+  r:
+    cd 88
+    damage 225
+    range 3000
+    speed 750
+    size 240
+    cast splash
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage magic
+      effect root 2.25s

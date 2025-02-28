@@ -59,7 +59,7 @@ abilities:
   e_bombs:
     damage 244
     size 100
-    -- tick 0
+    tick 0
     -- persist_time 10
     deploy_time 0.2
     cast after e

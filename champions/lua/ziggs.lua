@@ -109,6 +109,7 @@ local proj = aoe:new(self, { colliders = context.enemies,
 size = 100,
 color = { 0.8,0.5,0.2 },
 deploy_time = 0.2,
+tick = 0,
 at = pos,
 })
 proj.on_hit = function ()
@@ -124,6 +125,7 @@ local proj = aoe:new(self, { colliders = context.enemies,
 size = 100,
 color = { 0.8,0.5,0.2 },
 deploy_time = 0.2,
+tick = 0,
 at = pos,
 })
 proj.on_hit = function ()

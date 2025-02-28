@@ -15,7 +15,7 @@ function game_end:__call(winner, blue_team, red_team)
   else
     content = "Red Wins"
   end
-  local res = component { column = true, gap = 10, center = true }
+  local res = component { column = true, gap = 20, center = true }
       + label { text = content, color = { 1, 1, 1 } }
       + button { text = "Play", hoverColor = ui.SEL_COL, onClick = function()
         ui.new_game()
