@@ -1,56 +1,43 @@
 local component = require("ui.badr")
 
--- Converts a hex color to RGBA
-local function Hex(hex, alpha)
-    return {
-        tonumber(string.sub(hex, 2, 3), 16) / 256,
-        tonumber(string.sub(hex, 4, 5), 16) / 256,
-        tonumber(string.sub(hex, 6, 7), 16) / 256,
-        alpha or 1
-    }
-end
-
-return function(props)
-    local font = props.font or love.graphics.getFont()
-    local originalFontSize = font:getHeight()
-    local padding = {
-        horizontal = (props.leftPadding or 12) + (props.rightPadding or 12),
-        vertical = (props.topPadding or 8) + (props.bottomPadding or 8)
-    }
-    local originalWidth = math.max(props.width or 0, font:getWidth(props.text) + padding.horizontal)
-    local originalHeight = math.max(props.height or 0, originalFontSize + padding.vertical)
+return function(options)
+    local font = options.font or love.graphics.getFont()
+    local originalWidth = math.max(options.width or 0, font:getWidth(options.text))
+    local originalSize = math.max(options.height or 0, font:getHeight(options.text))
+    options.padding = options.padding or 0
 
     return component {
-        text = props.text or "Button",
-        id = props.id or tostring(love.timer.getTime()),
-        x = props.x or 0,
-        y = props.y or 0,
-        originalWidth = originalWidth,
-        originalHeight = originalHeight,
-        width = originalWidth,
-        height = originalHeight,
+        text = options.text or "Button",
+        id = options.id or tostring(love.timer.getTime()),
+        x = options.x or 0,
+        y = options.y or 0,
+        padding = options.padding,
+        borderRadius = options.borderRadius,
+        borderColor = options.borderColor,
+        borderWidth = options.borderWidth,
+        width = originalWidth + 2 * options.padding,
+        height = originalSize + 2 * options.padding,
         font = font,
         scaleFactor = 1, -- Tracks scaling factor
         -- Colors
-        opacity = props.opacity or 1,
-        backgroundColor = props.backgroundColor or Hex("#DBE2EF"),
-        hoverColor = props.hoverColor or Hex("#3F72AF"),
-        textColor = props.textColor or Hex("#112D4E"),
-        borderColor = props.borderColor or { 1, 1, 1 },
-        -- Styles
-        cornerRadius = props.cornerRadius or 4,
-        borderWidth = props.borderWidth or 0,
-        border = props.border or false,
+        opacity = options.opacity or 1,
+        backgroundColor = options.backgroundColor or {0.4, 0.38, 0.4},
+        hoverColor = options.hoverColor or {0.3, 0.5, 0.4},
+        textColor = options.textColor or {1, 1, 1},
         -- Events
-        onClick = props.onClick,
-        onRightClick = props.onRightClick,
-        onHover = props.onHover,
-        disabled = props.disabled or false,
+        onClick = options.onClick,
+        onRightClick = options.onRightClick,
+        onHover = options.onHover,
+        disabled = options.disabled or false,
         onUpdate = function(self)
+            self.bg = self:isMouseInside() and self.hoverColor or self.backgroundColor
             if love.mouse.isDown(1) then
                 if self.mousePressed == false and self:isMouseInside() and self.parent.visible then
                     self.mousePressed = true
-                    if props.onClick then self:onClick() end
+                    if options.onClick then self:onClick() end
+                end
+                if not self:isMouseInside() and self.parent.visible then
+                    self.mousePressed = false
                 end
             else
                 self.mousePressed = false
@@ -58,52 +45,43 @@ return function(props)
             if love.mouse.isDown(2) then
                 if self.rightPressed == false and self:isMouseInside() and self.parent.visible then
                     self.rightPressed = true
-                    if props.onRightClick then self:onRightClick() end
+                    if options.onRightClick then self:onRightClick() end
                 end
             else
                 self.rightPressed = false
             end
         end,
-        -- Scale function
-        scale = function(self, value)
-            self.scaleFactor = self.scaleFactor * value
-
-            -- Scale dimensions
-            self.width = self.originalWidth * self.scaleFactor
-            self.height = self.originalHeight * self.scaleFactor
-
-            -- Scale position
-            self.x = self.x * value
-            self.y = self.y * value
-
-            -- Update font size
-            local newFontSize = math.floor(originalFontSize * self.scaleFactor)
-            if newFontSize > 0 then
-                self.font = love.graphics.newFont(newFontSize)
-            end
-        end,
-        -- Draw function
         draw = function(self)
             if not self.visible then return end
             love.graphics.setFont(self.font)
 
-            -- Border
-            if self.border then
-                love.graphics.setColor(self.borderColor)
-                love.graphics.setLineWidth(self.borderWidth)
-                love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius)
-            end
-
-            -- Button background color
-            local color = self:isMouseInside() and self.hoverColor or self.backgroundColor
-            love.graphics.setColor(color[1], color[2], color[3], self.opacity)
-            love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.cornerRadius)
-
-            -- Text
-            love.graphics.setColor(self.textColor[1], self.textColor[2], self.textColor[3], self.opacity)
+            love.graphics.setColor(self.textColor)
             love.graphics.printf(self.text, self.x, self.y + (self.height - self.font:getHeight()) / 2, self.width, "center")
 
             love.graphics.setColor(1, 1, 1) -- Reset color
+        end,
+        scale = function(self, value)
+            self.scaleFactor = self.scaleFactor * value
+            self.x = self.x * value
+            self.y = self.y * value
+            self.width = self.width * value
+            self.height = self.height * value
+            self.padding = self.padding * value
+            options.padding = self.padding
+            local newFontSize = math.floor(originalSize * self.scaleFactor)
+            if newFontSize > 0 then
+                self.font = love.graphics.newFont(component.FONT, newFontSize)
+                local fontWidth = self.font:getWidth(self.text)
+                if fontWidth > self.width then
+                    self.x = self.x - (fontWidth - self.width) / 2 - self.padding
+                    self.width = fontWidth + 2 * self.padding
+                end
+                local fontHeight = self.font:getHeight(self.text)
+                if fontHeight > self.height then
+                    self.y = self.y - (fontHeight - self.height) / 2 - self.padding
+                    self.height = fontHeight + 2 * self.padding
+                end
+            end
         end
     }
 end

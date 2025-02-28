@@ -32,11 +32,11 @@ end
 
 function champion:move(context)
   local dir = vec2.new(0, 0)
-  print("---" .. context.champ.name)
+  -- print("---" .. context.champ.name)
   for script, mult in pairs(self.movement_scripts) do
     local script_dir = require("movement." .. script)(context) * mult
     -- if script == "dodge" and script_dir.x ~= 0 then
-    print(script .. ": [" .. script_dir.x .. ", " .. script_dir.y .. "], mult = " ..tostring(mult))
+    -- print(script .. ": [" .. script_dir.x .. ", " .. script_dir.y .. "], mult = " ..tostring(mult))
     -- end
     dir = dir + script_dir
   end

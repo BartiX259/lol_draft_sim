@@ -9,34 +9,24 @@ local PLAYING = 0
 local BLUE_WIN = 1
 local RED_WIN = 2
 local DRAFT = 3
-local GLITCH = 4
+local SIM_END = 4
+local GLITCH = 5
 
 function love.load()
   love.window.setMode(1000, 600, {resizable = true})
   -- love.window.maximize()
- Draft = {blue = {}, red = {}}
- Simulations = 0
- BlueWins = 0
- RedWins = 0
- GameState = DRAFT
-end
-
-function set_draft(draft)
-  Draft = draft
-end
-
-function draft()
+  Draft = { blue = {}, red = {} }
   GameState = DRAFT
 end
 
-function new_game()
+function NewGame()
   GameState = PLAYING
   Camera = camera(0, 0)
   Camera:zoom(0.4)
   ui.clear()
   BlueTeam = {}
   RedTeam = {}
-  x = -600
+  local x = -600
   for _, champ in pairs(Draft.blue) do
     local champ = require("champions.lua."..champ).new(x, 1100)
     for _, ability in pairs(champ.abilities) do
@@ -69,9 +59,21 @@ function new_game()
   RedTeamAll = table.shallow_copy(RedTeam)
 end
 
-ui.new_game = new_game
-ui.set_draft = set_draft
-ui.draft_mode = draft
+ui.new_game = function ()
+  SimInfo = nil
+  NewGame()
+end
+ui.new_sim = function()
+  ---@class SimInfo
+  SimInfo = { games = 100, games_left = 100, blue_wins = 0, red_wins = 0, blue = {}, red = {} }
+  NewGame()
+end
+ui.set_draft = function(draft)
+  Draft = draft
+end
+ui.draft_mode = function ()
+  GameState = DRAFT
+end
 
 function SpawnBlue(projectile)
   table.insert(BlueProjectiles, projectile)
@@ -81,37 +83,74 @@ function SpawnRed(projectile)
   table.insert(RedProjectiles, projectile)
 end
 
-function Delay(time, func)
-  table.insert(Delays, { time = time, func = func })
+function DespawnBlue(projectile)
+  for id, value in pairs(BlueProjectiles) do
+    if value == projectile then
+      table.remove(BlueProjectiles, id)
+    end
+  end
 end
 
-function sim_result(res)
-  if res == BLUE_WIN then
-    BlueWins = BlueWins + 1
-  elseif res == RED_WIN then
-    RedWins = RedWins + 1
+function DespawnRed(projectile)
+  for id, value in pairs(RedProjectiles) do
+    if value == projectile then
+      table.remove(RedProjectiles, id)
+    end
   end
-  Simulations = Simulations - 1
-  if Simulations == 0 then
-    GameState = res
-    print("Blue: " .. tostring(BlueWins))
-    print("Red: " .. tostring(RedWins))
+end
+
+function Delay(time, func)
+    table.insert(Delays, { time = time, func = func })
+end
+
+function SimResult(res)
+  if res == BLUE_WIN then
+      SimInfo.blue_wins = SimInfo.blue_wins + 1
+  elseif res == RED_WIN then
+      SimInfo.red_wins = SimInfo.red_wins + 1
+  end
+  for _, pair in ipairs({ { BlueTeamAll, "blue" }, { RedTeamAll, "red" } }) do
+    for id, champ in pairs(pair[1]) do
+      local function update_val(key, value)
+        local ptr = SimInfo[pair[2]]
+        if ptr[id] == nil then
+          ptr[id] = {}
+        end
+        ptr = ptr[id]
+        if ptr[key] == nil then
+            ptr[key] = 0
+        end
+        ptr[key] = ptr[key] + value
+      end
+      update_val("damage_dealt", champ.damage_dealt)
+    end
+  end
+  SimInfo.games_left = SimInfo.games_left - 1
+  if SimInfo.games_left == 0 then
+    GameState = SIM_END
+    for _, pair in ipairs({ { BlueTeamAll, "blue" }, { RedTeamAll, "red" } }) do
+      for id, champ in pairs(pair[1]) do
+        SimInfo[pair[2]][id].sprite = champ.sprite
+        SimInfo[pair[2]][id].name = champ.name
+      end
+    end
+    dump.dump(SimInfo)
   else
-    new_game()
+    NewGame()
   end
 end
 
 function love.update(dt)
-  if Simulations > 0 and GameState == PLAYING then
-    for i = 1, 1000 do
-      game_tick(0.02)
+  if SimInfo and GameState == PLAYING then
+    for _ = 1, 1000 do
+      GameTick(0.02)
     end
   else
-    game_tick(dt)
+    GameTick(dt)
   end
 end
 
-function game_tick(dt)
+function GameTick(dt)
   if GameState == GLITCH then
     return
   end
@@ -122,16 +161,16 @@ function game_tick(dt)
   end
 
   if Capture >= 1 or rawequal(next(RedTeam), nil) then
-      if Simulations > 0 then
-        sim_result(BLUE_WIN)
+      if SimInfo then
+        SimResult(BLUE_WIN)
       else
         GameState = BLUE_WIN
         ui.update()
       end
       return
   elseif Capture <= -1 or rawequal(next(BlueTeam), nil) then
-      if Simulations > 0 then
-        sim_result(RED_WIN)
+      if SimInfo then
+        SimResult(RED_WIN)
       else
         GameState = RED_WIN
         ui.update()
@@ -166,6 +205,7 @@ function game_tick(dt)
         enemies_avg_pos = distances.weighted_position(champ, enemies),
         capture = Capture,
         spawn = is_blue and SpawnBlue or SpawnRed,
+        despawn = is_blue and DespawnBlue or DespawnRed,
         delay = Delay,
         dt = dt
       }
@@ -300,11 +340,15 @@ function love.draw()
     return
   end
   if GameState == BLUE_WIN then
-    ui.end_screen(ui.BLUE, BlueTeamAll, RedTeamAll)
+    ui.game_end(ui.BLUE, BlueTeamAll, RedTeamAll)
     return
   end
   if GameState == RED_WIN then
-    ui.end_screen(ui.RED, BlueTeamAll, RedTeamAll)
+    ui.game_end(ui.RED, BlueTeamAll, RedTeamAll)
+    return
+  end
+  if GameState == SIM_END then
+    ui.sim_end(SimInfo)
     return
   end
 
@@ -330,53 +374,57 @@ function love.draw()
   end
 
   -- Iterate over both teams
-  for _, team in ipairs({ { BlueTeam, { 0.4, 0.4, 1 } }, { RedTeam, { 1, 0.4, 0.4 } } }) do
-    local champs, color = team[1], team[2]
+    for _, team in ipairs({ { BlueTeam, { 0.4, 0.4, 1 } }, { RedTeam, { 1, 0.4, 0.4 } } }) do
+        local champs, color = team[1], team[2]
 
-    -- Draw champions
-    love.graphics.setColor(color)
-    for _, champ in pairs(champs) do
-      love.graphics.setColor(color)
-      if champ:has_effect("stun") then
-        love.graphics.setColor({ 1000, 1000, 1000 })
-      end
-      -- Move direction
-      love.graphics.line(champ.pos.x, champ.pos.y, champ.pos.x + champ.move_dir.x, champ.pos.y + champ.move_dir.y)
-      -- Outline
-      love.graphics.circle("fill", champ.pos.x, champ.pos.y, champ.size / 2 + 5)
-      -- Circle mask
-      love.graphics.stencil(function()
-        love.graphics.circle("fill", champ.pos.x, champ.pos.y, champ.size / 2)
-      end, "replace", 1)
-      love.graphics.setStencilTest("equal", 1)
-      -- Draw sprite
-      love.graphics.setColor({ 1, 1, 1 })
-      love.graphics.draw(champ.sprite, champ.pos.x, champ.pos.y, 0, champ.size / champ.sprite:getWidth(),
-        champ.size / champ.sprite:getHeight(), champ.sprite:getWidth() / 2, champ.sprite:getHeight() / 2)
-      -- Reset the mask
-      love.graphics.setStencilTest()
-    end
-
-    -- Draw health bars
-    for _, champ in pairs(champs) do
-      -- Red
-      love.graphics.setColor(0.8, 0.1, 0.1)
-      love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2, champ.size, 10)
-      -- Shield
-      if champ:has_effect("shield") then
-        local amount = 0
-        for _, shield in pairs(champ:get_effects("shield")) do
-          amount = amount + shield.amount
+        -- Draw champions
+        love.graphics.setColor(color)
+        for _, champ in pairs(champs) do
+            love.graphics.setColor(color)
+            if champ:has_effect("stun") then
+                love.graphics.setColor({ 1000, 1000, 1000 })
+            end
+            -- Move direction
+            love.graphics.line(champ.pos.x, champ.pos.y, champ.pos.x + champ.move_dir.x, champ.pos.y + champ.move_dir.y)
+            -- Outline
+            love.graphics.circle("fill", champ.pos.x, champ.pos.y, champ.size / 2 + 5)
+            -- Circle mask
+            love.graphics.stencil(function()
+                love.graphics.circle("fill", champ.pos.x, champ.pos.y, champ.size / 2)
+            end, "replace", 1)
+            love.graphics.setStencilTest("equal", 1)
+            -- Draw sprite
+            love.graphics.setColor({ 1, 1, 1 })
+            love.graphics.draw(champ.sprite, champ.pos.x, champ.pos.y, 0, champ.size / champ.sprite:getWidth(),
+                champ.size / champ.sprite:getHeight(), champ.sprite:getWidth() / 2, champ.sprite:getHeight() / 2)
+            -- Reset the mask
+            love.graphics.setStencilTest()
         end
-        love.graphics.setColor(0.8, 0.8, 0.8)
-        love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2,
-          ((champ.health + amount) / champ.max_health) * champ.size, 10)
-      end
-      -- Green
-      love.graphics.setColor(0.1, 0.9, 0.1)
-      love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2,
-        (champ.health / champ.max_health) * champ.size, 10)
+
+        -- Draw health bars
+        for _, champ in pairs(champs) do
+            -- Red
+            love.graphics.setColor(0.8, 0.1, 0.1)
+            love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2, champ.size, 10)
+            -- Shield
+            if champ:has_effect("shield") then
+                local amount = 0
+                for _, shield in pairs(champ:get_effects("shield")) do
+                    amount = amount + shield.amount
+                end
+                love.graphics.setColor(0.8, 0.8, 0.8)
+                love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2,
+                    ((champ.health + amount) / champ.max_health) * champ.size, 10)
+            end
+            -- Green
+            love.graphics.setColor(0.1, 0.9, 0.1)
+            love.graphics.rectangle("fill", champ.pos.x - champ.size / 2, champ.pos.y + champ.size / 2,
+                (champ.health / champ.max_health) * champ.size, 10)
+        end
     end
-  end
   Camera:detach()
+  if SimInfo then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Games: " .. tostring(SimInfo.games - SimInfo.games_left) .. "/" .. tostring(SimInfo.games), 0, 0)
+  end
 end

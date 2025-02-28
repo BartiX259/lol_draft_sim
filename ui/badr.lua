@@ -9,6 +9,8 @@
 local badr = {}
 badr.__index = badr
 
+badr.FONT = "assets/Nexa-Heavy.ttf"
+
 function badr:new(t)
   t = t or {}
   local _default = {
@@ -132,27 +134,50 @@ function badr:isMouseInside()
 end
 
 function badr:draw()
-  if not self.visible then return end;
-  for _, child in ipairs(self.children) do
-    if child.bg then
-      love.graphics.setColor(child.bg)
-      love.graphics.rectangle("fill", child.x, child.y, child.width, child.height)
+    if not self.visible then return end
+
+    for _, child in ipairs(self.children) do
+        local width = child.borderWidth or 0
+        local offset = width / 2
+
+        if child.borderColor and width > 0 then
+            love.graphics.setColor(child.borderColor)
+            love.graphics.rectangle("fill", child.x - offset, child.y - offset, child.width + width, child.height + width,
+                child.borderRadius, child.borderRadius)
+        end
+        if child.borderRadius then
+            love.graphics.stencil(function()
+                love.graphics.rectangle("fill", child.x, child.y, child.width, child.height, child.borderRadius,
+                    child.borderRadius)
+            end, "replace", 1)
+            love.graphics.setStencilTest("equal", 1)
+        end
+        if child.bg then
+            love.graphics.setColor(child.bg)
+            love.graphics.rectangle("fill", child.x, child.y, child.width, child.height, child.borderRadius,
+                child.borderRadius)
+        end
+
+        child:draw()
+
+        if child.borderRadius then
+            love.graphics.setStencilTest()
+        end
     end
-    child:draw()
-  end
-  for _, blend in ipairs(self.blends) do
-    blend:draw()
-  end
+
+    for _, blend in ipairs(self.blends) do
+        blend:draw()
+    end
 end
 
-function badr:fitScreen()
+function badr:fitScreen(scale)
   local screenWidth = love.graphics.getWidth()
   local screenHeight = love.graphics.getHeight()
 
   local scaleX = screenWidth / self.width
   local scaleY = screenHeight / self.height
 
-  local scaleFactor = math.min(scaleX, scaleY) * 0.95
+  local scaleFactor = math.min(scaleX, scaleY) * scale
 
   local targetX = (screenWidth - self.width * scaleFactor) * 0.5
   local targetY = (screenHeight - self.height * scaleFactor) * 0.5
@@ -208,7 +233,7 @@ function badr:update()
   end
 end
 
-return setmetatable({ new = badr.new }, {
+return setmetatable({ new = badr.new, FONT = badr.FONT }, {
   __call = function(t, ...)
     return badr:new(...)
   end,

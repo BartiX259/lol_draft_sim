@@ -14,12 +14,15 @@ function collision.projectile(projectile)
   end
   local hit = false
   for _,col in pairs(projectile.colliders) do
-    if projectile.hit_cols[col] ~= nil then
+    if projectile.hit_cols[col] then
       goto continue
     end
     if collision.c2c(projectile, col) then
       projectile.hit_cols[col] = true
       projectile.ability:hit(col)
+      if projectile.on_hit then
+        projectile:on_hit()
+      end
       hit = true
     end
       ::continue::

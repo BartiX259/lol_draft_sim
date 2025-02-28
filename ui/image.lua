@@ -11,6 +11,9 @@ local function image(options)
     image = options.image,
     visible = options.visible or true,
     id = options.id,
+    borderRadius = options.borderRadius,
+    borderColor = options.borderColor,
+    borderWidth = options.borderWidth,
     --
     width = options.width or image:getWidth(),
     height = options.height or image:getHeight(),

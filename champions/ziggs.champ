@@ -5,7 +5,7 @@ attributes:
   health 1878
   armor 77.4
   mr 45.6
-  ms 340
+  ms 325
 
 behavior:
   range q
@@ -16,15 +16,15 @@ abilities:
 
   aa:
     cd 1.5
-    damage 335
+    damage 298
     range 550
     cast ranged_aa
     hit:
       damage magic
 
   q:
-    cd 3.2
-    damage 382.5
+    cd 3.6
+    damage 402
     range 1400 -- max range
     speed 1700
     size 240
@@ -45,10 +45,47 @@ abilities:
       spawn proj
     hit:
       damage magic
+  
+  e:
+    cd 5
+    range 1000
+    speed 1500
+    size 300 -- Total size
+    cast splash
+    use:
+      proj = missile from pos to cast.pos size 70 colliders nil -- visual
+      spawn proj
+    
+  e_bombs:
+    damage 244
+    size 100
+    -- tick 0
+    -- persist_time 10
+    deploy_time 0.2
+    cast after e
+    use:
+      for i = 1, 3 do
+          local pos = cast.pos + cast.dir:rotate(i * math.pi * 2/3) * 80
+          local proj = aoe at pos
+          proj.on_hit = function()
+            despawn proj
+          end
+          spawn proj
+        end
+        for i = 1, 8 do
+          local pos = cast.pos + cast.dir:rotate(i * math.pi * 1/4) * 200
+          local proj = aoe at pos
+          proj.on_hit = function()
+            despawn proj
+          end
+          spawn proj
+        end
+    hit:
+      damage magic
 
   r:
-    cd 76
-    damage 615
+    cd 85.5
+    damage 432
     range 5000
     size 525
     deploy_time 1.2

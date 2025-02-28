@@ -413,6 +413,9 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                 case "spawn":
                     line += "context.spawn("
                     unclosed.append(")")
+                case "despawn":
+                    line += "context.despawn("
+                    unclosed.append(")")
                 case "delay":
                     line += "context.delay(" + alias(stmt[i+1], champion, info) + ", function()"
                     if stmt[i+2] == "do":
