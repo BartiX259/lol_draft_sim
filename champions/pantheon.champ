@@ -1,0 +1,96 @@
+champion pantheon
+sprite pantheon.jpg
+
+attributes:
+  health 2458
+  armor 132.4
+  mr 72.6
+  ms 390
+
+behavior:
+  if closest_dist < aa.range + 100 then
+    range aa
+    self.target = closest_enemy
+  elseif ready w then
+    range w
+    movement aggressive
+  elseif ready q then
+    range q
+    movement aggressive
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.8, 0.6, 0.1
+
+  aa:
+    cd 1.045
+    range 175
+    damage 173.6
+    cast melee_aa
+
+  q: -- fully charged, empowered
+    cd 5.93
+    range 1200
+    damage 643.54
+    size 120
+    speed 2700
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+       damage physical
+
+
+  w:
+    cd 6.67
+    range 600
+    damage 188
+    cast ranged
+    use:
+      effect on self dash to cast.target speed 1500 on finish do
+        effect stun 1s
+      end
+    hit:
+      damage physical
+
+
+  e:
+    cd 13.34
+    damage 14.4
+    range 525
+    size 300
+    tick 0.125
+    dist 0
+    persist_time 1.5
+    cast dash
+    use:
+      proj = aoe follow self colliders projectiles
+      spawn proj
+      effect on self slow 25% duration persist_time
+      effect on self silence duration persist_time
+    hit:
+      target.hit_cols[self] = true
+
+
+  r:  -- Grand Starfall
+    cd 122.27
+    damage 700
+    range 5500  -- Global, or very large range
+    size 450    -- Landing zone size
+    deploy_time 2 -- Time to land
+    cast splash
+    use:
+        local ch = deploy_time / 2
+        effect on self fly duration deploy_time channel ch on finish do
+          pos = cast.pos
+        end
+        proj = aoe at cast.pos
+        spawn proj
+
+    hit:
+      damage magic
+      effect slow 50% 2s -- Slow on landing

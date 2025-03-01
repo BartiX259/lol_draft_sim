@@ -1,0 +1,115 @@
+champion rumble
+sprite rumble.jpg
+
+attributes:
+  health 2365
+  armor 122.4
+  mr 46.6
+  ms 390
+
+behavior:
+  if q.active and closest_dist < q.range then
+    range aa
+    self.target = closest_enemy
+  elseif ready e then
+     range e
+     movement aggressive
+  else
+    range e + 100
+    movement peel
+  end
+
+-- Assume his abilities are empowered
+abilities:
+  color 0.9, 0.4, 0.1
+
+  aa:
+    cd 1.55
+    range 125
+    damage 102.4
+    cast melee_aa
+
+  q:
+    cd 4.5
+    damage 35.6
+    range 550
+    size 300
+    tick 0.25
+    persist_time 3
+    cast ranged
+    use:
+      active = true
+      proj = aoe at self on finish active = false
+      spawn proj
+    hit:
+      damage magic
+
+  q_pos:
+    cast always if q
+    pre-cast:
+      q.proj.pos = pos + (closest_enemy.pos - pos):normalize() * 150
+      return nil
+
+  e:
+    cd 4.5
+    damage 311.3
+    range 950
+    speed 2000
+    size 120
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect slow 52.5% 2s
+
+  r:
+    cd 79
+    damage 123.4
+    range 1000
+    speed 1600
+    size 250
+    tick 0.5
+    deploy_time 0.2
+    persist_time 4.5
+    cast big
+    pre-cast:
+      local longest_mag = 1
+      local t1 = nil
+      local t2 = nil
+      for _, e1 in pairs(in_range_list(cast, enemies, 1000)) do
+        for _, e2 in pairs(in_range_list(cast, enemies, 1000)) do
+            local mag = e1.pos:distance(e2.pos)
+            if mag > longest_mag then
+              longest_mag = mag
+              t1 = e1
+              t2 = e2
+            end
+        end
+      end
+      if t1 ~= nil and t2 ~= nil then
+        local dir = t2.pos - t1.pos
+        if dir:mag() > 0.01 then
+          cast.pos = t1.pos
+          cast.dir = dir:normalize()
+        end
+      else
+        cast.pos = cast.pos - cast.dir * 500
+      end
+      return cast
+    use:
+      local line_start = cast.pos
+      local line_end = cast.pos + cast.dir
+      local num_aoes = 6
+      local step = (line_end - line_start):normalize() * (r.size)
+
+      for i = 0, num_aoes -1 do
+          local aoe_pos = line_start + step * i
+          local proj = aoe at aoe_pos
+          spawn proj
+      end
+    hit:
+        damage magic
+        effect slow 35% 1s

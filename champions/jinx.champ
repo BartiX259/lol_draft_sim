@@ -1,0 +1,69 @@
+champion jinx
+sprite jinx.jpg
+
+attributes:
+  health 2340
+  armor 112.4
+  mr 85.6
+  ms 370
+
+behavior:
+    range aa
+    movement kite
+
+abilities:
+  color 0.9, 0.5, 0.6
+
+  aa:
+    cd 0.865
+    range 625
+    damage 123.8
+    speed 1800
+    size 80
+    cast ranged
+    use:
+      proj = missile from pos to cast.target range nil
+      spawn proj
+    hit:
+      damage physical
+  
+  aa_aoe:
+    damage 136
+    size 250
+    opacity 0.9
+    cast after aa
+    use:
+      proj = aoe at aa.proj.pos
+      spawn proj
+    hit:
+      damage physical
+
+  w:
+    cd 4
+    damage 383
+    range 1500
+    speed 3300
+    size 120
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      effect slow 2s 80%
+
+  r:
+    cd 65
+    color 0.9, 0.4, 0.5
+    damage 582
+    range 5000 -- global
+    speed 2200
+    stop_on_hit true
+    size 250
+    cast important
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical

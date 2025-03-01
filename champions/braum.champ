@@ -1,0 +1,91 @@
+champion braum
+sprite braum.jpg
+
+attributes:
+  health 2704
+  armor 199
+  mr 97
+  ms 360
+
+behavior:
+  if ready q then
+    range q - 50
+    movement aggressive
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.2, 0.8, 0.9
+
+  aa:
+    cd 1.2
+    range 175
+    damage 93
+    cast melee_aa
+
+  q:
+    cd 5.7
+    damage 275
+    range 1050
+    speed 1700
+    size 120
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect slow 70% 2s
+
+
+  w:
+    cd 7.6
+    range 650
+    cast buff
+    use:
+      effect on self dash to cast.target speed 1500 on finish do
+        effect resist_buff 3s 40
+        effect on self resist_buff 3s 40
+      end
+
+
+  e:
+    cd 7.6
+    range 800
+    persist_time 4
+    size 250
+    dist 100
+    tick 0
+    opacity 0.8
+    cast dash
+    use:
+      proj = aoe follow self colliders projectiles
+      effect on self speed 10% duration persist_time
+      effect on self resist_buff duration persist_time 40
+      spawn proj
+    hit:
+      if target.is_missile then
+        if target.ability.hit then
+          target.ability:hit(self)
+        end
+        target.despawn = true
+      end
+
+
+  r:
+    cd 95.2
+    damage 300
+    range 1200
+    speed 1400
+    size 300
+    cast big
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect airborne 1.5s
+      effect slow 50% 2s
