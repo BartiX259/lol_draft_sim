@@ -34,8 +34,8 @@ content += "\n".join(open(file, "r", encoding="utf-8").read() for file in files)
 # print(content)
 # exit(1)
 
-# model = "gemini-2.0-pro-exp-02-05"
-model = "gemini-2.0-flash-thinking-exp-01-21"
+model = "gemini-2.0-pro-exp-02-05"
+# model = "gemini-2.0-flash-thinking-exp-01-21"
 print("Asking " + model)
 response = requests.post(
 url="https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + key,

@@ -26,6 +26,7 @@ function aoe:new(ability, data)
       soft_follow = data.soft_follow or false,
       color = data.color,
       tick_time = data.tick,
+      re_hit = data.re_hit or true,
       hit_cols = data.hit_cols or {},
       after_hit = false,
       cur_time = 0
@@ -49,6 +50,11 @@ function aoe:update(dt)
   if self.tick_time and self.after_hit then
     if self.cur_time - self.hit_time > self.tick_time then
       self.after_hit = false
+      if self.re_hit then
+        for k,_ in pairs(self.hit_cols) do
+          self.hit_cols[k] = nil
+        end
+      end
     end
   end
 

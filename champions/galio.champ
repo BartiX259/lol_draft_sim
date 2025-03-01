@@ -64,9 +64,11 @@ abilities:
     size 320
     cast ranged
     use:
-      spawn aoe follow self tick 0
+      proj = aoe follow self tick 0
+      spawn proj
       effect on self dash to cast.pos speed 2300
     hit:
+      proj.despawn = true
       self:del_effect("dash")
       damage magic
       effect airborne 0.75s

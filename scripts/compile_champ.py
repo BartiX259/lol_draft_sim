@@ -204,6 +204,13 @@ def build_champion_table(tokens):
             if res in data:
                 raise CompilerError("'" + res + "' is reserved", champion["line_nrs"][ability][res])
             data[res] = []
+    # Apply opacity
+    for ability, data in champion["abilities"].items():
+        if "opacity" in data:
+            if "color" not in data:
+                raise CompilerError("Couldn't find 'color' for opacity", champion["line_nrs"][ability]["opacity"])
+            data["color"] = data["color"][:-2] + "," + data["opacity"] + " }"
+
 
     return champion
 
@@ -240,7 +247,7 @@ def alias(word, champion, info):
     domains = {
         "champ": ["pos", "range"],
         "math": ["min", "max", "clamp"],
-        "context": ["closest_enemy", "closest_ally", "closest_dist", "allies", "enemies", "allies_avg_pos", "enemies_avg_pos"],
+        "context": ["closest_enemy", "closest_ally", "closest_dist", "allies", "enemies", "allies_avg_pos", "enemies_avg_pos", "projectiles"],
         "distances": ["in_range", "in_range_list", "find_clump"]
     }
     for match, replacement in replacements.items():
@@ -325,7 +332,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     line += "})"
                 case "aoe":
                     champion["imports"]["projectiles"].add("aoe")
-                    keys = ["size", "color", "colliders", "deploy_time", "persist_time", "at", "hit_cols", "follow", "soft_follow", "tick"]
+                    keys = ["size", "color", "colliders", "deploy_time", "persist_time", "at", "hit_cols", "follow", "soft_follow", "tick", "re_hit"]
                     aoe = { "colliders": "context.enemies"}
                     on = None
                     for key in keys:
@@ -349,6 +356,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                                     i += 1
                                 else:
                                     unclosed.append("end)")
+                                break
                             else:
                                 raise CompilerError("Expected 'on finish' or 'on impact'", line_nr)
                         else:
@@ -519,6 +527,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
         raise CompilerError("Missed symbol 'end'", line_nr)
     if curly_count:
         raise CompilerError("Missed symbol '}'", line_nr)
+    info["local"] = []
     res = res[:-1]
     return res
 
@@ -559,6 +568,7 @@ def generate_lua_code(champion):
             "ranged_aa": ["range", "damage", "color"],
             "dash": ["dist", "range"],
             "buff": ["range"],
+            "always": []
         }
         if isinstance(cast_type, str) and cast_type in fields:
             line += f"{cast_type}_cast.new({ability_data['cd']}, "
@@ -613,21 +623,22 @@ def generate_lua_code(champion):
                 lua_code.append("function champ.abilities." + ability + ":use(context, cast)")
 
             # Generate use function
-            lua_code.append(generate_pseudo_code(ability_data["use"], ability_data, champion, "use", champion["line_nrs"][ability]["use"]))
-            for other, other_data in champion["abilities"].items(): # Check if any abilities cast with this one
-                if isinstance(other_data["cast"], tuple):
-                    if other_data["cast"][1] != ability:
-                        continue
-                    if "cd" in other_data:
-                        lua_code.append("if champ.abilities." + other + ".timer <= 0 then")
-                        lua_code.append("champ.abilities." + other + ".timer = champ.abilities." + other + ".cd")
-                    match other_data["cast"]:
-                        case ("after", _):
-                            lua_code.append("self.proj.after = function() champ.abilities." + other + ":after_" + ability + "(context, cast) end")
-                        case ("with", _):
-                            lua_code.append("champ.abilities." + other + ":with_" + ability + "(context, cast)")
-                    if "cd" in other_data:
-                        lua_code.append("end")
+            if "use" in ability_data:
+                lua_code.append(generate_pseudo_code(ability_data["use"], ability_data, champion, "use", champion["line_nrs"][ability]["use"]))
+                for other, other_data in champion["abilities"].items(): # Check if any abilities cast with this one
+                    if isinstance(other_data["cast"], tuple):
+                        if other_data["cast"][1] != ability:
+                            continue
+                        if "cd" in other_data:
+                            lua_code.append("if champ.abilities." + other + ".timer <= 0 then")
+                            lua_code.append("champ.abilities." + other + ".timer = champ.abilities." + other + ".cd")
+                        match other_data["cast"]:
+                            case ("after", _):
+                                lua_code.append("self.proj.after = function() champ.abilities." + other + ":after_" + ability + "(context, cast) end")
+                            case ("with", _):
+                                lua_code.append("champ.abilities." + other + ":with_" + ability + "(context, cast)")
+                        if "cd" in other_data:
+                            lua_code.append("end")
             lua_code.append("end")
 
         lua_code.append("")

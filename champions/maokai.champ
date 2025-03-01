@@ -34,7 +34,6 @@ abilities:
     size 300
     cast ranged
     use:
-      print("q" .. context.tick)
       proj = aoe follow self
       spawn proj
     hit:
@@ -50,7 +49,6 @@ abilities:
     cast ranged
     use:
       effect on self dash to cast.target speed 1500 on finish do
-        print("root" .. context.tick)
         effect root 1.4s
       end
     hit:
@@ -67,7 +65,6 @@ abilities:
       if cast.target:has_effect("root") then
         return nil
       end
-      print("ye" .. context.tick)
       return cast
     use:
       proj = missile from self

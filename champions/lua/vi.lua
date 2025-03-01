@@ -36,12 +36,13 @@ return cast
 end
 
 function champ.abilities.q:use(context, cast)
-context.spawn( aoe:new(self, { colliders = context.enemies,
+self.proj = aoe:new(self, { colliders = context.enemies,
 size = 120,
 color = { 0.9,0.2,0.2 },
 follow = champ,
 tick = 0,
 })
+context.spawn( self.proj
 )
 champ:effect(dash.new(1400, cast.pos))
 end
@@ -49,6 +50,7 @@ end
 function champ.abilities.q:hit(target)
 damage:new(302, damage.PHYSICAL):deal(champ, target)
 champ:effect(shield.new(3.0, 263.0))
+self.proj.despawn = true
 champ :del_effect (" dash ")
 target:effect(airborne.new(1.0))
 end

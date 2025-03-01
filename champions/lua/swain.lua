@@ -1,6 +1,5 @@
 local ranged_cast = require("abilities.ranged")
 local ranged_aa_cast = require("abilities.ranged_aa")
-local splash_cast = require("abilities.splash")
 local root = require("effects.root")
 local aoe = require("projectiles.aoe")
 local missile = require("projectiles.missile")
@@ -15,24 +14,20 @@ local swain = {}
 -- Constructor
 function swain.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2450,
-    armor = 105.4,
-    mr = 62.6,
+    health = 2473,
+    armor = 88.4,
+    mr = 49.6,
     ms = 330,
     sprite = 'swain.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.3, 525, 70, { 0.5,0.1,0.1 }),
-    q = ranged_cast.new(4.5, 725),
-    e = ranged_cast.new(10, 900),
-    e_ret = ability:new(10),
-    r = splash_cast.new(120, 250, 500),
+    aa = ranged_aa_cast.new(1.3, 525, 90.4, { 0.5,0.1,0.1 }),
+    q = ranged_cast.new(2.73, 725),
+    e = ranged_cast.new(9.1, 900),
+    e_ret = ability:new(9.1),
+    r = ranged_cast.new(72.7, 300),
   }
-
-function champ.abilities.aa:hit(target)
-damage:new(70, damage.PHYSICAL):deal(champ, target)
-end
 
 function champ.abilities.q:use(context, cast)
 for i = 1 , 5 do
@@ -51,7 +46,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(100, damage.MAGIC):deal(champ, target)
+damage:new(104, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -73,7 +68,7 @@ end
 end
 
 function champ.abilities.e:hit(target)
-damage:new(80, damage.MAGIC):deal(champ, target)
+damage:new(353, damage.MAGIC):deal(champ, target)
 target:effect(root.new(1.5))
 end
 
@@ -93,20 +88,20 @@ context.spawn( self.proj
 end
 
 function champ.abilities.e_ret:hit(target)
-damage:new(80, damage.MAGIC):deal(champ, target)
+damage:new(353, damage.MAGIC):deal(champ, target)
 target:effect(root.new(1.5))
 end
 
 function champ.abilities.r:use(context, cast)
 self.active = true
 self.proj = aoe:new(self, { colliders = context.enemies,
-size = 500,
-color = { 0.5,0.1,0.1 },
+size = 650,
+color = { 0.5,0.1,0.1,0.9 },
 persist_time = 12,
 tick = 0.5,
 follow = champ,
 }):on_impact(function()
-champ.health = champ.health + 50 * distances.in_range(champ, context.enemies, 250)
+champ.health = champ.health + 50 * distances.in_range(champ, context.enemies, 300)
 end)
 context.delay(12, function() self.active = false
 end)
@@ -115,12 +110,12 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(20, damage.MAGIC):deal(champ, target)
+damage:new(29, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)
 if champ.abilities.r.active then
-champ.range = 250-50
+champ.range = 300-50
 champ.target = context.closest_enemy
 else
 champ.range = 725+100

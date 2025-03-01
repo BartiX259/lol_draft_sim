@@ -76,17 +76,19 @@ damage:new(270, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
-context.spawn( aoe:new(self, { colliders = context.enemies,
+self.proj = aoe:new(self, { colliders = context.enemies,
 size = 320,
 color = { 0.7,0.7,1.0 },
 follow = champ,
 tick = 0,
 })
+context.spawn( self.proj
 )
 champ:effect(dash.new(2300, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
+self.proj.despawn = true
 champ :del_effect (" dash ")
 damage:new(340, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(0.75))

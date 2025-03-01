@@ -53,7 +53,6 @@ function NewGame()
   Capture = 0
   CaptureRadius = 300
   CaptureSpeed = 0.05
-  CaptureFade = CaptureSpeed / 2
   Tick = 0
   Delays = {}
   BlueTeamAll = table.shallow_copy(BlueTeam)
@@ -135,7 +134,6 @@ function SimResult(res)
         SimInfo[pair[2]][id].name = champ.name
       end
     end
-    dump.dump(SimInfo)
   else
     NewGame()
   end
@@ -294,7 +292,7 @@ function GameTick(dt)
   -- Update projectiles
   for _, list in ipairs({ BlueProjectiles, RedProjectiles }) do
     for id, projectile in pairs(list) do
-      if projectile:update(dt) then
+      if projectile.despawn or projectile:update(dt) then
         -- Despawn logic
         if projectile.after ~= nil then
           projectile.after()
@@ -325,9 +323,9 @@ function GameTick(dt)
   -- Update objective
   if objective_count == 0 then
     local dir = Capture > 0 and -1 or 1
-    Capture = Capture + dir * math.min(math.abs(Capture), CaptureFade * dt)
+    Capture = Capture + dir * math.min(math.abs(Capture), CaptureSpeed * dt / 2)
   else
-    local dir = objective_count / (1 + math.abs(objective_count) / 4)
+    local dir = objective_count / (1 + math.abs(objective_count) / 4) * math.min(5 / (#BlueTeam + #RedTeam), 1.5)
     Capture = Capture + dir * CaptureSpeed * dt
   end
 end

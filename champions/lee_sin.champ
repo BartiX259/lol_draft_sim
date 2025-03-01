@@ -2,8 +2,8 @@ champion lee_sin
 sprite lee_sin.jpg
 
 attributes:
-  health 2541
-  armor 95
+  health 2091
+  armor 110
   mr 57
   ms 345
 
@@ -22,15 +22,15 @@ color 0.4, 0.6, 0.8
 aa:
   cd 1.2
   range 125
-  damage 203
+  damage 213
   cast melee_aa
 
 q:
-  cd 5.7
-  range 1000
-  damage 389
+  cd 5
+  range 1200
+  damage 270
   speed 1800
-  size 150
+  size 120
   stop_on_hit true
   cast ranged
   use:
@@ -41,8 +41,8 @@ q:
     effect on self dash to target speed 1695
 
 w:
-  cd 11.4
-  range 400
+  cd 10
+  range 700
   cast buff
   use:
     effect on self dash to cast.pos speed 1695
@@ -50,11 +50,11 @@ w:
     effect shield 1s 250
 
 r:
-  cd 81
-  damage 580
-  dist 600
-  range 300
-  size 100
+  cd 71
+  damage 825
+  dist 800
+  range 375
+  size 160
   cast ranged
   use:
     if cast.dir:dot(allies_avg_pos - pos) > 0 then

@@ -40,11 +40,13 @@ abilities:
       end
       return cast
     use:
-      spawn aoe follow self tick 0 -- Check for collision every frame
+      proj = aoe follow self tick 0 -- Check for collision every frame
+      spawn proj
       effect on self dash to cast.pos speed 1400
     hit:
       damage physical
       effect on self shield 263 3s -- passive shield
+      proj.despawn = true
       self:del_effect("dash")
       effect airborne 1s
 

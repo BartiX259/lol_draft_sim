@@ -2,10 +2,10 @@ champion ashe
 sprite ashe.jpg
 
 attributes:
-  health 1972
+  health 2272
   armor 96.2
   mr 45.6
-  ms 370
+  ms 381
 
 behavior:
     range aa.range
@@ -15,17 +15,17 @@ abilities:
   color 0.2, 0.7, 1.0
 
   aa:
-    cd 0.75
+    cd 0.90
     range 600
-    damage 224
+    damage 149
     cast ranged_aa
     hit:
       damage physical
-      effect slow 26% 2s
+      effect slow 25% 2s
 
   w:
-    cd 3.81
-    damage 274
+    cd 4
+    damage 209
     range 1200
     speed 2000
     size 50
@@ -39,10 +39,10 @@ abilities:
       end
     hit:
       damage physical
-      effect slow 26% 2s
+      effect slow 25% 2s
 
   r:
-    cd 76.19
+    cd 80
     damage 400
     range 2500
     speed 1600
@@ -54,4 +54,4 @@ abilities:
       spawn proj
     hit:
       damage magic
-      effect stun 1.5s
+      effect stun 2.25s

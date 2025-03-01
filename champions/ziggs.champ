@@ -2,10 +2,10 @@ champion ziggs
 sprite ziggs.jpg
 
 attributes:
-  health 1878
+  health 2178
   armor 77.4
   mr 45.6
-  ms 325
+  ms 350
 
 behavior:
   range q
@@ -15,20 +15,20 @@ abilities:
   color 0.8, 0.5, 0.2
 
   aa:
-    cd 1.5
-    damage 298
+    cd 1.12
+    damage 151
     range 550
     cast ranged_aa
     hit:
       damage magic
 
   q:
-    cd 3.6
+    cd 3.64
     damage 402
     range 1400 -- max range
     speed 1700
-    size 240
-    deploy_time 0.2
+    size 200
+    deploy_time 0.25
     cast ranged
     use:
       local range = min(850, cast.mag) -- first bounce range
@@ -47,7 +47,7 @@ abilities:
       damage magic
   
   e:
-    cd 5
+    cd 14.55
     range 1000
     speed 1500
     size 300 -- Total size
@@ -84,7 +84,7 @@ abilities:
       damage magic
 
   r:
-    cd 85.5
+    cd 86.36
     damage 432
     range 5000
     size 525

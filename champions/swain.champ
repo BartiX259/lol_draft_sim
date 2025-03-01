@@ -24,8 +24,6 @@ aa:
   range 525
   damage 90.4
   cast ranged_aa
-  hit:
-    damage physical
 
 q:
   cd 2.73
@@ -78,6 +76,7 @@ r:
   size 650
   persist_time 12
   tick 0.5
+  opacity 0.9
   cast ranged
   use:
     active = true

@@ -17,6 +17,9 @@ function collision.projectile(projectile)
     if projectile.hit_cols[col] then
       goto continue
     end
+    if col.pos == nil then
+      goto continue
+    end
     if collision.c2c(projectile, col) then
       projectile.hit_cols[col] = true
       projectile.ability:hit(col)

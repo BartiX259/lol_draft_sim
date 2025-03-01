@@ -30,7 +30,6 @@ function maokai.new(x, y)
   }
 
 function champ.abilities.q:use(context, cast)
-print (" q " .. context.tick )
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 300,
 color = { 0.2,0.6,0.2 },
@@ -49,7 +48,6 @@ end
 
 function champ.abilities.w:use(context, cast)
 champ:effect(dash.new(1500, cast.target):on_finish(function()
-print (" root " .. context.tick )
 cast.target:effect(root.new(1.4))
 end))
 end
@@ -62,7 +60,6 @@ function champ.abilities.r:precast(context, cast)
 if cast.target :has_effect (" root ") then
 return nil
 end
-print (" ye " .. context.tick )
 return cast
 end
 

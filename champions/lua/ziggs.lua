@@ -14,23 +14,23 @@ local ziggs = {}
 -- Constructor
 function ziggs.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1878,
+    health = 2178,
     armor = 77.4,
     mr = 45.6,
-    ms = 325,
+    ms = 350,
     sprite = 'ziggs.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.5, 550, 298, { 0.8,0.5,0.2 }),
-    q = ranged_cast.new(3.6, 1400),
-    e = splash_cast.new(5, 1000, 300),
+    aa = ranged_aa_cast.new(1.12, 550, 151, { 0.8,0.5,0.2 }),
+    q = ranged_cast.new(3.64, 1400),
+    e = splash_cast.new(14.55, 1000, 300),
     e_bombs = none_cast.new(),
-    r = big_cast.new(85.5, 5000, 525),
+    r = big_cast.new(86.36, 5000, 525),
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(298, damage.MAGIC):deal(champ, target)
+damage:new(151, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.q:use(context, cast)
@@ -45,9 +45,9 @@ from = champ.pos,
 })
 self.proj.after = function ()
 context.spawn( aoe:new(self, { colliders = context.enemies,
-size = 240,
+size = 200,
 color = { 0.8,0.5,0.2 },
-deploy_time = 0.2,
+deploy_time = 0.25,
 at = self.proj.pos,
 })
 )
@@ -61,9 +61,9 @@ range = 300,
 })
 self.proj.next.after = function ()
 context.spawn( aoe:new(self, { colliders = context.enemies,
-size = 240,
+size = 200,
 color = { 0.8,0.5,0.2 },
-deploy_time = 0.2,
+deploy_time = 0.25,
 at = self.proj.pos,
 })
 )
@@ -76,9 +76,9 @@ color = { 0.8,0.5,0.2 },
 range = 250,
 })
 self.proj.next.next.next = aoe:new(self, { colliders = context.enemies,
-size = 240,
+size = 200,
 color = { 0.8,0.5,0.2 },
-deploy_time = 0.2,
+deploy_time = 0.25,
 })
 context.spawn( self.proj
 )

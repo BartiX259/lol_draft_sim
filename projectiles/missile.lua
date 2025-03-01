@@ -36,15 +36,19 @@ function missile.new(ability, data)
       next = data.next,
       color = data.color,
       hit_cols = data.hit_cols or {},
-      traveled = 0
+      traveled = 0,
+      is_missile = data.is_missile or true
     },
     missile)
 end
 
 function missile:update(dt)
   if self.pos == nil and self.from ~= nil then
-    self.pos = self.from.pos
-    self.from = nil
+      self.pos = self.from.pos
+      self.from = nil
+  end
+  if self.pos == nil then
+    return
   end
   if self.to then
     if getmetatable(self.to) == vec2 then

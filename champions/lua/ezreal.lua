@@ -11,15 +11,15 @@ local ezreal = {}
 -- Constructor
 function ezreal.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2274,
+    health = 1824,
     armor = 80.4,
     mr = 45.6,
-    ms = 370,
+    ms = 360,
     sprite = 'ezreal.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.23, 550, 163, { 0.8,0.8,0.4 }),
+    aa = ranged_aa_cast.new(0.63, 550, 208, { 0.8,0.8,0.4 }),
     q = ranged_cast.new(3.75, 1200),
     e = dash_cast.new(11.7, 475, 700),
   }
@@ -39,7 +39,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(332, damage.PHYSICAL):deal(champ, target)
+damage:new(390, damage.PHYSICAL):deal(champ, target)
 for _,ability in pairs ( champ.abilities ) do
 ability.timer = ability.timer - 1.5
 end

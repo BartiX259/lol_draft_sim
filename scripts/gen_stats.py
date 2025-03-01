@@ -8,6 +8,28 @@ import argparse
 import os
 import glob
 
+with open("key.txt", "r", encoding="utf-8") as file:
+    key = file.readline().strip()
+
+def text_from_url(url):
+    html = urlopen(url).read()
+    soup = BeautifulSoup(html, features="html.parser")
+
+    # kill all script and style elements
+    for script in soup(["script", "style"]):
+        script.extract()    # rip it out
+
+    # get text
+    text = soup.get_text()
+
+    # break into lines and remove leading and trailing space on each
+    lines = (line.strip() for line in text.splitlines())
+    # break multi-headlines into a line each
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    # drop blank lines
+    text = '\n'.join(chunk for chunk in chunks if chunk)
+
+    return text
 
 parser = argparse.ArgumentParser(description="Use AI to generate stats for a .champ file")
 parser.add_argument("champ_files", nargs="+", help="The .champ files")
@@ -24,34 +46,16 @@ for pattern in args.champ_files:
 
 for file_path in files:
     name = os.path.splitext(os.path.basename(file_path))[0]
+    name = "_".join(word.capitalize() for word in name.split("_"))
+    if name == "Jarvan_Iv":
+        name = "Jarvan_IV"
+    print(name)
 
-    with open("key.txt", "r", encoding="utf-8") as file:
-        key = file.readline().strip()
     with open(file_path, "r", encoding="utf-8") as file:
         champ_file = file.read().strip()
 
-    def text_from_url(url):
-        html = urlopen(url).read()
-        soup = BeautifulSoup(html, features="html.parser")
-
-        # kill all script and style elements
-        for script in soup(["script", "style"]):
-            script.extract()    # rip it out
-
-        # get text
-        text = soup.get_text()
-
-        # break into lines and remove leading and trailing space on each
-        lines = (line.strip() for line in text.splitlines())
-        # break multi-headlines into a line each
-        chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-        # drop blank lines
-        text = '\n'.join(chunk for chunk in chunks if chunk)
-
-        return text
-
     print("Reading the wiki")
-    wiki = text_from_url(f"https://leagueoflegends.fandom.com/wiki/{name.capitalize()}/LoL")
+    wiki = text_from_url(f"https://leagueoflegends.fandom.com/wiki/{name}/LoL")
     # print("Reading build site")
     # build = text_from_url(f"https://www.metasrc.com/lol/build/{name}")
 

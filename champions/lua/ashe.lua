@@ -13,22 +13,22 @@ local ashe = {}
 -- Constructor
 function ashe.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1972,
+    health = 2272,
     armor = 96.2,
     mr = 45.6,
-    ms = 370,
+    ms = 381,
     sprite = 'ashe.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(0.75, 600, 224, { 0.2,0.7,1.0 }),
-    w = ranged_cast.new(3.81, 1200),
-    r = important_cast.new(76.19, 2500),
+    aa = ranged_aa_cast.new(0.90, 600, 149, { 0.2,0.7,1.0 }),
+    w = ranged_cast.new(4, 1200),
+    r = important_cast.new(80, 2500),
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(224, damage.PHYSICAL):deal(champ, target)
-target:effect(slow.new(2.0, 0.26))
+damage:new(149, damage.PHYSICAL):deal(champ, target)
+target:effect(slow.new(2.0, 0.25))
 end
 
 function champ.abilities.w:use(context, cast)
@@ -49,8 +49,8 @@ end
 end
 
 function champ.abilities.w:hit(target)
-damage:new(274, damage.PHYSICAL):deal(champ, target)
-target:effect(slow.new(2.0, 0.26))
+damage:new(209, damage.PHYSICAL):deal(champ, target)
+target:effect(slow.new(2.0, 0.25))
 end
 
 function champ.abilities.r:use(context, cast)
@@ -69,7 +69,7 @@ end
 
 function champ.abilities.r:hit(target)
 damage:new(400, damage.MAGIC):deal(champ, target)
-target:effect(stun.new(1.5))
+target:effect(stun.new(2.25))
 end
 
 function champ.behaviour(ready, context)
