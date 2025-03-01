@@ -94,7 +94,7 @@ end
 
 function champ.abilities.r:hit(target)
 damage:new(590, damage.MAGIC):deal(champ, target)
-target:effect(pull.new(1200.0, self.proj))
+target:effect(pull.new(1200, self.proj))
 end
 
 function champ.behaviour(ready, context)

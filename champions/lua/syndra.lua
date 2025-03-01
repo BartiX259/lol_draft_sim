@@ -74,7 +74,7 @@ end
 function champ.abilities.e:hit(target)
 damage:new(317.8, damage.MAGIC):deal(champ, target)
 local push_pos = target.pos + ( target.pos - champ.pos ):normalize () * 300
-target:effect(pull.new(1500.0, push_pos))
+target:effect(pull.new(1500, push_pos))
 target:effect(stun.new(1.0))
 end
 

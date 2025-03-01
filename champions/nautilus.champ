@@ -56,7 +56,7 @@ color 0.3, 0.9, 0.9
       airborne_duration 1.5
       size 300
       speed 275
-      cast ranged
+      cast important
       use:
         proj = missile from pos to cast.target -- to cast.target, this is correct.
         spawn proj

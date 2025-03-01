@@ -1,3 +1,4 @@
+local important_cast = require("abilities.important")
 local melee_aa_cast = require("abilities.melee_aa")
 local ranged_cast = require("abilities.ranged")
 local airborne = require("effects.airborne")
@@ -24,11 +25,11 @@ function vi.new(x, y)
   champ.abilities = {
     aa = melee_aa_cast.new(1.25, 125, 158),
     q = ranged_cast.new(4.3, 725),
-    r = ranged_cast.new(82.1, 800),
+    r = important_cast.new(82.1, 800),
   }
 
 function champ.abilities.q:precast(context, cast)
-if cast.target :has_effect (" stun ") or champ.abilities.r.active then
+if cast.target :has_effect (" root ") or champ.abilities.r.active then
 return nil
 end
 return cast
@@ -42,7 +43,7 @@ follow = champ,
 tick = 0,
 })
 )
-champ:effect(dash.new(1400.0, cast.pos))
+champ:effect(dash.new(1400, cast.pos))
 end
 
 function champ.abilities.q:hit(target)
@@ -55,7 +56,7 @@ end
 function champ.abilities.r:use(context, cast)
 champ:effect(unstoppable.new(1.5))
 self.active = true
-champ:effect(dash.new(1400.0, cast.target):on_finish(function()
+champ:effect(dash.new(1400, cast.target):on_finish(function()
 champ :del_effect (" unstoppable ")
 context.spawn( aoe:new(self, { colliders = context.enemies,
 size = 150,

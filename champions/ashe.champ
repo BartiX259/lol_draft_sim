@@ -1,0 +1,57 @@
+champion ashe
+sprite ashe.jpg
+
+attributes:
+  health 1972
+  armor 96.2
+  mr 45.6
+  ms 370
+
+behavior:
+    range aa.range
+    movement kite
+
+abilities:
+  color 0.2, 0.7, 1.0
+
+  aa:
+    cd 0.75
+    range 600
+    damage 224
+    cast ranged_aa
+    hit:
+      damage physical
+      effect slow 26% 2s
+
+  w:
+    cd 3.81
+    damage 274
+    range 1200
+    speed 2000
+    size 50
+    stop_on_hit true
+    cast ranged
+    use:
+      for i = -4, 4 do
+        local dir = cast.dir:rotate(i/8)
+        proj = missile from pos
+        spawn proj
+      end
+    hit:
+      damage physical
+      effect slow 26% 2s
+
+  r:
+    cd 76.19
+    damage 400
+    range 2500
+    speed 1600
+    size 130
+    stop_on_hit true
+    cast important
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage magic
+      effect stun 1.5s

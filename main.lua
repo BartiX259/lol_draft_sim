@@ -13,7 +13,7 @@ local SIM_END = 4
 local GLITCH = 5
 
 function love.load()
-  love.window.setMode(1000, 600, {resizable = true})
+  love.window.setMode(1200, 800, {resizable = true})
   -- love.window.maximize()
   Draft = { blue = {}, red = {} }
   GameState = DRAFT
@@ -22,7 +22,7 @@ end
 function NewGame()
   GameState = PLAYING
   Camera = camera(0, 0)
-  Camera:zoom(0.4)
+  Camera:zoom(0.3)
   ui.clear()
   BlueTeam = {}
   RedTeam = {}
@@ -51,9 +51,10 @@ function NewGame()
   BlueProjectiles = {}
   RedProjectiles = {}
   Capture = 0
-  CaptureRadius = 200
+  CaptureRadius = 300
   CaptureSpeed = 0.05
   CaptureFade = CaptureSpeed / 2
+  Tick = 0
   Delays = {}
   BlueTeamAll = table.shallow_copy(BlueTeam)
   RedTeamAll = table.shallow_copy(RedTeam)
@@ -177,6 +178,8 @@ function GameTick(dt)
       end
       return
   end
+  
+  Tick = Tick + 1
 
   -- Handle delays
   for id, delay in pairs(Delays) do
@@ -207,6 +210,7 @@ function GameTick(dt)
         spawn = is_blue and SpawnBlue or SpawnRed,
         despawn = is_blue and DespawnBlue or DespawnRed,
         delay = Delay,
+        tick = tostring(Tick),
         dt = dt
       }
       if context.closest_enemy == nil then
@@ -222,24 +226,19 @@ function GameTick(dt)
       local can_cast = true
       -- Effects
       for id, effect in pairs(champ.effects) do
+        if effect.tags["silence"] then
+          can_cast = false
+        end
+        if effect.tags["root"] then
+          move_mult = 0
+        end
+        if effect.tags["slow"] or effect.tags["speed"] then
+          move_mult = move_mult * effect.amount
+        end
         if effect:tick(context) then
           table.remove(champ.effects, id)
           if effect.on_finish_func ~= nil then
             effect.on_finish_func()
-          end
-        else
-          if effect.tags["stun"] then
-            move_mult = 0
-            can_cast = false
-          end
-          if effect.tags["silence"] then
-            can_cast = false
-          end
-          if effect.tags["root"] then
-            move_mult = 0
-          end
-          if effect.tags["slow"] or effect.tags["speed"] then
-            move_mult = move_mult * effect.amount
           end
         end
       end
@@ -381,7 +380,7 @@ function love.draw()
         love.graphics.setColor(color)
         for _, champ in pairs(champs) do
             love.graphics.setColor(color)
-            if champ:has_effect("stun") then
+            if champ:has_effect("root") then
                 love.graphics.setColor({ 1000, 1000, 1000 })
             end
             -- Move direction

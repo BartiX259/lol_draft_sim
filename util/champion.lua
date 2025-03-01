@@ -48,6 +48,7 @@ function champion:on_hit(damage)
 end
 
 function champion:change_movement(scripts)
+  self.target = nil
   local changed = false
   for script, value in pairs(scripts) do
     if self.movement_scripts[script] ~= value then
@@ -62,10 +63,11 @@ function champion:change_movement(scripts)
 end
 
 function champion:effect(effect)
-  if effect.tags["pull"] then -- Multiple pulls are bad
+  if effect.tags["pull"] or effect.tags["root"] then -- Multiple pulls are bad
     self:del_effect("pull")
   end
-  if self:has_effect("unstoppable") and not effect.tags["dash"] and (effect.tags["stun"] or effect.tags["slow"]) then
+  
+  if self:has_effect("unstoppable") and not effect.tags["dash"] and (effect.tags["root"] or effect.tags["silence"] or effect.tags["slow"]) then
     return
   end
   table.insert(self.effects, effect)
@@ -96,6 +98,11 @@ function champion:del_effect(tag)
       table.remove(self.effects, id)
     end
   end
+end
+
+function champion:prio()
+  local ehp = self.health * (1 + 0.01 * self.armor) * (1 + 0.01 * self.mr) / 1000
+  return ehp * ehp
 end
 
 return champion

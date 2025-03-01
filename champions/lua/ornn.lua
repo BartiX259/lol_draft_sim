@@ -1,3 +1,4 @@
+local big_cast = require("abilities.big")
 local melee_aa_cast = require("abilities.melee_aa")
 local none_cast = require("abilities.none")
 local splash_cast = require("abilities.splash")
@@ -25,7 +26,7 @@ function ornn.new(x, y)
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 111),
     e = splash_cast.new(12, 800, 360),
-    r = splash_cast.new(100, 2500, 340),
+    r = big_cast.new(100, 2500, 340),
     r_recast = none_cast.new(),
   }
 
@@ -38,7 +39,7 @@ follow = champ,
 })
 context.spawn( self.proj
 )
-champ:effect(dash.new(1600.0, cast.pos))
+champ:effect(dash.new(1600, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
@@ -47,13 +48,14 @@ target:effect(airborne.new(1.25))
 end
 
 function champ.abilities.r:use(context, cast)
+local cast_pos = cast.dir * 2500
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
 size = 340,
 speed = 1200,
 color = { 0.8,0.4,0.2 },
 range = 2500,
-from = cast.pos,
+from = cast_pos,
 to = champ,
 })
 context.spawn( self.proj

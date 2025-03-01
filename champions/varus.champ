@@ -39,7 +39,7 @@ abilities:
     range 1370
     speed 1500
     size 240
-    cast ranged
+    cast important
     use:
        proj = missile from self
        spawn proj

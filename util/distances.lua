@@ -45,8 +45,10 @@ end
 function distances.in_range(unit, units, range)
   local count = 0
   for _,u in pairs(units) do
-    if u.pos:distance(unit.pos) < range then
-      count = count + 1
+    if u ~= unit then
+      if u.pos:distance(unit.pos) < range then
+        count = count + 1
+      end
     end
   end
   return count
@@ -56,8 +58,10 @@ end
 function distances.in_range_list(unit, units, range)
   local res = {}
   for _,u in pairs(units) do
-    if u.pos:distance(unit.pos) < range then
-      table.insert(res, u)
+    if u ~= unit then
+      if u.pos:distance(unit.pos) < range then
+        table.insert(res, u)
+      end
     end
   end
   return res

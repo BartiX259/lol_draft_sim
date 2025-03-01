@@ -2,13 +2,16 @@ champion maokai
 sprite maokai.jpg
 
 attributes:
-  health 3023
-  armor 127.4
-  mr 161.6
-  ms 360
+  health 2723.00
+  armor 127.40
+  mr 121.60
+  ms 380
 
 behavior:
-  if ready w then
+  if closest_dist < 200 then
+    range aa
+    self.target = closest_enemy
+  elseif ready w then
     range w
     movement aggressive
   else
@@ -19,13 +22,19 @@ behavior:
 abilities:
   color 0.2, 0.6, 0.2
 
+  aa:
+    damage 103.60
+    cd 0.83
+    range 125
+    cast melee_aa
   q:
-    cd 4
-    damage 325
-    range 600
+    cd 4.35
+    damage 341
+    range 150
     size 300
     cast ranged
     use:
+      print("q" .. context.tick)
       proj = aoe follow self
       spawn proj
     hit:
@@ -35,24 +44,31 @@ abilities:
       effect pull to pos speed 1000
 
   w:
-    cd 8
-    damage 160
+    cd 8.70
+    damage 176
     range 525
     cast ranged
     use:
       effect on self dash to cast.target speed 1500 on finish do
+        print("root" .. context.tick)
         effect root 1.4s
       end
     hit:
       damage magic
 
   r:
-    cd 88
-    damage 225
+    cd 95.66
+    damage 255
     range 3000
     speed 750
     size 240
-    cast splash
+    cast big
+    pre-cast:
+      if cast.target:has_effect("root") then
+        return nil
+      end
+      print("ye" .. context.tick)
+      return cast
     use:
       proj = missile from self
       spawn proj

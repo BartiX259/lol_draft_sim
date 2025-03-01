@@ -1,4 +1,3 @@
-local effect = require("util.effect")
 local pull = require("effects.pull")
 local dash = {}
 

@@ -35,7 +35,7 @@ abilities:
     size 120
     cast ranged
     pre-cast:
-      if cast.target:has_effect("stun") or r.active then
+      if cast.target:has_effect("root") or r.active then
         return nil
       end
       return cast
@@ -53,7 +53,7 @@ abilities:
     damage 353
     range 800
     size 150
-    cast ranged
+    cast important
     use:
       effect on self unstoppable 1.5s
       active = true

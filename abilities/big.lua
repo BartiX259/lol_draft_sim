@@ -23,7 +23,7 @@ function big.new(cd, range, size)
     if clump.count >= math.clamp(enemy_count - 1, 2, 3) then
       return res
     end
-    if mag < range / 3 then
+    if mag < context.champ.range / 2 then
       return res
     end
     return nil

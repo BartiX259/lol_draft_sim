@@ -31,6 +31,12 @@ local function get_team(text)
   return string.find(text, "B") and "blue" or "red"
 end
 
+local function to_title_case(s)
+    return s:gsub("_", " "):gsub("(%a)(%w*)", function(first, rest)
+        return first:upper() .. rest:lower()
+    end)
+end
+
 function draft:__call()
   local res = component { column = true, gap = 20, center = true }
 
@@ -86,7 +92,7 @@ function draft:__call()
         info.slot = -1
       end
     end} )
-    + label { text = mod.name:gsub("^%l", string.upper), color = mod.color, font = font, padding = 5 }
+    + label { text = to_title_case(mod.name), color = mod.color, font = font, padding = 5 }
     row = row + item
   end
   champs = champs + row

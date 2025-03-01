@@ -3,7 +3,7 @@ local vec2 = require("util.vec2")
 local pull = {}
 
 function pull.new(speed, towards)
-  local self = effect.new({ "stun", "pull" }, 0)
+  local self = effect.new({ "root", "silence", "pull" }, 0)
   self.speed = speed
   if towards.pos ~= nil then
     self.unit = towards

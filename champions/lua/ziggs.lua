@@ -1,3 +1,4 @@
+local big_cast = require("abilities.big")
 local none_cast = require("abilities.none")
 local ranged_cast = require("abilities.ranged")
 local ranged_aa_cast = require("abilities.ranged_aa")
@@ -25,7 +26,7 @@ function ziggs.new(x, y)
     q = ranged_cast.new(3.6, 1400),
     e = splash_cast.new(5, 1000, 300),
     e_bombs = none_cast.new(),
-    r = splash_cast.new(85.5, 5000, 525),
+    r = big_cast.new(85.5, 5000, 525),
   }
 
 function champ.abilities.aa:hit(target)

@@ -28,7 +28,7 @@ function ahri.new(x, y)
     q = splash_cast.new(7, 900, 200),
     q_ret = ability:new(7),
     e = ranged_cast.new(12, 1000),
-    r = dash_cast.new(115, 500, champ.range),
+    r = dash_cast.new(115, 500, 900),
     r_charges = none_cast.new(),
   }
 
@@ -87,20 +87,20 @@ end
 
 function champ.abilities.e:hit(target)
 damage:new(429, damage.MAGIC):deal(champ, target)
-target:effect(charm.new(2.0, 244.0, champ))
+target:effect(charm.new(2.0, 244, champ))
 end
 
 function champ.abilities.r:use(context, cast)
-champ:effect(dash.new(1300.0, cast.pos):on_finish(function()
+champ:effect(dash.new(1300, cast.pos):on_finish(function()
 if context.closest_dist < 900 then
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
 size = 100,
 speed = 1400,
 color = { 0.4,0.5,0.9 },
+range = nil,
 from = champ.pos,
 to = cast.target,
-range = nil,
 })
 context.spawn( self.proj
 )

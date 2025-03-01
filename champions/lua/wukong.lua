@@ -30,7 +30,7 @@ function wukong.new(x, y)
   }
 
 function champ.abilities.e:use(context, cast)
-champ:effect(dash.new(1550.0, cast.target))
+champ:effect(dash.new(1550, cast.target))
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 190,
 color = { 0.9,0.9,0.9,0.9 },

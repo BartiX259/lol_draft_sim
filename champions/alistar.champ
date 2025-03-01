@@ -1,0 +1,48 @@
+champion alistar
+sprite alistar.jpg
+
+-- Should be a bit more tanky than normal because he doesnt have his ult
+attributes:
+  health 2875
+  armor 148.4
+  mr 106.6
+  ms 355
+
+behavior:
+  range w
+  movement peel
+
+abilities:
+  color 0.6, 0.3, 0.1
+
+  aa:
+    cd 1.1
+    range 125
+    damage 107
+    cast melee_aa
+
+  q:
+    cd 8.3
+    damage 220
+    range 187
+    size 375
+    cast splash
+    use:
+      proj = aoe at self deploy_time 0.1
+      spawn proj
+    hit:
+      damage magic
+      target:del_effect("pull")
+      effect airborne 1s
+
+  w:
+    cd 8.3
+    damage 275
+    range 650
+    cast ranged
+    use:
+      effect on self dash to cast.target speed 1500 on finish do
+            damage magic
+            local pull_pos = cast.target.pos + cast.dir * 400
+            effect pull to pull_pos speed 1500
+      end

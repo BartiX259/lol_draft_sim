@@ -240,7 +240,7 @@ def alias(word, champion, info):
     domains = {
         "champ": ["pos", "range"],
         "math": ["min", "max", "clamp"],
-        "context": ["closest_enemy", "closest_ally", "closest_dist", "allies", "enemies"],
+        "context": ["closest_enemy", "closest_ally", "closest_dist", "allies", "enemies", "allies_avg_pos", "enemies_avg_pos"],
         "distances": ["in_range", "in_range_list", "find_clump"]
     }
     for match, replacement in replacements.items():
@@ -266,7 +266,9 @@ def default_args(func, info):
 
 def generate_pseudo_code(stmts, info, champion, block, line_nr):
     res = ""
-    close_after_end = [] 
+    close_after_end = []
+    curly_count = 0
+    is_key = True
     for stmt in stmts:
         tok_count = len(stmt)
         line = ""
@@ -276,7 +278,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
         while i < tok_count:
             token = stmt[i]
             defaults = default_args(token, info)
-            if defaults != None:
+            if defaults is not None and (i + 1 >= tok_count or "(" not in stmt[i + 1]):
                 line += defaults
                 line += " "
                 i += 1
@@ -285,6 +287,15 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                 close_after_end.append("")
             elif i == 0 and token.isidentifier() and i + 1 < tok_count and stmt[i+1] == "=" and alias(token, champion, info) == token and token not in info["local"]:
                 info["global"].append(token)
+            if "{" in token:
+                is_key = True
+                curly_count += 1
+            if "}" in token:
+                curly_count -= 1
+            if curly_count and "=" in token:
+                is_key = False
+            if curly_count and "," in token:
+                is_key = True
             match token:
                 case "missile":
                     champion["imports"]["projectiles"].add("missile")
@@ -372,27 +383,21 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                         if token == "to":
                             effect["target"] = alias(stmt[i+1], champion, info)
                             i += 1
-                        elif token == "speed":
-                            effect["speed"] = float(alias(stmt[i+1], champion, info))
+                        elif token in ["speed", "duration", "amount", "channel"]:
+                            effect[token] = alias(stmt[i+1], champion, info)
                             i += 1
-                        elif token == "duration":
-                            effect["duration"] = float(alias(stmt[i+1], champion, info))
-                            i += 1
-                        elif token == "amount":
-                            effect["amount"] = float(alias(stmt[i+1], champion, info))
-                            i += 1
-                        elif re.match(r"^-?\d+(?:\.\d+)?s$", token):
+                        elif re.match(r"^-?\d+(?:\.\d+)?s$", token): # 1s
                             effect["duration"] = float(token[:-1])
-                        elif re.match(r"^-?\d+(?:\.\d+)?%$", token):
+                        elif re.match(r"^-?\d+(?:\.\d+)?%$", token): # 1%
                             effect["amount"] = float(token[:-1]) / 100
-                        elif re.match(r"^-?\d+(?:\.\d+)?$", alias(token, champion, info)):
+                        elif re.match(r"^-?\d+(?:\.\d+)?$", alias(token, champion, info)): # 1
                             effect["amount"] = float(alias(token, champion, info))
                         elif token == "on":
                             break
                         else:
                             raise CompilerError("Unexpected effect argument '" + token + "'", line_nr)
                         i += 1
-                    for key in ["duration", "amount", "speed", "target"]:
+                    for key in ["duration", "amount", "speed", "target", "channel"]:
                         if key in effect:
                             line += str(effect[key]) + ", "
                     line = line[:-2]
@@ -500,13 +505,20 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     if len(close_after_end) > 0:
                         line += close_after_end.pop()
                 case _:
-                    line += alias(token, champion, info)
+                    if curly_count > 0 and is_key:
+                        line += token
+                    else:
+                        line += alias(token, champion, info)
             line += " "
             i += 1
         res += line[:-1]
         res += "\n"
         for i in reversed(unclosed):
             res += i + "\n"
+    if len(close_after_end):
+        raise CompilerError("Missed symbol 'end'", line_nr)
+    if curly_count:
+        raise CompilerError("Missed symbol '}'", line_nr)
     res = res[:-1]
     return res
 
@@ -531,58 +543,45 @@ def generate_lua_code(champion):
         line = f"    {ability} = "
         if "cast" not in ability_data:
             raise CompilerError("Couldn't find 'cast' for ability " + ability, champion["line_nrs"][ability][":main"])
-        if "cd" not in ability_data and ability_data["cast"] != "none" and not isinstance(ability_data["cast"], tuple) and ":cast_join" not in ability_data:
+        cast_type = ability_data["cast"]
+        if "cd" not in ability_data and cast_type != "none" and not isinstance(cast_type, tuple) and ":cast_join" not in ability_data:
             raise CompilerError("Couldn't find 'cd' for cast", champion["line_nrs"][ability]["cast"])
-        if isinstance(ability_data["cast"], str):
-            champion["imports"]["abilities"].add(ability_data["cast"]) 
+        if isinstance(cast_type, str):
+            champion["imports"]["abilities"].add(cast_type) 
         if ":cast_join" in ability_data:
             ability_data["cd"] = 0
-        match ability_data["cast"]:
-            case "ranged":
-                for nec in ["range"]:
-                    if nec not in ability_data:
-                        raise CompilerError("Couldn't find '" + nec + "' for cast ranged", champion["line_nrs"][ability]["cast"])
-                line += f"ranged_cast.new({ability_data['cd']}, {ability_data['range']})"
-            case "splash":
-                for nec in ["range", "size"]:
-                    if nec not in ability_data:
-                        raise CompilerError("Couldn't find '" + nec + "' for cast splash", champion["line_nrs"][ability]["cast"])
-                line += f"splash_cast.new({ability_data['cd']}, {ability_data['range']}, {ability_data['size']})"
-            case "melee_aa":
-                for nec in ["range", "damage"]:
-                    if nec not in ability_data:
-                        raise CompilerError("Couldn't find '" + nec + "' for cast melee_aa", champion["line_nrs"][ability]["cast"])
-                line += f"melee_aa_cast.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']})"
-            case "ranged_aa":
-                for nec in ["range", "damage", "color"]:
-                    if nec not in ability_data:
-                        raise CompilerError("Couldn't find '" + nec + "' for cast ranged_aa", champion["line_nrs"][ability]["cast"])
-                line += f"ranged_aa_cast.new({ability_data['cd']}, {ability_data['range']}, {ability_data['damage']}, {ability_data['color']})"
-            case "dash":
-                for nec in ["dist"]:
-                    if nec not in ability_data:
-                        raise CompilerError("Couldn't find '" + nec + "' for cast dash", champion["line_nrs"][ability]["cast"])
-                if "range" in ability_data:
-                    line += f"dash_cast.new({ability_data['cd']}, {ability_data['dist']}, {ability_data['range']})"
-                else:
-                    line += f"dash_cast.new({ability_data['cd']}, {ability_data['dist']}, champ.range)"
-            case "buff":
-                for nec in ["range"]:
-                    if nec not in ability_data:
-                        raise CompilerError("Couldn't find '" + nec + "' for cast buff", champion["line_nrs"][ability]["cast"])
-                line += f"buff_cast.new({ability_data['cd']}, {ability_data['range']})"
-            case "none":
-                line += "none_cast.new()"
-            case (_, _):
-                if "cd" in ability_data:
+        fields = {
+            "ranged": ["range"],
+            "splash": ["range", "size"],
+            "big": ["range", "size"],
+            "important": ["range"],
+            "melee_aa": ["range", "damage"],
+            "ranged_aa": ["range", "damage", "color"],
+            "dash": ["dist", "range"],
+            "buff": ["range"],
+        }
+        if isinstance(cast_type, str) and cast_type in fields:
+            line += f"{cast_type}_cast.new({ability_data['cd']}, "
+            for field in fields[cast_type]:
+                if field not in ability_data:
+                    raise CompilerError(f"Couldn't find '{field}' for cast {cast_type}", champion["line_nrs"][ability]["cast"])
+                line += ability_data[field]
+                line += ", "
+            line = line[:-2] + ")"
+        else:
+            match ability_data["cast"]:
+                case "none":
+                    line += "none_cast.new()"
+                case (_, _):
+                    if "cd" in ability_data:
+                        line += f"ability:new({ability_data['cd']})"
+                        champion["imports"]["util"].add("ability") 
+                    else:
+                        line += "none_cast.new()"
+                        champion["imports"]["abilities"].add("none") 
+                case _:
                     line += f"ability:new({ability_data['cd']})"
                     champion["imports"]["util"].add("ability") 
-                else:
-                    line += "none_cast.new()"
-                    champion["imports"]["abilities"].add("none") 
-            case _:
-                line += f"ability:new({ability_data['cd']})"
-                champion["imports"]["util"].add("ability") 
         line += ','
         lua_code.append(line)
     

@@ -1,0 +1,90 @@
+champion swain
+sprite swain.jpg
+
+attributes:
+  health 2473
+  armor 88.4
+  mr 49.6
+  ms 330
+
+behavior:
+  if r.active then
+    range r.range - 50
+    self.target = closest_enemy
+  else
+    range q + 100
+    movement passive
+  end
+
+abilities:
+color 0.5, 0.1, 0.1
+
+aa:
+  cd 1.3
+  range 525
+  damage 90.4
+  cast ranged_aa
+  hit:
+    damage physical
+
+q:
+  cd 2.73
+  damage 104
+  range 725
+  size 150
+  speed 2500
+  angle 0.5
+  bolts 5
+  cast ranged
+  use:
+    for i = 1, bolts do
+      local dir = cast.dir:rotate((i - (bolts + 1) / 2) * angle / (bolts - 1))
+      proj = missile from pos dir dir
+      spawn proj
+    end
+  hit:
+    damage magic
+
+e:
+  cd 9.1
+  damage 353
+  range 900
+  speed 1600
+  size 120
+  stop_on_hit true
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage magic
+    effect root 1.5s
+
+e_ret:
+  stats e
+  range nil
+  cast after e
+  use:
+    proj = missile from e.proj to self
+    spawn proj
+  hit:
+    damage magic
+    effect root 1.5s
+
+r:
+  cd 72.7
+  damage 29
+  range 300
+  size 650
+  persist_time 12
+  tick 0.5
+  cast ranged
+  use:
+    active = true
+    proj = aoe follow self on impact do
+        self.health = self.health + 50 * in_range
+    end
+    delay persist_time active = false
+    spawn proj
+  hit:
+    damage magic

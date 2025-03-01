@@ -69,12 +69,13 @@ r:
   cd 115
   damage 208
   dist 500
+  range q
   size 100
   speed 1400
   cast dash
   use:
     effect on self dash to cast.pos speed 1300 on finish do
-        if closest_dist < q.range then
+        if closest_dist < range then
             proj = missile from pos to cast.target range nil
             spawn proj
         end
@@ -93,6 +94,110 @@ r_charges:
     else
       charges = 3
     end
+champion alistar
+sprite alistar.jpg
+
+-- Should be a bit more tanky than normal because he doesnt have his ult
+attributes:
+  health 2875
+  armor 148.4
+  mr 106.6
+  ms 355
+
+behavior:
+  range w
+  movement peel
+
+abilities:
+  color 0.6, 0.3, 0.1
+
+  aa:
+    cd 1.1
+    range 125
+    damage 107
+    cast melee_aa
+
+  q:
+    cd 8.3
+    damage 220
+    range 187
+    size 375
+    cast splash
+    use:
+      proj = aoe at self deploy_time 0.1
+      spawn proj
+    hit:
+      damage magic
+      target:del_effect("pull")
+      effect airborne 1s
+
+  w:
+    cd 8.3
+    damage 275
+    range 650
+    cast ranged
+    use:
+      effect on self dash to cast.target speed 1500 on finish do
+            damage magic
+            local pull_pos = cast.target.pos + cast.dir * 400
+            effect pull to pull_pos speed 1500
+      endchampion ashe
+sprite ashe.jpg
+
+attributes:
+  health 1965
+  armor 71.2
+  mr 42.5
+  ms 325
+
+behavior:
+    range aa.range
+    movement kite
+
+abilities:
+  color 0.2, 0.7, 1.0
+
+  aa:
+    cd 0.75
+    range 600
+    damage 98
+    cast ranged_aa
+    hit:
+      damage physical
+      effect slow 20% 2s
+
+  w:
+    cd 12
+    damage 220
+    range 1200
+    speed 2000
+    size 50
+    stop_on_hit true
+    cast ranged
+    use:
+      for i = -4, 4 do
+        local dir = cast.dir:rotate(i/8)
+        proj = missile from pos
+        spawn proj
+      end
+    hit:
+      damage physical
+      effect slow 20% 2s
+
+  r:
+    cd 80
+    damage 300
+    range 2500
+    speed 1600
+    size 130
+    stop_on_hit true
+    cast important
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage magic
+      effect stun 1.5s
 champion ezreal
 sprite ezreal.jpg
 
@@ -385,7 +490,83 @@ abilities:
     range 650
     cast buff
     use:
-        effect shield 2.5s 326champion nautilus
+        effect shield 2.5s 326champion maokai
+sprite maokai.jpg
+
+attributes:
+  health 2723.00
+  armor 127.40
+  mr 121.60
+  ms 380
+
+behavior:
+  if closest_dist < 200 then
+    range aa
+    self.target = closest_enemy
+  elseif ready w then
+    range w
+    movement aggressive
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.2, 0.6, 0.2
+
+  aa:
+    damage 103.60
+    cd 0.83
+    range 125
+    cast melee_aa
+  q:
+    cd 4.35
+    damage 341
+    range 150
+    size 300
+    cast ranged
+    use:
+      print("q" .. context.tick)
+      proj = aoe follow self
+      spawn proj
+    hit:
+      damage magic
+      local dir = (target.pos - proj.pos):normalize() * 100
+      local pos = target.pos + dir
+      effect pull to pos speed 1000
+
+  w:
+    cd 8.70
+    damage 176
+    range 525
+    cast ranged
+    use:
+      effect on self dash to cast.target speed 1500 on finish do
+        print("root" .. context.tick)
+        effect root 1.4s
+      end
+    hit:
+      damage magic
+
+  r:
+    cd 95.66
+    damage 255
+    range 3000
+    speed 750
+    size 240
+    cast big
+    pre-cast:
+      if cast.target:has_effect("root") then
+        return nil
+      end
+      print("ye" .. context.tick)
+      return cast
+    use:
+      proj = missile from self
+      spawn proj
+    hit:
+      damage magic
+      effect root 2.25schampion nautilus
 sprite nautilus.jpg
 
 attributes:
@@ -443,7 +624,7 @@ color 0.3, 0.9, 0.9
       airborne_duration 1.5
       size 300
       speed 275
-      cast ranged
+      cast important
       use:
         proj = missile from pos to cast.target -- to cast.target, this is correct.
         spawn proj
@@ -564,9 +745,10 @@ abilities:
     range 2500
     speed 1200
     size 340
-    cast splash
+    cast big
     use:
-        proj = missile from cast.pos to self
+        local cast_pos = cast.dir * range
+        proj = missile from cast_pos to self
         spawn proj
 
     hit:
@@ -720,7 +902,7 @@ abilities:
     range 1370
     speed 1500
     size 240
-    cast ranged
+    cast important
     use:
        proj = missile from self
        spawn proj
@@ -763,7 +945,7 @@ abilities:
     size 120
     cast ranged
     pre-cast:
-      if cast.target:has_effect("stun") or r.active then
+      if cast.target:has_effect("root") or r.active then
         return nil
       end
       return cast
@@ -781,7 +963,7 @@ abilities:
     damage 353
     range 800
     size 150
-    cast ranged
+    cast important
     use:
       effect on self unstoppable 1.5s
       active = true
@@ -967,7 +1149,7 @@ abilities:
     range 5000
     size 525
     deploy_time 1.2
-    cast splash
+    cast big
     use:
       proj = aoe at cast.pos size 525
       spawn proj

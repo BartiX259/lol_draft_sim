@@ -3,7 +3,7 @@ local vec2 = require("util.vec2")
 local charm = {}
 
 function charm.new(duration, speed, unit)
-  local self = effect.new({ "stun" }, duration)
+  local self = effect.new({ "root", "silence" }, duration)
 
   function self:tick(context)
     if unit == nil then

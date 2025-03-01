@@ -89,7 +89,7 @@ abilities:
     range 5000
     size 525
     deploy_time 1.2
-    cast splash
+    cast big
     use:
       proj = aoe at cast.pos size 525
       spawn proj

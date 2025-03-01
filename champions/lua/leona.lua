@@ -47,7 +47,7 @@ end
 function champ.abilities.e:hit(target)
 damage:new(210, damage.MAGIC):deal(champ, target)
 target:effect(root.new(0.5))
-champ:effect(dash.new(1500.0, target.pos))
+champ:effect(dash.new(1500, target.pos))
 end
 
 function champ.abilities.r:use(context, cast)

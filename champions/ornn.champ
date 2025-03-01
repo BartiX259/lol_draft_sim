@@ -47,9 +47,10 @@ abilities:
     range 2500
     speed 1200
     size 340
-    cast splash
+    cast big
     use:
-        proj = missile from cast.pos to self
+        local cast_pos = cast.dir * range
+        proj = missile from cast_pos to self
         spawn proj
 
     hit:

@@ -69,12 +69,13 @@ r:
   cd 115
   damage 208
   dist 500
+  range q
   size 100
   speed 1400
   cast dash
   use:
     effect on self dash to cast.pos speed 1300 on finish do
-        if closest_dist < q.range then
+        if closest_dist < range then
             proj = missile from pos to cast.target range nil
             spawn proj
         end

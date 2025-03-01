@@ -1,5 +1,6 @@
+local big_cast = require("abilities.big")
+local melee_aa_cast = require("abilities.melee_aa")
 local ranged_cast = require("abilities.ranged")
-local splash_cast = require("abilities.splash")
 local dash = require("effects.dash")
 local pull = require("effects.pull")
 local root = require("effects.root")
@@ -14,19 +15,22 @@ local maokai = {}
 -- Constructor
 function maokai.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2450,
-    armor = 135,
-    mr = 85,
-    ms = 345,
+    health = 2723.00,
+    armor = 127.40,
+    mr = 121.60,
+    ms = 380,
     sprite = 'maokai.jpg',
   })
 
   champ.abilities = {
-    q = ranged_cast.new(6, 200),
-    w = ranged_cast.new(12, 525),
-    r = splash_cast.new(120, 3000, 600),
+    aa = melee_aa_cast.new(0.83, 125, 103.60),
+    q = ranged_cast.new(4.35, 150),
+    w = ranged_cast.new(8.70, 525),
+    r = big_cast.new(95.66, 3000, 240),
   }
+
 function champ.abilities.q:use(context, cast)
+print (" q " .. context.tick )
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 300,
 color = { 0.2,0.6,0.2 },
@@ -37,27 +41,36 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(300, damage.MAGIC):deal(champ, target)
+damage:new(341, damage.MAGIC):deal(champ, target)
 local dir = ( target.pos - self.proj.pos ):normalize () * 100
 local pos = target.pos + dir
-target:effect(pull.new(1000.0, pos))
+target:effect(pull.new(1000, pos))
 end
 
 function champ.abilities.w:use(context, cast)
-champ:effect(dash.new(1500.0, cast.target):on_finish(function()
-cast.target:effect(root.new(1.5))
+champ:effect(dash.new(1500, cast.target):on_finish(function()
+print (" root " .. context.tick )
+cast.target:effect(root.new(1.4))
 end))
 end
 
 function champ.abilities.w:hit(target)
-damage:new(250, damage.MAGIC):deal(champ, target)
+damage:new(176, damage.MAGIC):deal(champ, target)
+end
+
+function champ.abilities.r:precast(context, cast)
+if cast.target :has_effect (" root ") then
+return nil
+end
+print (" ye " .. context.tick )
+return cast
 end
 
 function champ.abilities.r:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
-size = 600,
-speed = 500,
+size = 240,
+speed = 750,
 color = { 0.2,0.6,0.2 },
 range = 3000,
 from = champ,
@@ -67,16 +80,19 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(500, damage.MAGIC):deal(champ, target)
-target:effect(root.new(2.5))
+damage:new(255, damage.MAGIC):deal(champ, target)
+target:effect(root.new(2.25))
 end
 
 function champ.behaviour(ready, context)
-if ready.w then
+if context.closest_dist < 200 then
+champ.range = 125
+champ.target = context.closest_enemy
+elseif ready.w then
 champ.range = 525
 champ:change_movement(movement.AGGRESSIVE)
 else
-champ.range = 200+100
+champ.range = 150+100
 champ:change_movement(movement.PEEL)
 end
 end

@@ -1,0 +1,68 @@
+champion lee_sin
+sprite lee_sin.jpg
+
+attributes:
+  health 2541
+  armor 95
+  mr 57
+  ms 345
+
+behavior:
+  if closest_dist < aa.range + 100 then
+    range aa
+    self.target = closest_enemy
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+color 0.4, 0.6, 0.8
+
+aa:
+  cd 1.2
+  range 125
+  damage 203
+  cast melee_aa
+
+q:
+  cd 5.7
+  range 1000
+  damage 389
+  speed 1800
+  size 150
+  stop_on_hit true
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage physical
+    effect on self dash to target speed 1695
+
+w:
+  cd 11.4
+  range 400
+  cast buff
+  use:
+    effect on self dash to cast.pos speed 1695
+    effect on self shield 1s 250
+    effect shield 1s 250
+
+r:
+  cd 81
+  damage 580
+  dist 600
+  range 300
+  size 100
+  cast ranged
+  use:
+    if cast.dir:dot(allies_avg_pos - pos) > 0 then
+        cast.dir = -cast.dir
+    end
+    effect on self dash to cast.target speed 1600 on finish do
+        local kick_dir = -cast.dir:normalize()
+        local kick_pos = cast.target.pos + kick_dir * dist
+        effect pull to kick_pos speed 1000
+        damage physical
+    end
