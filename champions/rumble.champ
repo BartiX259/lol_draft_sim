@@ -2,10 +2,10 @@ champion rumble
 sprite rumble.jpg
 
 attributes:
-  health 2365
-  armor 122.4
+  health 2165
+  armor 62.4
   mr 46.6
-  ms 390
+  ms 375
 
 behavior:
   if q.active and closest_dist < q.range then
@@ -19,20 +19,19 @@ behavior:
     movement peel
   end
 
--- Assume his abilities are empowered
 abilities:
   color 0.9, 0.4, 0.1
 
   aa:
-    cd 1.55
+    cd 1.5
     range 125
     damage 102.4
     cast melee_aa
 
   q:
-    cd 4.5
-    damage 35.6
-    range 550
+    cd 5.3
+    damage 32
+    range 600
     size 300
     tick 0.25
     persist_time 3
@@ -47,12 +46,12 @@ abilities:
   q_pos:
     cast always if q
     pre-cast:
-      q.proj.pos = pos + (closest_enemy.pos - pos):normalize() * 150
+      q.proj.pos = pos + (closest_enemy.pos - pos):normalize() * 140
       return nil
 
   e:
-    cd 4.5
-    damage 311.3
+    cd 6.5
+    damage 235
     range 950
     speed 2000
     size 120
@@ -63,16 +62,16 @@ abilities:
       spawn proj
     hit:
       damage magic
-      effect slow 52.5% 2s
+      effect slow 35% 2s
 
   r:
-    cd 79
-    damage 123.4
-    range 1000
+    cd 64
+    damage 148
+    range 1700
     speed 1600
-    size 250
+    size 200
     tick 0.5
-    deploy_time 0.2
+    deploy_time 0.75
     persist_time 4.5
     cast big
     pre-cast:
@@ -104,6 +103,7 @@ abilities:
       local line_end = cast.pos + cast.dir
       local num_aoes = 6
       local step = (line_end - line_start):normalize() * (r.size)
+      local hit_cols = {}
 
       for i = 0, num_aoes -1 do
           local aoe_pos = line_start + step * i

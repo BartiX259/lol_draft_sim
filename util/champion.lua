@@ -63,13 +63,13 @@ function champion:change_movement(scripts)
 end
 
 function champion:effect(effect)
+  if self:has_effect("unstoppable") and not effect.tags["dash"] and (effect.tags["root"] or effect.tags["silence"] or effect.tags["slow"]) then
+    return
+  end
   if effect.tags["pull"] or effect.tags["root"] then -- Multiple pulls are bad
     self:del_effect("pull")
   end
   
-  if self:has_effect("unstoppable") and not effect.tags["dash"] and (effect.tags["root"] or effect.tags["silence"] or effect.tags["slow"]) then
-    return
-  end
   table.insert(self.effects, effect)
 end
 

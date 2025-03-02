@@ -1,7 +1,7 @@
+local big_cast = require("abilities.big")
 local dash_cast = require("abilities.dash")
 local melee_aa_cast = require("abilities.melee_aa")
 local ranged_cast = require("abilities.ranged")
-local splash_cast = require("abilities.splash")
 local dash = require("effects.dash")
 local fly = require("effects.fly")
 local silence = require("effects.silence")
@@ -18,19 +18,19 @@ local pantheon = {}
 -- Constructor
 function pantheon.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2458,
-    armor = 132.4,
+    health = 2308,
+    armor = 114.4,
     mr = 72.6,
-    ms = 390,
+    ms = 375,
     sprite = 'pantheon.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.045, 175, 173.6),
-    q = ranged_cast.new(5.93, 1200),
-    w = ranged_cast.new(6.67, 600),
-    e = dash_cast.new(13.34, 0, 525),
-    r = splash_cast.new(122.27, 5500, 450),
+    aa = melee_aa_cast.new(1.122, 175, 173.6),
+    q = ranged_cast.new(6.4, 1200),
+    w = ranged_cast.new(8.2, 600),
+    e = dash_cast.new(14.4, 0, 525),
+    r = big_cast.new(120, 3500, 450),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -47,7 +47,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(643.54, damage.PHYSICAL):deal(champ, target)
+damage:new(536.5, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)
@@ -57,7 +57,7 @@ end))
 end
 
 function champ.abilities.w:hit(target)
-damage:new(188, damage.PHYSICAL):deal(champ, target)
+damage:new(144, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -94,7 +94,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(700, damage.MAGIC):deal(champ, target)
+damage:new(400, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(2.0, 0.5))
 end
 

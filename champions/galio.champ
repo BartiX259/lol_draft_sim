@@ -2,9 +2,9 @@ champion galio
 sprite galio.jpg
 
 attributes:
-  health 2744
-  armor 95.4
-  mr 76.6
+  health 2544
+  armor 75.4
+  mr 96.6
   ms 385
 
 behavior:
@@ -19,31 +19,41 @@ behavior:
 abilities:
   color 0.7, 0.7, 1.0
 
-  aa:
+  aa: -- no passive
     cd 1.2
     range 150
-    damage 360
+    damage 100
     cast melee_aa
 
   q:
     cd 6.3
-    damage 280
+    damage 250
     range 825
     size 150
     speed 1400
-    persist_time 2
-    tick 0.5
     cast ranged
     use:
       proj = missile from pos to cast.pos
-      proj.next = aoe
+      spawn proj
+    hit:
+      damage magic
+  
+  q_tick:
+    damage 70
+    size q
+    persist_time 2
+    tick 0.5
+    cast after q
+    use:
+      proj = aoe at q.proj.pos
       spawn proj
     hit:
       damage magic
 
+
   w:
     cd 12.6
-    damage 270
+    damage 150
     range 350
     size 350
     deploy_time 1
@@ -59,7 +69,7 @@ abilities:
 
   e:
     cd 6.3
-    damage 340
+    damage 240
     range 650
     size 320
     cast ranged

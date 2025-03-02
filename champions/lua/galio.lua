@@ -1,4 +1,5 @@
 local melee_aa_cast = require("abilities.melee_aa")
+local none_cast = require("abilities.none")
 local ranged_cast = require("abilities.ranged")
 local airborne = require("effects.airborne")
 local dash = require("effects.dash")
@@ -17,16 +18,17 @@ local galio = {}
 -- Constructor
 function galio.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2744,
-    armor = 95.4,
-    mr = 76.6,
+    health = 2544,
+    armor = 75.4,
+    mr = 96.6,
     ms = 385,
     sprite = 'galio.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.2, 150, 360),
+    aa = melee_aa_cast.new(1.2, 150, 100),
     q = ranged_cast.new(6.3, 825),
+    q_tick = none_cast.new(),
     w = ranged_cast.new(12.6, 350),
     e = ranged_cast.new(6.3, 650),
     r = ability:new(144),
@@ -42,18 +44,29 @@ range = 825,
 from = champ.pos,
 to = cast.pos,
 })
-self.proj.next = aoe:new(self, { colliders = context.enemies,
+context.spawn( self.proj
+)
+self.proj.after = function() champ.abilities.q_tick:after_q(context, cast) end
+end
+
+function champ.abilities.q:hit(target)
+damage:new(250, damage.MAGIC):deal(champ, target)
+end
+
+function champ.abilities.q_tick:after_q(context, cast)
+self.proj = aoe:new(self, { colliders = context.enemies,
 size = 150,
 color = { 0.7,0.7,1.0 },
 persist_time = 2,
 tick = 0.5,
+at = champ.abilities.q.proj.pos,
 })
 context.spawn( self.proj
 )
 end
 
-function champ.abilities.q:hit(target)
-damage:new(280, damage.MAGIC):deal(champ, target)
+function champ.abilities.q_tick:hit(target)
+damage:new(70, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)
@@ -72,7 +85,7 @@ end
 
 function champ.abilities.w:hit(target)
 target:effect(stun.new(1.5))
-damage:new(270, damage.MAGIC):deal(champ, target)
+damage:new(150, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -90,7 +103,7 @@ end
 function champ.abilities.e:hit(target)
 self.proj.despawn = true
 champ :del_effect (" dash ")
-damage:new(340, damage.MAGIC):deal(champ, target)
+damage:new(240, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(0.75))
 end
 

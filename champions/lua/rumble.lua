@@ -15,19 +15,19 @@ local rumble = {}
 -- Constructor
 function rumble.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2365,
-    armor = 122.4,
+    health = 2165,
+    armor = 62.4,
     mr = 46.6,
-    ms = 390,
+    ms = 375,
     sprite = 'rumble.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.55, 125, 102.4),
-    q = ranged_cast.new(4.5, 550),
+    aa = melee_aa_cast.new(1.5, 125, 102.4),
+    q = ranged_cast.new(5.3, 600),
     q_pos = always_cast.new(0),
-    e = ranged_cast.new(4.5, 950),
-    r = big_cast.new(79, 1000, 250),
+    e = ranged_cast.new(6.5, 950),
+    r = big_cast.new(64, 1700, 200),
   }
 champ.abilities.q_pos:join(champ.abilities.q)
 
@@ -46,11 +46,11 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(35.6, damage.MAGIC):deal(champ, target)
+damage:new(32, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.q_pos:precast(context, cast)
-champ.abilities.q.proj.pos = champ.pos + ( context.closest_enemy.pos - champ.pos ):normalize () * 150
+champ.abilities.q.proj.pos = champ.pos + ( context.closest_enemy.pos - champ.pos ):normalize () * 140
 return nil
 end
 
@@ -72,8 +72,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.e:hit(target)
-damage:new(311.3, damage.MAGIC):deal(champ, target)
-target:effect(slow.new(2.0, 0.525))
+damage:new(235, damage.MAGIC):deal(champ, target)
+target:effect(slow.new(2.0, 0.35))
 end
 
 function champ.abilities.r:precast(context, cast)
@@ -106,14 +106,16 @@ function champ.abilities.r:use(context, cast)
 local line_start = cast.pos
 local line_end = cast.pos + cast.dir
 local num_aoes = 6
-local step = ( line_end - line_start ):normalize () * ( 250 )
+local step = ( line_end - line_start ):normalize () * ( 200 )
+local hit_cols = {}
 for i = 0 , num_aoes - 1 do
 local aoe_pos = line_start + step * i
 local proj = aoe:new(self, { colliders = context.enemies,
-size = 250,
+size = 200,
 color = { 0.9,0.4,0.1 },
-deploy_time = 0.2,
+deploy_time = 0.75,
 persist_time = 4.5,
+hit_cols = hit_cols,
 tick = 0.5,
 at = aoe_pos,
 })
@@ -123,12 +125,12 @@ end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(123.4, damage.MAGIC):deal(champ, target)
+damage:new(148, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.0, 0.35))
 end
 
 function champ.behaviour(ready, context)
-if champ.abilities.q.active and context.closest_dist < 550 then
+if champ.abilities.q.active and context.closest_dist < 600 then
 champ.range = 125
 champ.target = context.closest_enemy
 elseif ready.e then

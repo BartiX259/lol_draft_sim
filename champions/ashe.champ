@@ -2,10 +2,10 @@ champion ashe
 sprite ashe.jpg
 
 attributes:
-  health 2272
-  armor 96.2
+  health 1980
+  armor 66.2
   mr 45.6
-  ms 381
+  ms 391
 
 behavior:
     range aa.range
@@ -17,7 +17,7 @@ abilities:
   aa:
     cd 0.90
     range 600
-    damage 149
+    damage 160
     cast ranged_aa
     hit:
       damage physical
@@ -29,13 +29,14 @@ abilities:
     range 1200
     speed 2000
     size 50
+    angle 46
+    missiles 8
     stop_on_hit true
     cast ranged
     use:
-      for i = -4, 4 do
-        local dir = cast.dir:rotate(i/8)
-        proj = missile from pos
-        spawn proj
+      local hit_cols = {}
+      for _, dir in pairs(cast.dir:cone(angle, missiles)) do
+        spawn missile from pos
       end
     hit:
       damage physical

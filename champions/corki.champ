@@ -1,0 +1,60 @@
+champion corki
+sprite corki.jpg
+
+attributes:
+  health 1810
+  armor 84
+  mr 45.6
+  ms 350
+
+behavior:
+  range r
+  movement passive
+
+abilities:
+  color 0.8, 0.6, 0.3
+
+  aa:
+    cd 0.859
+    range 550
+    damage 179
+    cast ranged_aa
+    hit:
+      damage physical
+
+  q:
+    cd 7.36
+    damage 406
+    range 825
+    speed 1100
+    size 275
+    deploy_time 0.227
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage magic
+
+  w:
+    cd 10.91
+    range 600
+    speed 650
+    dist 600
+    cast dash
+    use:
+      effect on self dash to cast.pos speed speed
+
+  r: -- big rocket every couple of seconds
+    cd 2.5
+    damage 256
+    range 1500
+    speed 2000
+    size 160
+    stop_on_hit true
+    cast ranged
+    use:
+       proj = missile from pos
+       spawn proj
+    hit:
+      damage physical

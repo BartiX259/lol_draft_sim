@@ -2,6 +2,7 @@ local component = require("ui.badr")
 local button    = require("ui.button")
 local label     = require("ui.label")
 local image     = require("ui.image")
+local scroll_box = require("ui.scroll_box")
 local ui = require("ui.main")
 
 local draft    = {}
@@ -162,6 +163,7 @@ function draft:__call()
     end
     slots = slots + row
   end
+  champs = scroll_box { height = 560, offsetTop = -40 } + champs
   res = res + slots * champs
   res = res + button { text = "Play", hoverColor = ui.SEL_COL,
     onClick = function ()
@@ -173,6 +175,11 @@ function draft:__call()
       ui.set_draft(picks)
       ui.new_sim()
     end}
+  local item = component {row = true, gap = 0} + button { text = "Test winrates", hoverColor = ui.SEL_COL,
+    onClick = function ()
+      ui.random_sim()
+    end} + component {width = 50}
+    res = res + item
   return res
 end
 

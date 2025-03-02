@@ -10,6 +10,7 @@ local badr = {}
 badr.__index = badr
 
 badr.FONT = "assets/Nexa-Heavy.ttf"
+badr.WHEEL = { 0 }
 
 function badr:new(t)
   t = t or {}
@@ -145,6 +146,10 @@ function badr:draw()
             love.graphics.rectangle("fill", child.x - offset, child.y - offset, child.width + width, child.height + width,
                 child.borderRadius, child.borderRadius)
         end
+
+        -- Save current stencil state
+        local currentStencil, stencilValue = love.graphics.getStencilTest()
+
         if child.borderRadius then
             love.graphics.stencil(function()
                 love.graphics.rectangle("fill", child.x, child.y, child.width, child.height, child.borderRadius,
@@ -152,23 +157,25 @@ function badr:draw()
             end, "replace", 1)
             love.graphics.setStencilTest("equal", 1)
         end
+
         if child.bg then
             love.graphics.setColor(child.bg)
             love.graphics.rectangle("fill", child.x, child.y, child.width, child.height, child.borderRadius,
                 child.borderRadius)
         end
 
-        child:draw()
+        child:draw() -- Child may set its own stencil
 
-        if child.borderRadius then
-            love.graphics.setStencilTest()
-        end
+        -- Restore parent stencil test
+        love.graphics.setStencilTest(currentStencil, stencilValue)
+
     end
 
     for _, blend in ipairs(self.blends) do
         blend:draw()
     end
 end
+
 
 function badr:fitScreen(scale)
   local screenWidth = love.graphics.getWidth()
@@ -233,7 +240,11 @@ function badr:update()
   end
 end
 
-return setmetatable({ new = badr.new, FONT = badr.FONT }, {
+function love.wheelmoved(x, y)
+	badr.WHEEL[1] = y
+end
+
+return setmetatable({ new = badr.new, FONT = badr.FONT, WHEEL = badr.WHEEL }, {
   __call = function(t, ...)
     return badr:new(...)
   end,

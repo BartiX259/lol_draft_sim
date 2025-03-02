@@ -15,17 +15,17 @@ local nautilus = {}
 -- Constructor
 function nautilus.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2446,
-    armor = 158.4,
-    mr = 116.6,
-    ms = 325,
+    health = 2846,
+    armor = 168.4,
+    mr = 136.6,
+    ms = 385,
     sprite = 'nautilus.jpg',
   })
 
   champ.abilities = {
     aa = melee_aa_cast.new(1, 175, 101),
-    q = ranged_cast.new(8.33, 1122),
-    r = important_cast.new(83.33, 825),
+    q = ranged_cast.new(6.33, 1122),
+    r = important_cast.new(83.33, 925),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -60,7 +60,7 @@ colliders = context.enemies,
 size = 300,
 speed = 275,
 color = { 0.3,0.9,0.9 },
-range = 825,
+range = 925,
 from = champ.pos,
 to = cast.target,
 })
@@ -69,7 +69,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(175, damage.MAGIC):deal(champ, target)
+damage:new(275, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(1.5))
 end
 

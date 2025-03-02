@@ -15,6 +15,7 @@ local NONE = 0
 local DRAFT = 1
 local GAME_END = 2
 local SIM_END = 3
+local RANDOM_SIM_END = 4
 
 local STATE = NONE
 
@@ -42,6 +43,15 @@ function ui.sim_end(sim_info)
   if STATE ~= SIM_END then
     STATE = SIM_END
     screen = require("ui.sim_end")(sim_info)
+  end
+  screen:fitScreen(0.6)
+  screen:draw()
+end
+
+function ui.random_sim_end(sim_info)
+  if STATE ~= RANDOM_SIM_END then
+    STATE = RANDOM_SIM_END
+    screen = require("ui.random_sim_end")(sim_info)
   end
   screen:fitScreen(0.6)
   screen:draw()

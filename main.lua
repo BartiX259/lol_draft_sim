@@ -10,7 +10,8 @@ local BLUE_WIN = 1
 local RED_WIN = 2
 local DRAFT = 3
 local SIM_END = 4
-local GLITCH = 5
+local RANDOM_SIM_END = 5
+local GLITCH = 6
 
 function love.load()
   love.window.setMode(1200, 800, {resizable = true})
@@ -28,7 +29,7 @@ function NewGame()
   RedTeam = {}
   local x = -600
   for _, champ in pairs(Draft.blue) do
-    local champ = require("champions.lua."..champ).new(x, 1100)
+    local champ = require("champions.lua."..champ).new(x, 1300)
     for _, ability in pairs(champ.abilities) do
       if ability.start then
         ability:start()
@@ -39,7 +40,7 @@ function NewGame()
   end
   x = -600
   for _, champ in pairs(Draft.red) do
-    local champ = require("champions.lua."..champ).new(x, -1100)
+    local champ = require("champions.lua."..champ).new(x, -1300)
     for _, ability in pairs(champ.abilities) do
       if ability.start then
         ability:start()
@@ -59,13 +60,61 @@ function NewGame()
   RedTeamAll = table.shallow_copy(RedTeam)
 end
 
+function RandomDraft()
+  Draft = {blue = {}, red = {}}
+  
+  -- Shuffle function to randomize the pool
+  local function shuffleTable(tbl)
+    for i = #tbl, 2, -1 do
+      local j = math.random(i)
+      tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+  end
+  
+  -- Load available champions from the champions/lua directory
+  local function loadChampionPool()
+    local champions = {}
+    local files = love.filesystem.getDirectoryItems("champions/lua")
+    for _, file in ipairs(files) do
+      if file:match("%.lua$") then
+        local champName = file:gsub("%.lua$", "")
+        table.insert(champions, champName)
+      end
+    end
+    return champions
+  end
+  
+  local championPool = loadChampionPool()
+  
+  -- Select random champions for both teams
+  shuffleTable(championPool)
+  for i = 1, math.min(5, #championPool) do
+    table.insert(Draft.blue, championPool[i])
+  end
+  
+  shuffleTable(championPool)
+  for i = 1, math.min(5, #championPool) do
+    table.insert(Draft.red, championPool[i])
+  end
+end
+
 ui.new_game = function ()
   SimInfo = nil
+  RandomSimInfo = nil
   NewGame()
 end
 ui.new_sim = function()
+  local game_count = 100
   ---@class SimInfo
-  SimInfo = { games = 100, games_left = 100, blue_wins = 0, red_wins = 0, blue = {}, red = {} }
+  SimInfo = { games = game_count, games_left = game_count, blue_wins = 0, red_wins = 0, blue = {}, red = {} }
+  RandomSimInfo = nil
+  NewGame()
+end
+ui.random_sim = function()
+  local game_count = 1000
+  SimInfo = nil
+  ---@class RandomSimInfo
+  RandomSimInfo = { games = game_count, games_left = game_count, champs = {} }
   NewGame()
 end
 ui.set_draft = function(draft)
@@ -101,6 +150,32 @@ end
 
 function Delay(time, func)
     table.insert(Delays, { time = time, func = func })
+end
+
+function RandomSimResult(res)
+  local function add_res(champ, res)
+    if RandomSimInfo.champs[champ.name] == nil then
+      RandomSimInfo.champs[champ.name] = {wins = 0, losses = 0, sprite = champ.sprite}
+    end
+    RandomSimInfo.champs[champ.name][res] = RandomSimInfo.champs[champ.name][res] + 1
+  end
+  for _, champ in pairs(res == BLUE_WIN and BlueTeamAll or RedTeamAll) do
+    add_res(champ, "wins")
+  end
+  for _, champ in pairs(res == BLUE_WIN and RedTeamAll or BlueTeamAll) do
+    add_res(champ, "losses")
+  end
+  RandomSimInfo.games_left = RandomSimInfo.games_left - 1
+  if RandomSimInfo.games_left == 0 then
+    GameState = RANDOM_SIM_END
+    for _, champ in pairs(RandomSimInfo.champs) do
+      champ.win_rate = champ.wins / (champ.wins + champ.losses)
+    end
+    --dump.dump(RandomSimInfo)
+  else
+    RandomDraft()
+    NewGame()
+  end
 end
 
 function SimResult(res)
@@ -140,8 +215,8 @@ function SimResult(res)
 end
 
 function love.update(dt)
-  if SimInfo and GameState == PLAYING then
-    for _ = 1, 1000 do
+  if (SimInfo or RandomSimInfo) and GameState == PLAYING then
+    for _ = 1, 700 do
       GameTick(0.02)
     end
   else
@@ -162,6 +237,8 @@ function GameTick(dt)
   if Capture >= 1 or rawequal(next(RedTeam), nil) then
       if SimInfo then
         SimResult(BLUE_WIN)
+      elseif RandomSimInfo then
+        RandomSimResult(BLUE_WIN)
       else
         GameState = BLUE_WIN
         ui.update()
@@ -170,6 +247,8 @@ function GameTick(dt)
   elseif Capture <= -1 or rawequal(next(BlueTeam), nil) then
       if SimInfo then
         SimResult(RED_WIN)
+      elseif RandomSimInfo then
+        RandomSimResult(RED_WIN)
       else
         GameState = RED_WIN
         ui.update()
@@ -348,6 +427,10 @@ function love.draw()
     ui.sim_end(SimInfo)
     return
   end
+  if GameState == RANDOM_SIM_END then
+    ui.random_sim_end(RandomSimInfo)
+    return
+  end
 
   Camera:attach()
 
@@ -423,5 +506,8 @@ function love.draw()
   if SimInfo then
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Games: " .. tostring(SimInfo.games - SimInfo.games_left) .. "/" .. tostring(SimInfo.games), 0, 0)
+  elseif RandomSimInfo then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Games: " .. tostring(RandomSimInfo.games - RandomSimInfo.games_left) .. "/" .. tostring(RandomSimInfo.games), 0, 0)
   end
 end

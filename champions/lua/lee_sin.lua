@@ -5,8 +5,10 @@ local dash = require("effects.dash")
 local pull = require("effects.pull")
 local shield = require("effects.shield")
 local missile = require("projectiles.missile")
+local ability = require("util.ability")
 local champion = require("util.champion")
 local damage = require("util.damage")
+local distances = require("util.distances")
 local movement = require("util.movement")
 
 local lee_sin = {}
@@ -14,18 +16,18 @@ local lee_sin = {}
 -- Constructor
 function lee_sin.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2091,
-    armor = 110,
-    mr = 57,
-    ms = 345,
+    health = 2541,
+    armor = 129.8,
+    mr = 78.6,
+    ms = 385,
     sprite = 'lee_sin.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.2, 125, 213),
-    q = ranged_cast.new(5, 1200),
-    w = buff_cast.new(10, 700),
-    r = ranged_cast.new(71, 375),
+    aa = melee_aa_cast.new(1.13, 125, 253.4),
+    q = ranged_cast.new(4.2, 1200),
+    w = buff_cast.new(6.2, 700),
+    r = ability:new(68),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -43,25 +45,43 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(270, damage.PHYSICAL):deal(champ, target)
+damage:new(371.5, damage.PHYSICAL):deal(champ, target)
 champ:effect(dash.new(1695, target))
 end
 
 function champ.abilities.w:use(context, cast)
 champ:effect(dash.new(1695, cast.pos))
-champ:effect(shield.new(1.0, 250.0))
-cast.target:effect(shield.new(1.0, 250.0))
+champ:effect(shield.new(2.0, 250.0))
+cast.target:effect(shield.new(2.0, 250.0))
+end
+
+function champ.abilities.r:cast(context)
+local lowest = math.huge
+local target
+for _,champ in pairs ( distances.in_range_list(champ, context.enemies, 425) ) do
+if champ.health < lowest then
+lowest = champ.health
+target = champ
+end
+end
+if target == nil then
+return nil
+end
+if lowest < 1600 then
+return {
+target = target ,
+pos = target.pos
+}
+end
+return nil
 end
 
 function champ.abilities.r:use(context, cast)
-if cast.dir :dot ( context.allies_avg_pos - champ.pos ) > 0 then
-cast.dir = - cast.dir
-end
 champ:effect(dash.new(1600, cast.target):on_finish(function()
-local kick_dir = - cast.dir :normalize ()
-local kick_pos = cast.target.pos + kick_dir * 800
+local kick_dir = ( context.allies_avg_pos - cast.pos ):normalize ()
+local kick_pos = cast.pos + kick_dir * 800
 cast.target:effect(pull.new(1000, kick_pos))
-damage:new(825, damage.PHYSICAL):deal(champ, cast.target)
+damage:new(865, damage.PHYSICAL):deal(champ, cast.target)
 end))
 end
 

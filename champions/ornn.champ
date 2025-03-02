@@ -2,9 +2,9 @@ champion ornn
 sprite ornn.jpg
 
 attributes:
-  health 2518
-  armor 270
-  mr 117
+  health 2650
+  armor 200
+  mr 127
   ms 380
 
 behavior:
@@ -26,8 +26,8 @@ abilities:
     cast melee_aa
 
   e:
-    cd 12
-    damage 348
+    cd 8
+    damage 298
     range 800
     speed 1600
     size 360
@@ -43,7 +43,7 @@ abilities:
 
   r:
     cd 100
-    damage 175
+    damage 125
     range 2500
     speed 1200
     size 340
@@ -58,7 +58,7 @@ abilities:
       effect slow 50% 2s
 
   r_recast:
-     damage 350
+     damage 325
      speed 1900
      size 340
      cast after r

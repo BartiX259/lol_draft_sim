@@ -1,0 +1,69 @@
+champion volibear
+sprite volibear.jpg
+
+attributes:
+  health 2655
+  armor 128
+  mr 66.6
+  ms 385
+
+behavior:
+  if closest_dist < aa.range + 50 or q.active then
+    range aa
+    self.target = closest_enemy
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.7, 0.8, 1.0  --  Bluish-white, lightning-like
+
+  aa:
+    cd 1.13
+    range 150
+    damage 162
+    cast melee_aa
+  q:
+    cd 9.55
+    range 500      -- engage range
+    cast ranged
+    use:
+        active = true
+        effect on self speed 56% 4s on finish active = false
+
+  q_hit:
+     range 175
+     damage 212
+     cast ranged if q
+     use:
+        damage physical
+        effect stun 1s
+
+  w:
+    cd 4.77
+    damage 351
+    range 350
+    cast ranged
+    use:
+        damage physical
+        self.health = self.health + 0.16 * (self.max_health - self.health)
+
+  r:
+    cd 129
+    damage 400
+    range 700 -- jump range
+    size 550
+    deploy_time 1.0 --  Time for the jump
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      local speed = cast.mag / deploy_time
+      effect on self dash to cast.pos speed speed
+      local channel = deploy_time * 2
+      --effect on self fly duration deploy_time channel channel
+      effect on self unstoppable duration deploy_time
+      spawn proj
+    hit:
+      damage physical
+      effect slow 50% 1s

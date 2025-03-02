@@ -13,15 +13,15 @@ local varus = {}
 function varus.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 1860,
-    armor = 82.2,
+    armor = 67.2,
     mr = 45.6,
     ms = 375,
     sprite = 'varus.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(0.645, 575, 276, { 0.7,0.1,0.8 }),
-    q = ranged_cast.new(10.908, 1595),
+    aa = ranged_aa_cast.new(0.745, 575, 190, { 0.7,0.1,0.8 }),
+    q = ranged_cast.new(5.9, 1595),
     r = important_cast.new(72.72, 1370),
   }
 
@@ -39,7 +39,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(709, damage.PHYSICAL):deal(champ, target)
+damage:new(555, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.r:use(context, cast)

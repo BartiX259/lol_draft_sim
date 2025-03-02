@@ -2,7 +2,7 @@ champion maokai
 sprite maokai.jpg
 
 attributes:
-  health 2723.00
+  health 2523.00
   armor 127.40
   mr 121.60
   ms 380
@@ -28,8 +28,8 @@ abilities:
     range 125
     cast melee_aa
   q:
-    cd 4.35
-    damage 341
+    cd 3.35
+    damage 381
     range 150
     size 300
     cast ranged
@@ -43,8 +43,8 @@ abilities:
       effect pull to pos speed 1000
 
   w:
-    cd 8.70
-    damage 176
+    cd 6.70
+    damage 276
     range 525
     cast ranged
     use:
@@ -56,7 +56,7 @@ abilities:
 
   r:
     cd 95.66
-    damage 255
+    damage 455
     range 3000
     speed 750
     size 240

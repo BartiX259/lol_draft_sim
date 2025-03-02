@@ -14,17 +14,17 @@ local alistar = {}
 -- Constructor
 function alistar.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2875,
-    armor = 148.4,
-    mr = 106.6,
-    ms = 355,
+    health = 2975,
+    armor = 158.4,
+    mr = 126.6,
+    ms = 385,
     sprite = 'alistar.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.1, 125, 107),
-    q = splash_cast.new(8.3, 187, 375),
-    w = ranged_cast.new(8.3, 650),
+    aa = melee_aa_cast.new(1.1, 125, 127),
+    q = splash_cast.new(3.9, 187, 375),
+    w = ranged_cast.new(6.3, 650),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -40,8 +40,7 @@ end
 
 function champ.abilities.q:hit(target)
 damage:new(220, damage.MAGIC):deal(champ, target)
-target :del_effect (" pull ")
-target:effect(airborne.new(1.0))
+target:effect(airborne.new(1.5))
 end
 
 function champ.abilities.w:use(context, cast)
@@ -53,7 +52,7 @@ end))
 end
 
 function champ.behaviour(ready, context)
-champ.range = 650
+champ.range = 650+100
 champ:change_movement(movement.PEEL)
 end
 

@@ -13,15 +13,15 @@ local garen = {}
 -- Constructor
 function garen.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2316,
-    armor = 154.4,
-    mr = 105.6,
+    health = 2416,
+    armor = 125.74,
+    mr = 85.66,
     ms = 385,
     sprite = 'garen.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(0.83, 175, 373),
+    aa = melee_aa_cast.new(0.9, 175, 188),
     q = ranged_cast.new(6.15, 400),
     q_hit = ranged_cast.new(0, 200),
     e = ranged_cast.new(6.92, 325),
@@ -36,7 +36,7 @@ end))
 end
 
 function champ.abilities.q_hit:use(context, cast)
-damage:new(337, damage.PHYSICAL):deal(champ, cast.target)
+damage:new(244, damage.PHYSICAL):deal(champ, cast.target)
 cast.target:effect(silence.new(1.5))
 end
 
@@ -53,11 +53,11 @@ context.spawn( self.proj
 end
 
 function champ.abilities.e:hit(target)
-damage:new(163.4, damage.PHYSICAL):deal(champ, target)
+damage:new(85.2, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.r:cast(context)
-if champ.target and champ.target.pos :distance ( champ.pos ) < 400 and ( champ.target.health < 697 or champ.health / champ.max_health < 0.2 ) then
+if champ.target and champ.target.pos :distance ( champ.pos ) < 400 and ( champ.target.health < 500 or champ.health / champ.max_health < 0.2 ) then
 return { target = champ.target }
 end
 return nil
@@ -71,7 +71,7 @@ deploy_time = 0.5,
 follow = cast.target,
 soft_follow = true,
 }):on_impact(function()
-damage:new(697, damage.TRUE):deal(champ, cast.target)
+damage:new(500, damage.TRUE):deal(champ, cast.target)
 end)
 context.spawn( self.proj
 )

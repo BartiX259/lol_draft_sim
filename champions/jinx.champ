@@ -2,9 +2,9 @@ champion jinx
 sprite jinx.jpg
 
 attributes:
-  health 2340
-  armor 112.4
-  mr 85.6
+  health 1900
+  armor 62.4
+  mr 45.6
   ms 370
 
 behavior:
@@ -17,22 +17,23 @@ abilities:
   aa:
     cd 0.865
     range 625
-    damage 123.8
+    damage 190
     speed 1800
     size 80
     cast ranged
     use:
-      proj = missile from pos to cast.target range nil
+      proj = missile from pos to cast.target range nil colliders nil
       spawn proj
     hit:
       damage physical
   
   aa_aoe:
-    damage 136
+    damage 190
     size 250
     opacity 0.9
     cast after aa
     use:
+      local hit_cols = { [cast.target] = true }
       proj = aoe at aa.proj.pos
       spawn proj
     hit:
@@ -51,7 +52,7 @@ abilities:
       spawn proj
     hit:
       damage physical
-      effect slow 2s 80%
+      effect slow 2s 60%
 
   r:
     cd 65

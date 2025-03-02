@@ -2,10 +2,10 @@ champion vi
 sprite vi.jpg
 
 attributes:
-  health 2193
+  health 2493
   armor 121.4
-  mr 56.6
-  ms 340
+  mr 66.6
+  ms 380
 
 behavior:
   if closest_dist < aa.range + 50 then
@@ -24,13 +24,13 @@ abilities:
 
   aa:
     cd 1.25
-    damage 158
+    damage 218
     range 125
     cast melee_aa
 
   q:
-    cd 4.3
-    damage 302
+    cd 4.8
+    damage 352
     range 725
     size 120
     cast ranged

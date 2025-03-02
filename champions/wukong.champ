@@ -2,9 +2,9 @@ champion wukong
 sprite wukong.jpg
 
 attributes:
-  health 2198
-  armor 150.4
-  mr 52.65
+  health 2498
+  armor 180.4
+  mr 72.65
   ms 385
 
 behavior:
@@ -24,15 +24,15 @@ color 0.9, 0.9, 0.9, 0.9
 
 aa:
   cd 1.2
-  damage 203
+  damage 223
   range 175
   cast melee_aa
 
 e:
   cd 5.6
-  damage 200
+  damage 220
   range 625
-  size 190
+  size 250
   deploy_time 0.1
   persist_time 0.1
   cast splash
@@ -45,8 +45,8 @@ e:
 
 r:
   cd 72
-  damage 120
-  size 165
+  damage 170
+  size 265
   range 200
   deploy_time 0
   persist_time 2
@@ -60,11 +60,8 @@ r:
     effect airborne 0.6s
 
 r_ticks:
-  damage 120
-  size 165
-  deploy_time 0
+  stats r
   tick 0.25
-  persist_time 2
   cast with r
   use:
     proj = aoe follow self

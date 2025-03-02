@@ -3,9 +3,9 @@ sprite ahri.jpg
 
 attributes:
   health 1838
-  armor 77.4
+  armor 67.4
   mr 45.6
-  ms 375
+  ms 385
 
 behavior:
   if ready e then
@@ -27,7 +27,7 @@ aa:
   damage 89
   cast ranged_aa
 q:
-  cd 7
+  cd 6.5
   range 900
   damage 266
   speed 1750
@@ -50,7 +50,7 @@ q_ret:
    damage magic
 
 e:
-  cd 12
+  cd 10
   damage 429
   range 1000
   speed 1550

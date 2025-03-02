@@ -16,16 +16,16 @@ local ornn = {}
 -- Constructor
 function ornn.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2518,
-    armor = 270,
-    mr = 117,
+    health = 2650,
+    armor = 200,
+    mr = 127,
     ms = 380,
     sprite = 'ornn.jpg',
   })
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 111),
-    e = splash_cast.new(12, 800, 360),
+    e = splash_cast.new(8, 800, 360),
     r = big_cast.new(100, 2500, 340),
     r_recast = none_cast.new(),
   }
@@ -43,7 +43,7 @@ champ:effect(dash.new(1600, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
-damage:new(348, damage.PHYSICAL):deal(champ, target)
+damage:new(298, damage.PHYSICAL):deal(champ, target)
 target:effect(airborne.new(1.25))
 end
 
@@ -64,7 +64,7 @@ self.proj.after = function() champ.abilities.r_recast:after_r(context, cast) end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(175, damage.MAGIC):deal(champ, target)
+damage:new(125, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(2.0, 0.5))
 end
 
@@ -82,7 +82,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r_recast:hit(target)
-damage:new(350, damage.MAGIC):deal(champ, target)
+damage:new(325, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(1.0))
 end
 

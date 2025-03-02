@@ -2,13 +2,13 @@ champion lulu
 sprite lulu.jpg
 
 attributes:
-    health 1699
-    armor 84.8
+    health 2099
+    armor 64.8
     mr 45.6
-    ms 370
+    ms 380
 
 behavior:
-    range 550
+    range q
     movement passive
 
 abilities:
@@ -16,12 +16,11 @@ abilities:
   aa:
     cd 1
     range 550
-    damage 84
+    damage 124
     cast ranged_aa
   q:
-    cd 5.83
+    cd 4.83
     damage 270
-    damage2 135
     range 950
     speed 1450
     size 120
@@ -35,14 +34,15 @@ abilities:
         damage magic
         effect slow 2s 80%
   w:
-    cd 12.5
+    cd 9.5
     cast with e
     use:
         effect speed 4s 31%
-        effect damage_buff 4s 35%
+        effect damage_buff 4s 15%
   e:
-    cd 6.67
+    cd 6.2
     range 650
     cast buff
     use:
-        effect shield 2.5s 326
+        effect shield 3.5s 326
+        effect damage_buff 3.5s 15%

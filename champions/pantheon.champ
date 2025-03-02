@@ -2,10 +2,10 @@ champion pantheon
 sprite pantheon.jpg
 
 attributes:
-  health 2458
-  armor 132.4
+  health 2308
+  armor 114.4
   mr 72.6
-  ms 390
+  ms 375
 
 behavior:
   if closest_dist < aa.range + 100 then
@@ -26,15 +26,15 @@ abilities:
   color 0.8, 0.6, 0.1
 
   aa:
-    cd 1.045
+    cd 1.122
     range 175
     damage 173.6
     cast melee_aa
 
   q: -- fully charged, empowered
-    cd 5.93
+    cd 6.4
     range 1200
-    damage 643.54
+    damage 536.5
     size 120
     speed 2700
     cast ranged
@@ -44,11 +44,10 @@ abilities:
     hit:
        damage physical
 
-
   w:
-    cd 6.67
+    cd 8.2
     range 600
-    damage 188
+    damage 144
     cast ranged
     use:
       effect on self dash to cast.target speed 1500 on finish do
@@ -57,10 +56,8 @@ abilities:
     hit:
       damage physical
 
-
   e:
-    cd 13.34
-    damage 14.4
+    cd 14.4
     range 525
     size 300
     tick 0.125
@@ -75,14 +72,13 @@ abilities:
     hit:
       target.hit_cols[self] = true
 
-
   r:  -- Grand Starfall
-    cd 122.27
-    damage 700
-    range 5500  -- Global, or very large range
+    cd 120
+    damage 400
+    range 3500  -- Global, or very large range
     size 450    -- Landing zone size
     deploy_time 2 -- Time to land
-    cast splash
+    cast big
     use:
         local ch = deploy_time / 2
         effect on self fly duration deploy_time channel ch on finish do

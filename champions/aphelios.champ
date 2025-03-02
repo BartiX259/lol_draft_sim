@@ -2,10 +2,10 @@ champion aphelios
 sprite aphelios.jpg
 
 attributes:
-  health 2424
-  armor 76.4
+  health 1824
+  armor 66.4
   mr 45.6
-  ms 375
+  ms 380
 
 behavior:
     range aa
@@ -16,48 +16,46 @@ abilities:
   color 0.3, 0.4, 0.7
 
   aa:
-    cd 0.81
+    cd 0.84
     range 550
-    damage 176
+    damage 205
     speed 1000
     size 80
     cast ranged
     use:
-      proj = missile from pos to cast.target range nil
+      proj = missile from pos to cast.target range nil colliders nil
       spawn proj
     hit:
       damage physical
   
   aa_wave:
     stats aa
-    angle 0.7
+    angle 40
     flames 4
     range 300
     cast after aa
     use:
-      local hit_cols = {}
-       for i = 1, flames do
-        local dir = cast.dir:rotate((i - (flames+1)/2 ) * angle/(flames -1))
-        proj = missile from aa.proj
-        spawn proj
-       end
+      local hit_cols = { [cast.target] = true }
+      for _, dir in pairs(cast.dir:cone(angle, flames)) do
+        spawn missile from aa.proj
+      end
     hit:
         damage physical
 
       
 
   q:
-    cd 7.3
-    damage 133
+    cd 5.45
+    damage 229
     range 650
     speed 1850
     size 120
-    angle 0.7
+    angle 40
     flames 4
     cast splash
     use:
-       for i = 1, flames do
-        local dir = cast.dir:rotate((i - (flames+1)/2 ) * angle/(flames -1))
+      local hit_cols = {}
+       for _, dir in pairs(cast.dir:cone(angle, flames)) do
         proj = missile from pos
         spawn proj
        end
@@ -66,7 +64,7 @@ abilities:
 
   r:
     cd 100
-    damage 196
+    damage 216
     range 1300
     speed 1000
     size 300
@@ -79,7 +77,7 @@ abilities:
 
   r_explosion:
     stats r
-    damage 126
+    damage 151
     range nil
     size 400
     cast after r

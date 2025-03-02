@@ -3,7 +3,7 @@ sprite syndra.jpg
 
 attributes:
     health 1811
-    armor 80.2
+    armor 64.2
     mr 45.6
     ms 390
 
@@ -45,12 +45,13 @@ e:
   damage 317.8
   speed 2500
   size 120
+  angle 56
+  missiles 7
   range 700
   cast with q
   use:
     hit_cols = {}
-    for angle = -0.733, 0.733, 0.2 do
-        local dir = cast.dir:rotate(angle)
+    for _, dir in pairs(cast.dir:cone(angle, missiles)) do
         spawn missile from self
     end
   hit:

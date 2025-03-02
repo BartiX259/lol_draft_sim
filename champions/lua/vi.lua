@@ -15,16 +15,16 @@ local vi = {}
 -- Constructor
 function vi.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2193,
+    health = 2493,
     armor = 121.4,
-    mr = 56.6,
-    ms = 340,
+    mr = 66.6,
+    ms = 380,
     sprite = 'vi.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.25, 125, 158),
-    q = ranged_cast.new(4.3, 725),
+    aa = melee_aa_cast.new(1.25, 125, 218),
+    q = ranged_cast.new(4.8, 725),
     r = important_cast.new(82.1, 800),
   }
 
@@ -48,7 +48,7 @@ champ:effect(dash.new(1400, cast.pos))
 end
 
 function champ.abilities.q:hit(target)
-damage:new(302, damage.PHYSICAL):deal(champ, target)
+damage:new(352, damage.PHYSICAL):deal(champ, target)
 champ:effect(shield.new(3.0, 263.0))
 self.proj.despawn = true
 champ :del_effect (" dash ")

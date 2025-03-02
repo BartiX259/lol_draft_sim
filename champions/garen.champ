@@ -2,9 +2,9 @@ champion garen
 sprite garen.jpg
 
 attributes:
-  health 2316
-  armor 154.4
-  mr 105.6
+  health 2416
+  armor 125.74
+  mr 85.66
   ms 385
 
 behavior:
@@ -18,8 +18,8 @@ behavior:
 
 abilities:
   aa:
-    damage 373
-    cd 0.83
+    damage 188
+    cd 0.9
     range 175
     cast melee_aa
 
@@ -33,7 +33,7 @@ abilities:
 
   q_hit:
     range 200
-    damage 337
+    damage 244
     cast ranged if q
     use:
         damage physical
@@ -41,7 +41,7 @@ abilities:
 
   e:
     cd 6.92
-    damage 163.4
+    damage 85.2
     range 325
     size 325
     tick 0.375
@@ -56,7 +56,7 @@ abilities:
 
   r:
     cd 76.9
-    damage 697
+    damage 500
     range 400
     color 1, 1, 1
     size 200

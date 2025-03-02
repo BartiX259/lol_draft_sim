@@ -3,7 +3,7 @@ sprite swain.jpg
 
 attributes:
   health 2473
-  armor 88.4
+  armor 68.4
   mr 49.6
   ms 330
 
@@ -31,13 +31,13 @@ q:
   range 725
   size 150
   speed 2500
-  angle 0.5
+  angle 32
   bolts 5
   cast ranged
   use:
-    for i = 1, bolts do
-      local dir = cast.dir:rotate((i - (bolts + 1) / 2) * angle / (bolts - 1))
-      proj = missile from pos dir dir
+    local hit_cols = {}
+    for _, dir in pairs(cast.dir:cone(angle, bolts)) do
+      proj = missile from pos
       spawn proj
     end
   hit:
@@ -45,7 +45,7 @@ q:
 
 e:
   cd 9.1
-  damage 353
+  damage 253
   range 900
   speed 1600
   size 120
@@ -81,7 +81,7 @@ r:
   use:
     active = true
     proj = aoe follow self on impact do
-        self.health = self.health + 50 * in_range
+        self.health = self.health + 35 * in_range
     end
     delay persist_time active = false
     spawn proj

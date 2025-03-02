@@ -2,10 +2,10 @@ champion lee_sin
 sprite lee_sin.jpg
 
 attributes:
-  health 2091
-  armor 110
-  mr 57
-  ms 345
+  health 2541
+  armor 129.8
+  mr 78.6
+  ms 385
 
 behavior:
   if closest_dist < aa.range + 100 then
@@ -20,15 +20,15 @@ abilities:
 color 0.4, 0.6, 0.8
 
 aa:
-  cd 1.2
+  cd 1.13
   range 125
-  damage 213
+  damage 253.4
   cast melee_aa
 
 q:
-  cd 5
+  cd 4.2
   range 1200
-  damage 270
+  damage 371.5
   speed 1800
   size 120
   stop_on_hit true
@@ -41,28 +41,42 @@ q:
     effect on self dash to target speed 1695
 
 w:
-  cd 10
+  cd 6.2
   range 700
   cast buff
   use:
     effect on self dash to cast.pos speed 1695
-    effect on self shield 1s 250
-    effect shield 1s 250
+    effect on self shield 2s 250
+    effect shield 2s 250
 
 r:
-  cd 71
-  damage 825
+  cd 68
+  damage 865
   dist 800
-  range 375
-  size 160
-  cast ranged
-  use:
-    if cast.dir:dot(allies_avg_pos - pos) > 0 then
-        cast.dir = -cast.dir
+  range 425
+  cast:
+    local lowest = math.huge
+    local target
+    for _, champ in pairs(in_range_list) do
+      if champ.health < lowest then
+        lowest = champ.health
+        target = champ
+      end
     end
+    if target == nil then
+      return nil
+    end
+    if lowest < 1600 then
+      return {
+        target = target,
+        pos = target.pos
+      }
+    end
+    return nil
+  use:
     effect on self dash to cast.target speed 1600 on finish do
-        local kick_dir = -cast.dir:normalize()
-        local kick_pos = cast.target.pos + kick_dir * dist
+        local kick_dir = (allies_avg_pos - cast.pos):normalize()
+        local kick_pos = cast.pos + kick_dir * dist
         effect pull to kick_pos speed 1000
         damage physical
     end

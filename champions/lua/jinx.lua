@@ -13,9 +13,9 @@ local jinx = {}
 -- Constructor
 function jinx.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2340,
-    armor = 112.4,
-    mr = 85.6,
+    health = 1900,
+    armor = 62.4,
+    mr = 45.6,
     ms = 370,
     sprite = 'jinx.jpg',
   })
@@ -28,7 +28,7 @@ function jinx.new(x, y)
   }
 function champ.abilities.aa:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
-colliders = context.enemies,
+colliders = nil,
 size = 80,
 speed = 1800,
 color = { 0.9,0.5,0.6 },
@@ -42,13 +42,15 @@ self.proj.after = function() champ.abilities.aa_aoe:after_aa(context, cast) end
 end
 
 function champ.abilities.aa:hit(target)
-damage:new(123.8, damage.PHYSICAL):deal(champ, target)
+damage:new(190, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.aa_aoe:after_aa(context, cast)
+local hit_cols = { [ cast.target ] = true }
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 250,
 color = { 0.9,0.5,0.6,0.9 },
+hit_cols = hit_cols,
 at = champ.abilities.aa.proj.pos,
 })
 context.spawn( self.proj
@@ -56,7 +58,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.aa_aoe:hit(target)
-damage:new(136, damage.PHYSICAL):deal(champ, target)
+damage:new(190, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)
@@ -75,7 +77,7 @@ end
 
 function champ.abilities.w:hit(target)
 damage:new(383, damage.PHYSICAL):deal(champ, target)
-target:effect(slow.new(2.0, 0.8))
+target:effect(slow.new(2.0, 0.6))
 end
 
 function champ.abilities.r:use(context, cast)

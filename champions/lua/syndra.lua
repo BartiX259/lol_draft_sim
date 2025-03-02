@@ -16,7 +16,7 @@ local syndra = {}
 function syndra.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 1811,
-    armor = 80.2,
+    armor = 64.2,
     mr = 45.6,
     ms = 390,
     sprite = 'syndra.jpg',
@@ -56,8 +56,7 @@ end
 
 function champ.abilities.e:with_q(context, cast)
 self.hit_cols = {}
-for angle = - 0.733 , 0.733 , 0.2 do
-local dir = cast.dir :rotate ( angle )
+for _,dir in pairs ( cast.dir :cone ( 56 , 7 )) do
 context.spawn( missile.new(self, { dir = dir,
 colliders = context.enemies,
 size = 120,

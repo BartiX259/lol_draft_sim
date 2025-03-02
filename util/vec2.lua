@@ -79,6 +79,25 @@ function vec2:rotate(deg)
   return vec2.new(cs * self.x - sn * self.y, sn * self.x + cs * self.y)
 end
 
+function vec2:perp(i)
+  local p = vec2.new(self.y, -self.x)
+  local list = {}
+  i = i - 1
+  for j = -i/2, i/2 do
+    table.insert(list, p * j)
+  end
+  return list
+end
+
+function vec2:cone(angle, i)
+  local list = {}
+  angle = angle * 0.017453292 -- deg2rad
+  for j = 1, i do
+    table.insert(list, self:rotate((j - (i+1)/2) * angle/(i-1)))
+  end
+  return list
+end
+
 function vec2:softcap(cap)
   local mag = self:mag()
   return self:normalize() * (mag / (1 + math.abs(mag) / cap))

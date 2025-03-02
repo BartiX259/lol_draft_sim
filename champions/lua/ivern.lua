@@ -15,17 +15,17 @@ local ivern = {}
 -- Constructor
 function ivern.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2568,
-    armor = 98.4,
-    mr = 65.6,
-    ms = 330,
+    health = 2418,
+    armor = 63.4,
+    mr = 45.6,
+    ms = 380,
     sprite = 'ivern.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1, 475, 88.8, { 0.2,0.8,0.4 }),
-    q = ranged_cast.new(8.33, 1150),
-    e = buff_cast.new(5.83, 750),
+    aa = ranged_aa_cast.new(0.95, 475, 164, { 0.2,0.8,0.4 }),
+    q = ranged_cast.new(5.5, 1150),
+    e = buff_cast.new(4, 750),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -48,7 +48,7 @@ target:effect(root.new(2.0))
 end
 
 function champ.abilities.e:use(context, cast)
-cast.target:effect(shield.new(2.0, 255.0))
+cast.target:effect(shield.new(2.0, 417.8))
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 500,
 color = { 0.2,0.8,0.4 },
@@ -62,7 +62,7 @@ end)
 end
 
 function champ.abilities.e:hit(target)
-damage:new(182, damage.MAGIC):deal(champ, target)
+damage:new(252, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(2.0, 0.6))
 end
 

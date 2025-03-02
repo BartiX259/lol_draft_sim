@@ -14,23 +14,23 @@ local ziggs = {}
 -- Constructor
 function ziggs.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2178,
-    armor = 77.4,
+    health = 2140,
+    armor = 67.4,
     mr = 45.6,
-    ms = 350,
+    ms = 325,
     sprite = 'ziggs.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.12, 550, 151, { 0.8,0.5,0.2 }),
-    q = ranged_cast.new(3.64, 1400),
-    e = splash_cast.new(14.55, 1000, 300),
+    aa = ranged_aa_cast.new(1.5, 550, 132.2, { 0.8,0.5,0.2 }),
+    q = ranged_cast.new(3.2, 1400),
+    e = splash_cast.new(12.31, 1000, 300),
     e_bombs = none_cast.new(),
-    r = big_cast.new(86.36, 5000, 525),
+    r = big_cast.new(53.84, 5000, 525),
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(151, damage.MAGIC):deal(champ, target)
+damage:new(132.2, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.q:use(context, cast)
@@ -47,7 +47,7 @@ self.proj.after = function ()
 context.spawn( aoe:new(self, { colliders = context.enemies,
 size = 200,
 color = { 0.8,0.5,0.2 },
-deploy_time = 0.25,
+deploy_time = 0.3,
 at = self.proj.pos,
 })
 )
@@ -63,7 +63,7 @@ self.proj.next.after = function ()
 context.spawn( aoe:new(self, { colliders = context.enemies,
 size = 200,
 color = { 0.8,0.5,0.2 },
-deploy_time = 0.25,
+deploy_time = 0.3,
 at = self.proj.pos,
 })
 )
@@ -78,14 +78,14 @@ range = 250,
 self.proj.next.next.next = aoe:new(self, { colliders = context.enemies,
 size = 200,
 color = { 0.8,0.5,0.2 },
-deploy_time = 0.25,
+deploy_time = 0.3,
 })
 context.spawn( self.proj
 )
 end
 
 function champ.abilities.q:hit(target)
-damage:new(402, damage.MAGIC):deal(champ, target)
+damage:new(250, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -110,7 +110,7 @@ local proj = aoe:new(self, { colliders = context.enemies,
 size = 100,
 color = { 0.8,0.5,0.2 },
 deploy_time = 0.2,
-tick = 0,
+tick = 0.1,
 at = pos,
 })
 proj.on_hit = function ()
@@ -126,7 +126,7 @@ local proj = aoe:new(self, { colliders = context.enemies,
 size = 100,
 color = { 0.8,0.5,0.2 },
 deploy_time = 0.2,
-tick = 0,
+tick = 0.1,
 at = pos,
 })
 proj.on_hit = function ()
@@ -139,7 +139,7 @@ end
 end
 
 function champ.abilities.e_bombs:hit(target)
-damage:new(244, damage.MAGIC):deal(champ, target)
+damage:new(195, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.r:use(context, cast)
@@ -154,7 +154,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(432, damage.MAGIC):deal(champ, target)
+damage:new(473.33, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

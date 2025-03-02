@@ -13,37 +13,37 @@ local ashe = {}
 -- Constructor
 function ashe.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2272,
-    armor = 96.2,
+    health = 1980,
+    armor = 66.2,
     mr = 45.6,
-    ms = 381,
+    ms = 391,
     sprite = 'ashe.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(0.90, 600, 149, { 0.2,0.7,1.0 }),
+    aa = ranged_aa_cast.new(0.90, 600, 160, { 0.2,0.7,1.0 }),
     w = ranged_cast.new(4, 1200),
     r = important_cast.new(80, 2500),
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(149, damage.PHYSICAL):deal(champ, target)
+damage:new(160, damage.PHYSICAL):deal(champ, target)
 target:effect(slow.new(2.0, 0.25))
 end
 
 function champ.abilities.w:use(context, cast)
-for i = - 4 , 4 do
-local dir = cast.dir :rotate ( i / 8 )
-self.proj = missile.new(self, { dir = dir,
+local hit_cols = {}
+for _,dir in pairs ( cast.dir :cone ( 46 , 8 )) do
+context.spawn( missile.new(self, { dir = dir,
 colliders = context.enemies,
 size = 50,
 speed = 2000,
 color = { 0.2,0.7,1.0 },
 range = 1200,
 stop_on_hit = true,
+hit_cols = hit_cols,
 from = champ.pos,
 })
-context.spawn( self.proj
 )
 end
 end

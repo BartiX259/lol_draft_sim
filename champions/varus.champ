@@ -3,7 +3,7 @@ sprite varus.jpg
 
 attributes:
   health 1860
-  armor 82.2
+  armor 67.2
   mr 45.6
   ms 375
 
@@ -15,14 +15,14 @@ abilities:
   color 0.7, 0.1, 0.8
 
    aa:
-      cd 0.645
-      damage 276
+      cd 0.745
+      damage 190
       range 575
       cast ranged_aa
 
   q:
-    cd 10.908
-    damage 709
+    cd 5.9
+    damage 555
     range 1595
     speed 1900
     size 140

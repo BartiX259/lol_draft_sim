@@ -15,18 +15,18 @@ local orianna = {}
 -- Constructor
 function orianna.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1905,
-    armor = 70.4,
+    health = 2055,
+    armor = 65.4,
     mr = 41.6,
     ms = 370,
     sprite = 'orianna.jpg',
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1, 525, 113, { 0.3,0.5,0.8 }),
-    q = splash_cast.new(2.5, 825, 175),
-    w = ability:new(5.83),
-    r = ability:new(66.66),
+    aa = ranged_aa_cast.new(1, 525, 151, { 0.3,0.5,0.8 }),
+    q = splash_cast.new(3, 825, 175),
+    w = ability:new(6.6),
+    r = ability:new(90.48),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -51,7 +51,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(290, damage.MAGIC):deal(champ, target)
+damage:new(211, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:cast(context)
@@ -71,8 +71,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.w:hit(target)
-damage:new(410, damage.MAGIC):deal(champ, target)
-target:effect(slow.new(1.0, 0.2))
+damage:new(368, damage.MAGIC):deal(champ, target)
+target:effect(slow.new(3.0, 0.4))
 end
 
 function champ.abilities.r:cast(context)
@@ -83,7 +83,7 @@ function champ.abilities.r:use(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 415,
 color = { 0.3,0.5,0.8,0.7 },
-deploy_time = 0.2,
+deploy_time = 0.5,
 at = champ.abilities.q.proj,
 follow = champ.abilities.q.proj,
 soft_follow = true,
@@ -93,7 +93,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(590, damage.MAGIC):deal(champ, target)
+damage:new(560, damage.MAGIC):deal(champ, target)
 target:effect(pull.new(1200, self.proj))
 end
 

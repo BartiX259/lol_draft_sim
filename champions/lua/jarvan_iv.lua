@@ -17,23 +17,23 @@ local jarvan_iv = {}
 -- Constructor
 function jarvan_iv.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2538,
-    armor = 113.4,
-    mr = 76.6,
-    ms = 365,
+    health = 2488,
+    armor = 118.4,
+    mr = 66.6,
+    ms = 340,
     sprite = 'jarvan_iv.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.2, 175, 150),
-    q = ranged_cast.new(4.4, 800),
-    e = ability:new(7.0),
+    aa = melee_aa_cast.new(1.3, 175, 170),
+    q = ranged_cast.new(4.5, 800),
+    e = ability:new(8.33),
     knockup = none_cast.new(),
-    r = splash_cast.new(74.1, 400, 400),
+    r = splash_cast.new(75, 400, 400),
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(150, damage.PHYSICAL):deal(champ, target)
+damage:new(170, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.q:use(context, cast)
@@ -95,7 +95,6 @@ context.spawn( self.proj
 end
 
 function champ.abilities.knockup:hit(target)
-damage:new(100, damage.PHYSICAL):deal(champ, target)
 target:effect(airborne.new(1.0))
 end
 
@@ -112,7 +111,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(415, damage.PHYSICAL):deal(champ, target)
+damage:new(540, damage.PHYSICAL):deal(champ, target)
 target:effect(stun.new(1.25))
 end
 

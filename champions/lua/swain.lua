@@ -15,7 +15,7 @@ local swain = {}
 function swain.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2473,
-    armor = 88.4,
+    armor = 68.4,
     mr = 49.6,
     ms = 330,
     sprite = 'swain.jpg',
@@ -30,14 +30,15 @@ function swain.new(x, y)
   }
 
 function champ.abilities.q:use(context, cast)
-for i = 1 , 5 do
-local dir = cast.dir :rotate (( i - ( 5 + 1 ) / 2 ) * 0.5 / ( 5 - 1 ))
+local hit_cols = {}
+for _,dir in pairs ( cast.dir :cone ( 32 , 5 )) do
 self.proj = missile.new(self, { dir = dir,
 colliders = context.enemies,
 size = 150,
 speed = 2500,
 color = { 0.5,0.1,0.1 },
 range = 725,
+hit_cols = hit_cols,
 from = champ.pos,
 })
 context.spawn( self.proj
@@ -68,7 +69,7 @@ end
 end
 
 function champ.abilities.e:hit(target)
-damage:new(353, damage.MAGIC):deal(champ, target)
+damage:new(253, damage.MAGIC):deal(champ, target)
 target:effect(root.new(1.5))
 end
 
@@ -88,7 +89,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.e_ret:hit(target)
-damage:new(353, damage.MAGIC):deal(champ, target)
+damage:new(253, damage.MAGIC):deal(champ, target)
 target:effect(root.new(1.5))
 end
 
@@ -101,7 +102,7 @@ persist_time = 12,
 tick = 0.5,
 follow = champ,
 }):on_impact(function()
-champ.health = champ.health + 50 * distances.in_range(champ, context.enemies, 300)
+champ.health = champ.health + 35 * distances.in_range(champ, context.enemies, 300)
 end)
 context.delay(12, function() self.active = false
 end)

@@ -17,17 +17,17 @@ local ahri = {}
 function ahri.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 1838,
-    armor = 77.4,
+    armor = 67.4,
     mr = 45.6,
-    ms = 375,
+    ms = 385,
     sprite = 'ahri.jpg',
   })
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.185, 550, 89, { 0.4,0.5,0.9 }),
-    q = splash_cast.new(7, 900, 200),
-    q_ret = ability:new(7),
-    e = ranged_cast.new(12, 1000),
+    q = splash_cast.new(6.5, 900, 200),
+    q_ret = ability:new(6.5),
+    e = ranged_cast.new(10, 1000),
     r = dash_cast.new(115, 500, 900),
     r_charges = none_cast.new(),
   }

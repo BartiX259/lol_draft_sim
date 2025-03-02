@@ -1,11 +1,20 @@
 local ability = require("util.ability")
+local distances = require("util.distances")
 local buff = {}
 
 function buff.new(cd, range)
   local self = ability:new(cd)
 
   function self:cast(context)
-    local target = context.closest_ally
+    local min_dist = math.huge
+    local target
+    for _, ally in pairs(distances.in_range_list(context.champ, context.allies, range)) do
+      local dist = ally.pos:distance(context.enemies_avg_pos)
+      if dist < min_dist then
+        min_dist = dist
+        target = ally
+      end
+    end
     if target == nil then
       target = context.champ
     end

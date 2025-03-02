@@ -15,7 +15,7 @@ local maokai = {}
 -- Constructor
 function maokai.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2723.00,
+    health = 2523.00,
     armor = 127.40,
     mr = 121.60,
     ms = 380,
@@ -24,8 +24,8 @@ function maokai.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(0.83, 125, 103.60),
-    q = ranged_cast.new(4.35, 150),
-    w = ranged_cast.new(8.70, 525),
+    q = ranged_cast.new(3.35, 150),
+    w = ranged_cast.new(6.70, 525),
     r = big_cast.new(95.66, 3000, 240),
   }
 
@@ -40,7 +40,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(341, damage.MAGIC):deal(champ, target)
+damage:new(381, damage.MAGIC):deal(champ, target)
 local dir = ( target.pos - self.proj.pos ):normalize () * 100
 local pos = target.pos + dir
 target:effect(pull.new(1000, pos))
@@ -53,7 +53,7 @@ end))
 end
 
 function champ.abilities.w:hit(target)
-damage:new(176, damage.MAGIC):deal(champ, target)
+damage:new(276, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.r:precast(context, cast)
@@ -77,7 +77,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(255, damage.MAGIC):deal(champ, target)
+damage:new(455, damage.MAGIC):deal(champ, target)
 target:effect(root.new(2.25))
 end
 

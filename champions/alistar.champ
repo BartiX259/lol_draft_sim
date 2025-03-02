@@ -3,13 +3,13 @@ sprite alistar.jpg
 
 -- Should be a bit more tanky than normal because he doesnt have his ult
 attributes:
-  health 2875
-  armor 148.4
-  mr 106.6
-  ms 355
+  health 2975
+  armor 158.4
+  mr 126.6
+  ms 385
 
 behavior:
-  range w
+  range w + 100
   movement peel
 
 abilities:
@@ -18,11 +18,11 @@ abilities:
   aa:
     cd 1.1
     range 125
-    damage 107
+    damage 127
     cast melee_aa
 
   q:
-    cd 8.3
+    cd 3.9
     damage 220
     range 187
     size 375
@@ -32,11 +32,10 @@ abilities:
       spawn proj
     hit:
       damage magic
-      target:del_effect("pull")
-      effect airborne 1s
+      effect airborne 1.5s
 
   w:
-    cd 8.3
+    cd 6.3
     damage 275
     range 650
     cast ranged
