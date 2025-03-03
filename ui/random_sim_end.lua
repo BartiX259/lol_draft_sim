@@ -37,7 +37,7 @@ function random_sim_end:__call(info)
         row = row + component { width = padding }
         row = row + component { width = champ.win_rate * width, height = height, bg = ui.BLUE_COL, borderRadius = 5 }
         row = row + component { width = (1 - champ.win_rate) * width, height = height, bg = ui.RED_COL, borderRadius = 5 }
-        row = row + label { text = tostring(champ.wins) .. " - " .. tostring(champ.losses), color = {1, 1, 1}, height = height, width = 110, font = love.graphics.newFont(component.FONT, 15) }
+        row = row + label { text = tostring(champ.wins) .. " - " .. tostring(champ.losses), color = {1, 1, 1}, height = height, width = 140, font = love.graphics.newFont(component.FONT, 15) }
         row = row + label { text = string.format("%.1f", champ.win_rate * 100) .. "%", color = {1, 1, 1}, height = height, width = 110, font = love.graphics.newFont(component.FONT, 15) }
         res = res + row
     end
