@@ -21,7 +21,7 @@ function varus.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(0.745, 575, 190, { 0.7,0.1,0.8 }),
-    q = ranged_cast.new(5.9, 1595),
+    q = ranged_cast.new(5.7, 1595),
     r = important_cast.new(72.72, 1370),
   }
 
@@ -39,7 +39,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(555, damage.PHYSICAL):deal(champ, target)
+damage:new(595, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.r:use(context, cast)

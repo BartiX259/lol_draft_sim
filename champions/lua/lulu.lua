@@ -25,7 +25,7 @@ function lulu.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1, 550, 124, { 0.8,0.5,0.8 }),
+    aa = ranged_aa_cast.new(1.3, 550, 134, { 0.8,0.5,0.8 }),
     q = ranged_cast.new(4.83, 950),
     w = ability:new(9.5),
     e = buff_cast.new(6.2, 650),

@@ -21,8 +21,8 @@ abilities:
       cast ranged_aa
 
   q:
-    cd 5.9
-    damage 555
+    cd 5.7
+    damage 595
     range 1595
     speed 1900
     size 140

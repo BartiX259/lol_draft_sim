@@ -26,7 +26,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 5.7
+    cd 5.5
     damage 275
     range 1050
     speed 1700

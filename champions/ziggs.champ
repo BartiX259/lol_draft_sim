@@ -16,7 +16,7 @@ abilities:
 
   aa:
     cd 1.5
-    damage 132.2
+    damage 152.2
     range 550
     cast ranged_aa
     hit:

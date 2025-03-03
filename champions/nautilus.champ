@@ -29,7 +29,7 @@ color 0.3, 0.9, 0.9
       damage 250
       range 1122
       speed 2000
-      size 180
+      size 200
       stop_on_hit true
       pull_speed 1300
       pull_distance_fraction 0.5

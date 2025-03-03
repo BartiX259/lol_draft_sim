@@ -3,7 +3,7 @@ sprite ezreal.jpg
 
 attributes:
     health 1824
-    armor 80.4
+    armor 66.4
     mr 45.6
     ms 360
 

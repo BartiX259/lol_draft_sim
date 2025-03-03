@@ -14,7 +14,7 @@ local alistar = {}
 -- Constructor
 function alistar.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2975,
+    health = 2935,
     armor = 158.4,
     mr = 126.6,
     ms = 385,
@@ -23,7 +23,7 @@ function alistar.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.1, 125, 127),
-    q = splash_cast.new(3.9, 187, 375),
+    q = splash_cast.new(4.1, 187, 375),
     w = ranged_cast.new(6.3, 650),
   }
 

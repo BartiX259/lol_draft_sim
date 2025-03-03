@@ -24,8 +24,8 @@ function swain.new(x, y)
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 90.4, { 0.5,0.1,0.1 }),
     q = ranged_cast.new(2.73, 725),
-    e = ranged_cast.new(9.1, 900),
-    e_ret = ability:new(9.1),
+    e = ranged_cast.new(8.8, 900),
+    e_ret = ability:new(8.8),
     r = ranged_cast.new(72.7, 300),
   }
 

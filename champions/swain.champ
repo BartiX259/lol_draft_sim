@@ -44,7 +44,7 @@ q:
     damage magic
 
 e:
-  cd 9.1
+  cd 8.8
   damage 253
   range 900
   speed 1600

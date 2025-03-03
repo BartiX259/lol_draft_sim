@@ -32,7 +32,7 @@ abilities:
     cast melee_aa
 
   q: -- fully charged, empowered
-    cd 6.4
+    cd 6.6
     range 1200
     damage 536.5
     size 120

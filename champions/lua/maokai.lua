@@ -24,14 +24,14 @@ function maokai.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(0.83, 125, 103.60),
-    q = ranged_cast.new(3.35, 150),
+    q = ranged_cast.new(3.35, 160),
     w = ranged_cast.new(6.70, 525),
     r = big_cast.new(95.66, 3000, 240),
   }
 
 function champ.abilities.q:use(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
-size = 300,
+size = 320,
 color = { 0.2,0.6,0.2 },
 follow = champ,
 })
@@ -89,7 +89,7 @@ elseif ready.w then
 champ.range = 525
 champ:change_movement(movement.AGGRESSIVE)
 else
-champ.range = 150+100
+champ.range = 160+100
 champ:change_movement(movement.PEEL)
 end
 end

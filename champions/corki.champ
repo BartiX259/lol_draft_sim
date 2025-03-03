@@ -47,7 +47,7 @@ abilities:
 
   r: -- big rocket every couple of seconds
     cd 2.5
-    damage 256
+    damage 286
     range 1500
     speed 2000
     size 160

@@ -23,7 +23,7 @@ function jinx.new(x, y)
   champ.abilities = {
     aa = ranged_cast.new(0.865, 625),
     aa_aoe = none_cast.new(),
-    w = ranged_cast.new(4, 1500),
+    w = ranged_cast.new(4.5, 1500),
     r = important_cast.new(65, 5000),
   }
 function champ.abilities.aa:use(context, cast)

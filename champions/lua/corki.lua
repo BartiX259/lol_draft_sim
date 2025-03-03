@@ -66,7 +66,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(256, damage.PHYSICAL):deal(champ, target)
+damage:new(286, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

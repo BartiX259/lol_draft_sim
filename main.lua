@@ -152,6 +152,8 @@ function Delay(time, func)
     table.insert(Delays, { time = time, func = func })
 end
 
+local avg_tps = 0
+
 function RandomSimResult(res)
   local function add_res(champ, res)
     if RandomSimInfo.champs[champ.name] == nil then
@@ -171,6 +173,7 @@ function RandomSimResult(res)
     for _, champ in pairs(RandomSimInfo.champs) do
       champ.win_rate = champ.wins / (champ.wins + champ.losses)
     end
+    print("Average TPS: " .. string.format("%.0f", avg_tps))
     --dump.dump(RandomSimInfo)
   else
     RandomDraft()
@@ -214,15 +217,39 @@ function SimResult(res)
   end
 end
 
+local tick_rate = 0.02 -- 50 logic updates per second
+local tick_count = 0 -- Tracks ticks per second
+local last_tps_update = love.timer.getTime() -- Time tracker for TPS
+local tps = 0
+local tps_samples = 0
+
 function love.update(dt)
   if (SimInfo or RandomSimInfo) and GameState == PLAYING then
-    for _ = 1, 700 do
-      GameTick(0.02)
+    local start_time = love.timer.getTime()
+
+    -- Run as many ticks as possible within the frame time budget
+    while love.timer.getTime() - start_time < dt * 0.9 do
+      for _ = 1, 20 do
+        GameTick(tick_rate)
+        tick_count = tick_count + 1
+      end
+    end
+
+    -- Calculate and log TPS every second
+    local now = love.timer.getTime()
+    if now - last_tps_update >= 1 then
+      tps = tick_count / (now - last_tps_update)
+      tps_samples = tps_samples + 1
+      avg_tps = avg_tps + (tps - avg_tps) / tps_samples
+      tick_count = 0 -- Reset counter
+      last_tps_update = now
     end
   else
-    GameTick(dt)
+    GameTick(dt) -- Run normal game updates
   end
 end
+
+
 
 function GameTick(dt)
   if GameState == GLITCH then
@@ -503,11 +530,10 @@ function love.draw()
         end
     end
   Camera:detach()
-  if SimInfo then
+  local info = SimInfo or RandomSimInfo
+  if info then
     love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Games: " .. tostring(SimInfo.games - SimInfo.games_left) .. "/" .. tostring(SimInfo.games), 0, 0)
-  elseif RandomSimInfo then
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Games: " .. tostring(RandomSimInfo.games - RandomSimInfo.games_left) .. "/" .. tostring(RandomSimInfo.games), 0, 0)
+    love.graphics.print("Games: " .. tostring(info.games - info.games_left) .. "/" .. tostring(info.games), 0, 0)
+    love.graphics.print("TPS: " .. string.format("%.0f", tps), 0, 25)
   end
 end

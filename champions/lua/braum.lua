@@ -28,7 +28,7 @@ function braum.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 93),
-    q = ranged_cast.new(5.7, 1050),
+    q = ranged_cast.new(5.5, 1050),
     w = buff_cast.new(7.6, 650),
     e = dash_cast.new(7.6, 100, 800),
     r = big_cast.new(95.2, 1200, 300),

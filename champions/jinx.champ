@@ -40,7 +40,7 @@ abilities:
       damage physical
 
   w:
-    cd 4
+    cd 4.5
     damage 383
     range 1500
     speed 3300

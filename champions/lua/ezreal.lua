@@ -12,7 +12,7 @@ local ezreal = {}
 function ezreal.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 1824,
-    armor = 80.4,
+    armor = 66.4,
     mr = 45.6,
     ms = 360,
     sprite = 'ezreal.jpg',

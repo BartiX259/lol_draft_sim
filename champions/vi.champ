@@ -24,12 +24,12 @@ abilities:
 
   aa:
     cd 1.25
-    damage 218
+    damage 238
     range 125
     cast melee_aa
 
   q:
-    cd 4.8
+    cd 4.7
     damage 352
     range 725
     size 120

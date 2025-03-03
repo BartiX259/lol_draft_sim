@@ -22,9 +22,9 @@ function garen.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(0.9, 175, 188),
-    q = ranged_cast.new(6.15, 400),
+    q = ranged_cast.new(6.35, 400),
     q_hit = ranged_cast.new(0, 200),
-    e = ranged_cast.new(6.92, 325),
+    e = ranged_cast.new(7.02, 325),
     r = ability:new(76.9),
   }
 champ.abilities.q_hit:join(champ.abilities.q)

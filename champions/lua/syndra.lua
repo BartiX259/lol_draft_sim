@@ -15,7 +15,7 @@ local syndra = {}
 -- Constructor
 function syndra.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1811,
+    health = 2011,
     armor = 64.2,
     mr = 45.6,
     ms = 390,
@@ -24,9 +24,9 @@ function syndra.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
-    q = splash_cast.new(5.187, 800, 210),
-    e = ability:new(12.6),
-    q_push = ability:new(12.6),
+    q = splash_cast.new(4.687, 800, 210),
+    e = ability:new(11.6),
+    q_push = ability:new(11.6),
     r = ability:new(74.1),
   }
 
@@ -51,7 +51,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(325.4, damage.MAGIC):deal(champ, target)
+damage:new(305.4, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:with_q(context, cast)

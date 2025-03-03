@@ -31,7 +31,7 @@ function nautilus.new(x, y)
 function champ.abilities.q:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
-size = 180,
+size = 200,
 speed = 2000,
 color = { 0.3,0.9,0.9 },
 range = 1122,

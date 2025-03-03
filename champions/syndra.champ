@@ -2,7 +2,7 @@ champion syndra
 sprite syndra.jpg
 
 attributes:
-    health 1811
+    health 2011
     armor 64.2
     mr 45.6
     ms 390
@@ -27,8 +27,8 @@ aa:
   damage 88.8
   cast ranged_aa
 q:
-  cd 5.187
-  damage 325.4
+  cd 4.687
+  damage 305.4
   range 800
   size 210
   deploy_time 0.4
@@ -41,7 +41,7 @@ q:
   damage magic
 
 e:
-  cd 12.6
+  cd 11.6
   damage 317.8
   speed 2500
   size 120

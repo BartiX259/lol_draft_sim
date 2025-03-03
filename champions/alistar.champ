@@ -3,7 +3,7 @@ sprite alistar.jpg
 
 -- Should be a bit more tanky than normal because he doesnt have his ult
 attributes:
-  health 2975
+  health 2935
   armor 158.4
   mr 126.6
   ms 385
@@ -22,7 +22,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 3.9
+    cd 4.1
     damage 220
     range 187
     size 375
