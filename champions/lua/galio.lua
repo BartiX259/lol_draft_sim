@@ -102,7 +102,7 @@ end
 
 function champ.abilities.e:hit(target)
 self.proj.despawn = true
-champ :del_effect (" dash ")
+champ :del_effect ( "dash" )
 damage:new(240, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(0.75))
 end

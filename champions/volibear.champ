@@ -22,7 +22,7 @@ abilities:
   aa:
     cd 1.13
     range 150
-    damage 162
+    damage 182
     cast melee_aa
   q:
     cd 9.55

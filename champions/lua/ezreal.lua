@@ -19,7 +19,7 @@ function ezreal.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(0.63, 550, 208, { 0.8,0.8,0.4 }),
+    aa = ranged_aa_cast.new(0.83, 550, 208, { 0.8,0.8,0.4 }),
     q = ranged_cast.new(3.75, 1200),
     e = dash_cast.new(11.7, 475, 700),
   }

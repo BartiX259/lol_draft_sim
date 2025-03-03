@@ -2,7 +2,7 @@ champion swain
 sprite swain.jpg
 
 attributes:
-  health 2473
+  health 2373
   armor 68.4
   mr 49.6
   ms 330
@@ -26,8 +26,8 @@ aa:
   cast ranged_aa
 
 q:
-  cd 2.73
-  damage 104
+  cd 2.9
+  damage 225
   range 725
   size 150
   speed 2500
@@ -44,7 +44,7 @@ q:
     damage magic
 
 e:
-  cd 8.8
+  cd 8.9
   damage 253
   range 900
   speed 1600
@@ -71,7 +71,7 @@ e_ret:
 
 r:
   cd 72.7
-  damage 29
+  damage 20
   range 300
   size 650
   persist_time 12
@@ -81,7 +81,7 @@ r:
   use:
     active = true
     proj = aoe follow self on impact do
-        self.health = self.health + 35 * in_range
+        self.health = self.health + 20 * in_range
     end
     delay persist_time active = false
     spawn proj

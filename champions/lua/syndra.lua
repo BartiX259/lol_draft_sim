@@ -24,7 +24,7 @@ function syndra.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
-    q = splash_cast.new(4.687, 800, 210),
+    q = splash_cast.new(4.78, 800, 210),
     e = ability:new(11.6),
     q_push = ability:new(11.6),
     r = ability:new(74.1),

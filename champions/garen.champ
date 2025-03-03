@@ -24,7 +24,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 6.35
+    cd 6.45
     range 400
     cast ranged
     use:
@@ -40,7 +40,7 @@ abilities:
         effect silence 1.5s
 
   e:
-    cd 7.02
+    cd 7.32
     damage 85.2
     range 325
     size 325

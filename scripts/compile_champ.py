@@ -26,31 +26,32 @@ class CompilerError(Exception):
         return (f"\033[1;31merror:\033[0m \033[1m{self.message}\033[0m\n"
                 f"   \033[34m-->\033[0m {self.file_name} line {self.line_number}")
 
-import re
-
 def tokenize_file(file_path):
     all_tokens = []
 
-    # Updated regex pattern:
-    # - Captures "pre-cast" as a single token
-    # - Words (alphanumeric and _)
-    # - Symbols (including # as a separate token)
-    # - Multi-character symbols like >=, <=, etc.
-    # - Percentages and numbers together (e.g., 75%)
-    pattern = r"pre-cast|[\w.]+(?:%?)|[^\w\s#]+|#|\d+[%]?"
+    # Regex patterns
+    string_pattern = re.compile(r'"[^"]*"|\'[^\']*\'')  # Captures quoted strings
+    token_pattern = re.compile(r"pre-cast|[\w.]+(?:%?)|[^\w\s#]+|#|\d+[%]?")  # Tokenizes everything else
 
     with open(file_path, "r", encoding="utf-8") as file:
         for line in file:
-            # Remove comments using regex (everything after "--")
-            line = re.sub(r"--.*", "", line).strip()
-
+            line = re.sub(r"--.*", "", line).strip()  # Remove comments
             if not line:
                 all_tokens.append([])
-                continue  # Skip empty lines
+                continue  
 
-            # Use regex to split line into tokens
-            line_tokens = re.findall(pattern, line)
-            all_tokens.append(line_tokens)  # Add the token list for this line
+            # Extract and replace quoted strings
+            quoted_strings = string_pattern.findall(line)
+            temp_line = string_pattern.sub("__STR__", line)
+
+            # Tokenize the modified line
+            tokens = token_pattern.findall(temp_line)
+
+            # Restore quoted strings
+            quote_index = 0
+            tokens = [quoted_strings[quote_index] if token == "__STR__" else token for token in tokens]
+
+            all_tokens.append(tokens)
 
     return all_tokens
 

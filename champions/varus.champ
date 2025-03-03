@@ -39,6 +39,7 @@ abilities:
     range 1370
     speed 1500
     size 240
+    stop_on_hit true
     cast important
     use:
        proj = missile from self

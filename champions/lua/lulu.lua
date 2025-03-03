@@ -25,10 +25,10 @@ function lulu.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.3, 550, 134, { 0.8,0.5,0.8 }),
-    q = ranged_cast.new(4.83, 950),
+    aa = ranged_aa_cast.new(1.1, 550, 154, { 0.8,0.5,0.8 }),
+    q = ranged_cast.new(4.9, 950),
     w = ability:new(9.5),
-    e = buff_cast.new(6.2, 650),
+    e = buff_cast.new(5.5, 650),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -56,7 +56,7 @@ end)
 end
 
 function champ.abilities.q:hit(target)
-damage:new(270, damage.MAGIC):deal(champ, target)
+damage:new(200, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(2.0, 0.8))
 end
 
@@ -66,8 +66,8 @@ cast.target:effect(damage_buff.new(4.0, 0.15))
 end
 
 function champ.abilities.e:use(context, cast)
-cast.target:effect(shield.new(3.5, 326.0))
-cast.target:effect(damage_buff.new(3.5, 0.15))
+cast.target:effect(shield.new(3.5, 376.0))
+cast.target:effect(damage_buff.new(3.5, 0.2))
 if champ.abilities.w.timer <= 0 then
 champ.abilities.w.timer = champ.abilities.w.cd
 champ.abilities.w:with_e(context, cast)

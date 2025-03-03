@@ -14,7 +14,7 @@ local swain = {}
 -- Constructor
 function swain.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2473,
+    health = 2373,
     armor = 68.4,
     mr = 49.6,
     ms = 330,
@@ -23,9 +23,9 @@ function swain.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 90.4, { 0.5,0.1,0.1 }),
-    q = ranged_cast.new(2.73, 725),
-    e = ranged_cast.new(8.8, 900),
-    e_ret = ability:new(8.8),
+    q = ranged_cast.new(2.9, 725),
+    e = ranged_cast.new(8.9, 900),
+    e_ret = ability:new(8.9),
     r = ranged_cast.new(72.7, 300),
   }
 
@@ -47,7 +47,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(104, damage.MAGIC):deal(champ, target)
+damage:new(225, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -102,7 +102,7 @@ persist_time = 12,
 tick = 0.5,
 follow = champ,
 }):on_impact(function()
-champ.health = champ.health + 35 * distances.in_range(champ, context.enemies, 300)
+champ.health = champ.health + 20 * distances.in_range(champ, context.enemies, 300)
 end)
 context.delay(12, function() self.active = false
 end)
@@ -111,7 +111,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(29, damage.MAGIC):deal(champ, target)
+damage:new(20, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

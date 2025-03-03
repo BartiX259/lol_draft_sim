@@ -18,7 +18,7 @@ abilities:
   aa:
     cd 0.84
     range 550
-    damage 205
+    damage 190
     speed 1000
     size 80
     cast ranged

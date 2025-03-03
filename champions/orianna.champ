@@ -25,7 +25,7 @@ abilities:
     damage 151
     cast ranged_aa
   q:
-    cd 3
+    cd 3.2
     range 825
     damage 211
     speed 1400
@@ -40,7 +40,7 @@ abilities:
     hit:
       damage magic
   w:
-    cd 6.6
+    cd 7
     damage 368
     size 225
     cast:

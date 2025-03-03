@@ -26,7 +26,7 @@ function aoe:new(ability, data)
       soft_follow = data.soft_follow or false,
       color = data.color,
       tick_time = data.tick,
-      re_hit = data.re_hit or true,
+      re_hit = data.re_hit == nil and true or data.re_hit,
       hit_cols = data.hit_cols or {},
       after_hit = false,
       cur_time = 0

@@ -1,0 +1,118 @@
+champion taliyah
+sprite taliyah.jpg
+
+attributes:
+  health 1890
+  armor 67.4
+  mr 45.6
+  ms 380
+
+behavior:
+  if ready q then
+    range q
+    movement passive
+  elseif ready w then
+    range w
+    movement aggressive
+  else
+    range q + 100
+    movement passive
+  end
+
+abilities:
+  color 0.7, 0.5, 0.3  -- Earthy tones
+
+  aa:
+    cd 1.1
+    range 525
+    damage 98
+    cast ranged_aa
+
+  q:
+    cd 4.5
+    damage 205
+    range 1000
+    speed 1500
+    stop_on_hit true
+    size 100 -- individual rock size
+    cast ranged
+    use:
+        local timings = { 0, 0.4, 0.7, 0.9, 1.1 }
+        local num_rocks = #timings
+        local spread_angle = 5 -- Total angle of spread
+
+        for _, i in pairs(timings) do
+          local angle_offset = (i - (num_rocks + 1) / 2) * (spread_angle / (num_rocks-1))
+          local dir = cast.dir:rotate(math.random(-1, 1) * math.rad(angle_offset))
+          local proj = missile from self
+          delay i spawn proj
+        end
+    hit:
+      damage magic
+      
+
+  w:
+    cd 9.8
+    range 900
+    size 200
+    deploy_time 0.8
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+        -- Determine knock-up direction (away from the center of the cast)
+        local knockup_dir = (target.pos - proj.pos):normalize()
+        local knockup_dist = 300
+        local target_pos = target.pos + knockup_dir * knockup_dist
+        effect pull to target_pos speed 1200
+
+
+  e:
+    cd 12.8
+    damage 330
+    range 500
+    speed 1600
+    size 70
+    deploy_time 0.25
+    cast ranged
+    use:
+      local num_rows = 6
+      local num_boulders_per_row = 4
+      local boulder_spacing = 110 
+      projs = {}
+      local hit_cols = {}
+      for i = 0, num_rows - 1 do
+        local row_offset = cast.dir * (i * boulder_spacing)
+
+        for _, dir in pairs(cast.dir:perp(num_boulders_per_row)) do
+          local boulder_pos = pos + row_offset + dir * boulder_spacing
+
+          local proj = aoe at boulder_pos persist_time 0
+          table.insert(projs, proj)
+          local del = i * 0.1
+          delay del spawn proj
+        end
+      end
+    hit:
+        damage magic
+        effect slow 20% 1s
+  
+  e_ticks:
+    size e
+    damage 150
+    deploy_time 0
+    persist_time 4
+    tick 0
+    cast with e
+    use:
+      local hit_cols = {}
+      for _, proj in pairs(e.projs) do
+        proj.next = aoe
+      end
+    hit:
+      if target:has_effect("pull") then
+        target:del_effect("pull")
+        effect stun 0.75s
+        damage magic
+      end

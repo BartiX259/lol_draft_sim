@@ -20,20 +20,20 @@ function jarvan_iv.new(x, y)
     health = 2488,
     armor = 118.4,
     mr = 66.6,
-    ms = 340,
+    ms = 380,
     sprite = 'jarvan_iv.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.3, 175, 170),
-    q = ranged_cast.new(4.5, 800),
+    aa = melee_aa_cast.new(1.3, 175, 223),
+    q = ranged_cast.new(4.3, 800),
     e = ability:new(8.33),
     knockup = none_cast.new(),
     r = splash_cast.new(75, 400, 400),
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(170, damage.PHYSICAL):deal(champ, target)
+damage:new(223, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.q:use(context, cast)

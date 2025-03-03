@@ -16,7 +16,11 @@ function melee_aa.new(cd, range, dmg)
   end
 
   function self:use(context, cast)
-    damage:new(dmg, damage.PHYSICAL):deal(context.champ, cast.target)
+    if self.hit then
+      self:hit(cast.target)
+    else
+      damage:new(dmg, damage.PHYSICAL):deal(context.champ, cast.target)
+    end
   end
 
   return self

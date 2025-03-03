@@ -1,0 +1,97 @@
+champion gwen
+sprite gwen.jpg
+
+attributes:
+  health 2150
+  armor 116
+  mr 77
+  ms 385
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  elseif ready w then
+    range w
+    movement aggressive
+  else
+    range w + 100
+    movement peel
+  end
+
+abilities:
+  color 0.6, 0.8, 1.0
+
+  aa:
+    cd 0.88
+    range 255
+    damage 205
+    cast melee_aa
+    hit:
+      damage magic
+
+  q:
+    cd 2.92
+    damage 245
+    range 220
+    size 250
+    angle 35
+    snips 6
+    deploy_time 0.1
+    persist_time 0.1
+    cast ranged
+    use:
+        local hit_cols = {}
+        for i = 1, snips do
+          for _, dir in pairs(cast.dir:cone(angle, 2)) do
+            local del = (i-1)*0.1
+            delay del do
+              local at = pos + dir * range / 2
+              spawn aoe
+            end
+          end
+        end
+    hit:
+      damage magic
+
+  w:
+    cd 15
+    persist_time 4
+    size 480
+    dist 0
+    range 0
+    opacity 0.7
+    cast dash
+    use:
+        proj = aoe follow self colliders projectiles
+        effect on self resist_buff 40 duration persist_time
+        spawn proj
+    hit:
+      target.hit_cols[self] = true
+
+  e:
+    cd 9.17
+    dist 450
+    range 500
+    cast dash
+    use:
+      effect on self dash to cast.pos speed 1400
+      effect on self damage_buff 25% 4s
+
+  r:
+    cd 83
+    damage 120
+    range 1350
+    speed 2200
+    size 80
+    needles 5
+    cast ranged
+    use:
+      for i = 1, needles do
+          local proj = missile from pos
+          local del = (i -1) * 0.1
+          delay del spawn proj
+      end
+    hit:
+      damage magic
+      effect slow 50% 1.5s

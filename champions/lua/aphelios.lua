@@ -46,7 +46,7 @@ end
 end
 
 function champ.abilities.aa:hit(target)
-damage:new(205, damage.PHYSICAL):deal(champ, target)
+damage:new(190, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.aa_wave:after_aa(context, cast)
@@ -66,7 +66,7 @@ end
 end
 
 function champ.abilities.aa_wave:hit(target)
-damage:new(205, damage.PHYSICAL):deal(champ, target)
+damage:new(190, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.q:use(context, cast)

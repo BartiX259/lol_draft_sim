@@ -14,13 +14,13 @@ behavior:
 abilities:
   color 0.8, 0.5, 0.8
   aa:
-    cd 1.3
+    cd 1.1
     range 550
-    damage 134
+    damage 154
     cast ranged_aa
   q:
-    cd 4.83
-    damage 270
+    cd 4.9
+    damage 200
     range 950
     speed 1450
     size 120
@@ -40,9 +40,9 @@ abilities:
         effect speed 4s 31%
         effect damage_buff 4s 15%
   e:
-    cd 6.2
+    cd 5.5
     range 650
     cast buff
     use:
-        effect shield 3.5s 326
-        effect damage_buff 3.5s 15%
+        effect shield 3.5s 376
+        effect damage_buff 3.5s 20%

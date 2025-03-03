@@ -23,9 +23,9 @@ function maokai.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(0.83, 125, 103.60),
-    q = ranged_cast.new(3.35, 160),
-    w = ranged_cast.new(6.70, 525),
+    aa = melee_aa_cast.new(1.3, 125, 88),
+    q = ranged_cast.new(3.5, 160),
+    w = ranged_cast.new(6.65, 525),
     r = big_cast.new(95.66, 3000, 240),
   }
 
@@ -57,7 +57,7 @@ damage:new(276, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.r:precast(context, cast)
-if cast.target :has_effect (" root ") then
+if cast.target :has_effect ( "root" ) then
 return nil
 end
 return cast

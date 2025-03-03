@@ -51,7 +51,7 @@ w:
 
 r:
   cd 68
-  damage 865
+  damage 805
   dist 800
   range 425
   cast:

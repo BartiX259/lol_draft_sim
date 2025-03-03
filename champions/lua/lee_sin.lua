@@ -81,7 +81,7 @@ champ:effect(dash.new(1600, cast.target):on_finish(function()
 local kick_dir = ( context.allies_avg_pos - cast.pos ):normalize ()
 local kick_pos = cast.pos + kick_dir * 800
 cast.target:effect(pull.new(1000, kick_pos))
-damage:new(865, damage.PHYSICAL):deal(champ, cast.target)
+damage:new(805, damage.PHYSICAL):deal(champ, cast.target)
 end))
 end
 

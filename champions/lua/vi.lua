@@ -24,12 +24,12 @@ function vi.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.25, 125, 238),
-    q = ranged_cast.new(4.7, 725),
+    q = ranged_cast.new(4.3, 725),
     r = important_cast.new(82.1, 800),
   }
 
 function champ.abilities.q:precast(context, cast)
-if cast.target :has_effect (" root ") or champ.abilities.r.active then
+if cast.target :has_effect ( "root" ) or champ.abilities.r.active then
 return nil
 end
 return cast
@@ -51,7 +51,7 @@ function champ.abilities.q:hit(target)
 damage:new(352, damage.PHYSICAL):deal(champ, target)
 champ:effect(shield.new(3.0, 263.0))
 self.proj.despawn = true
-champ :del_effect (" dash ")
+champ :del_effect ( "dash" )
 target:effect(airborne.new(1.0))
 end
 
@@ -59,7 +59,7 @@ function champ.abilities.r:use(context, cast)
 champ:effect(unstoppable.new(1.5))
 self.active = true
 champ:effect(dash.new(1400, cast.target):on_finish(function()
-champ :del_effect (" unstoppable ")
+champ :del_effect ( "unstoppable" )
 context.spawn( aoe:new(self, { colliders = context.enemies,
 size = 150,
 color = { 0.9,0.2,0.2 },

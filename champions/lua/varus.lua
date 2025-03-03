@@ -49,6 +49,7 @@ size = 240,
 speed = 1500,
 color = { 0.7,0.1,0.8 },
 range = 1370,
+stop_on_hit = true,
 from = champ,
 })
 context.spawn( self.proj

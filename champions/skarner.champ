@@ -1,0 +1,80 @@
+champion skarner
+sprite skarner.jpg
+
+attributes:
+  health 2580
+  armor 150.6
+  mr 96.6
+  ms 380
+
+behavior:
+  if r.active then
+    range q + 150
+    movement peel
+  elseif closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.6, 0.4, 0.8
+
+  aa:
+    cd 1.0
+    range 175
+    damage 169
+    cast melee_aa
+
+  q:
+    cd 5.4
+    damage 222
+    speed 1600
+    range 175
+    size 300
+    cast melee_aa
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      damage magic
+
+  e:
+    cd 13.5
+    damage 150
+    range 700
+    size 700
+    speed 1650
+    tick 0.1
+    cast ranged
+    use:
+      effect on self shield 204 2.5s
+      effect on self pull to cast.pos speed speed
+      start_pos = pos
+      local persist_time = cast.mag / speed
+      proj = aoe follow self re_hit false
+      spawn proj
+    hit:
+      damage magic
+      local time_left = (pos - start_pos):mag() / speed
+      effect suppress to proj duration time_left
+
+  r:
+    cd 82
+    damage 250
+    range 190
+    size 380
+    deploy_time 0.65
+    duration 1.5
+    cast ranged
+    use:
+      active = true
+      delay duration active = false
+      proj = aoe follow self
+      spawn proj
+    hit:
+      damage magic
+      effect suppress to self duration duration

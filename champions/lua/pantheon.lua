@@ -27,8 +27,8 @@ function pantheon.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.122, 175, 173.6),
-    q = ranged_cast.new(6.6, 1200),
-    w = ranged_cast.new(8.2, 600),
+    q = ranged_cast.new(6.8, 1200),
+    w = ranged_cast.new(8.4, 600),
     e = dash_cast.new(14.4, 0, 525),
     r = big_cast.new(120, 3500, 450),
   }

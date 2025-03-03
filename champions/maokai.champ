@@ -23,12 +23,12 @@ abilities:
   color 0.2, 0.6, 0.2
 
   aa:
-    damage 103.60
-    cd 0.83
+    damage 88
+    cd 1.3
     range 125
     cast melee_aa
   q:
-    cd 3.35
+    cd 3.5
     damage 381
     range 160
     size 320
@@ -43,7 +43,7 @@ abilities:
       effect pull to pos speed 1000
 
   w:
-    cd 6.70
+    cd 6.65
     damage 276
     range 525
     cast ranged
