@@ -1,0 +1,102 @@
+champion poppy
+sprite poppy.jpg
+
+attributes:
+  health 2508
+  armor 112.3
+  mr 88.2
+  ms 395
+
+behavior:
+  if ready e then
+    range e
+    movement aggressive
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.9, 0.6, 0.3 -- Gold/bronze
+
+  aa:
+    cd 1.1
+    range 175
+    damage 134
+    cast melee_aa
+
+  q:
+    cd 4.17
+    damage 230
+    range 200
+    size 200
+    deploy_time 0.2
+    cast ranged
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage physical
+      effect slow 40% 1s
+
+q_second:
+    stats q
+    cast after q
+    use:
+        proj = aoe at q.proj.pos
+        spawn proj
+    hit:
+      damage physical
+      effect slow 40% 1s
+
+  w:
+    cd 11.47
+    persist_time 2.5
+    size 400
+    damage 230
+    range 200
+    cast:
+      for _, enemy in pairs(in_range_list) do
+        if enemy:has_effect("dash") then
+          return true
+        end
+      end
+    use:
+        proj = aoe follow self tick 0
+        effect on self speed 30% duration persist_time
+        spawn proj
+    hit:
+      if target:has_effect("dash") then
+        damage magic
+        target:del_effect("dash")
+        effect slow 50% 1.2s
+        effect silence 1.2s
+        effect airborne 0.5s
+      end
+
+  e:
+    cd 7.28
+    damage 300
+    range 525
+    cast ranged
+    use:
+      local target_pos = pos + cast.dir * range
+      effect on self dash to target_pos speed 1600
+      effect stun 1.3s
+      effect pull to target_pos speed 1400
+      damage physical
+
+
+  r:
+    cd 83.48
+    damage 320
+    range 300
+    size 300
+    deploy_time 0.1
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage physical
+      effect airborne 1s

@@ -1,0 +1,124 @@
+champion kalista
+sprite kalista.jpg
+
+attributes:
+  health 2048
+  armor 72.4
+  mr 65.6
+  ms 385
+
+behavior:
+    range aa
+    movement kite
+
+abilities:
+  color 0.2, 0.8, 0.7
+
+  dash:
+    cd 0
+    dist 200
+    range 525
+    cast:
+      if self.dash then
+        return true
+      end
+    use:
+      self.dash = false
+      local dpos = dash_pos(context, dist, range)
+      if not dpos then
+        dpos = pos + (closest_enemy.pos - pos):normalize() * dist
+      end
+      effect on self dash to dpos speed 1500
+
+  aa:
+    cd 0.75
+    range 525
+    damage 239
+    size 50
+    speed 1500
+    cast ranged
+    start:
+      self.rend_stacks = {}
+      self.timers = {}
+    use:
+      self.dash = true
+      proj = missile from pos to cast.target colliders nil
+      spawn proj
+    hit:
+      damage physical
+      if self.rend_stacks[target] == nil then
+        self.rend_stacks[target] = 0
+      end
+      self.timers[target] = 4
+      self.rend_stacks[target] = self.rend_stacks[target] + 1
+
+  rend_stack_timers:
+    cast always
+    use:
+      for key, timer in pairs(self.timers) do
+        self.timers[key] = timer - dt
+        if self.timers[key] <= 0 then
+          self.rend_stacks[key] = nil
+          self.timers[key] = nil
+        end
+      end
+
+  q:
+    cd 5.93
+    damage 531
+    range 1200
+    speed 2400
+    size 80
+    cast ranged
+    use:
+      self.dash = true
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      if self.rend_stacks[target] == nil then
+        self.rend_stacks[target] = 0
+      end
+      self.timers[target] = 4
+      self.rend_stacks[target] = self.rend_stacks[target] + 1
+
+  e:
+    cd 5.93
+    base_damage 217
+    range 1100
+    stack_damage 41
+    cast:
+      for champ, count in pairs(self.rend_stacks) do
+        if self.timers ~= nil and self.timers[champ] ~= nil and self.timers[champ] < 1 and count > 5 then
+          return true
+        end
+        local dmg = base_damage + (stack_damage * count)
+        if dmg > champ.health + 100 then
+          return true
+        end
+      end
+      return nil
+    use:
+        local cast = {}
+        for champ, count in pairs(self.rend_stacks) do
+          dmg = base_damage + (stack_damage * count)
+          cast.target = champ
+          damage physical
+          effect slow 2s 50%
+        end
+        self.rend_stacks = {}
+
+  r:
+    cd 140
+    range 1500
+    damage 100
+    speed 1500
+    size 300
+    stop_on_hit true
+    cast important
+    use:
+        proj = missile from pos
+        spawn proj
+    hit:
+        damage magic
+        effect airborne 1.5s

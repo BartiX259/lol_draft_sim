@@ -47,8 +47,9 @@ for pattern in args.champ_files:
 for file_path in files:
     name = os.path.splitext(os.path.basename(file_path))[0]
     name = "_".join(word.capitalize() for word in name.split("_"))
-    if name == "Jarvan_Iv":
-        name = "Jarvan_IV"
+    replacements = { "Jarvan_Iv": "Jarvan_IV", "Cho_Gath": "Cho'Gath", "Kai_Sa": "Kai'Sa", "Vel_Koz": "Vel'Koz"}
+    if name in replacements:
+        name = replacements[name]
     print(name)
 
     with open(file_path, "r", encoding="utf-8") as file:

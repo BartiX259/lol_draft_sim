@@ -1,0 +1,106 @@
+champion sejuani
+sprite sejuani.jpg
+
+attributes:
+  health 2778
+  armor 131.9
+  mr 106.6
+  ms 380
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  elseif ready q then
+    range q
+    movement aggressive
+  else
+    range w + 100
+    movement peel
+  end
+
+abilities:
+  color 0.5, 0.7, 1.0  -- Light blue, icy
+
+  aa:
+    cd 1.2
+    range 175
+    damage 114
+    cast melee_aa
+
+  q:
+    cd 11.3
+    damage 240
+    range 650  -- dash range
+    size 220   -- AoE size (adjust as needed)
+    cast ranged  -- Sejuani *dashes* with Q.
+    use:
+      proj = aoe follow self tick 0 re_hit false  -- Check collision every frame.
+      dir = cast.dir
+      spawn proj
+      effect on self dash to cast.pos speed 1450 -- Dash speed.
+    hit:
+      damage magic
+      proj.despawn = true
+      self:del_effect("dash")
+      local target_pos = target.pos + dir * 90
+      effect airborne 1s
+      effect pull to target_pos speed 600
+
+  w:
+    cd 4.3
+    damage 120 -- First hit damage
+    range 350   --  cone range
+    size 120    --  individual hit size (adjust as needed). It is NOT angle.
+    angle 45      -- Cone angle for the swing
+    speed 1500
+    cast ranged
+    use:
+      local hit_cols = {}
+      for _, dir in pairs(cast.dir:cone(angle, 3)) do
+          proj = missile from pos
+          spawn proj
+      end
+    hit:
+        damage physical
+        effect slow 30% 0.5s
+
+  w_second:
+    damage 250
+    range 400
+    size 150
+    speed 1500
+    cast after w
+    use:
+        proj = missile from self
+        delay 0.1 spawn proj
+    hit:
+        damage physical
+
+
+  r:
+    cd 95.7
+    damage 183  -- Initial hit damage
+    range 1100 --  range
+    speed 1600
+    size 220  --  missile size
+    stop_on_hit true
+    cast important
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect stun 1.5s
+
+  r_explosion:
+     stats r
+     damage 300
+     size 400
+     cast after r
+     use:
+        proj = aoe at r.proj
+        spawn proj
+     hit:
+        damage magic
+        effect slow 80% 3s

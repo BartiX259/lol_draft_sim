@@ -2,7 +2,7 @@ champion vi
 sprite vi.jpg
 
 attributes:
-  health 2493
+  health 2523
   armor 121.4
   mr 66.6
   ms 380
@@ -29,7 +29,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 4.3
+    cd 4.2
     damage 352
     range 725
     size 120

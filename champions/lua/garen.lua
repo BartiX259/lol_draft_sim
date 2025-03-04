@@ -13,8 +13,8 @@ local garen = {}
 -- Constructor
 function garen.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2416,
-    armor = 125.74,
+    health = 2466,
+    armor = 103.74,
     mr = 85.66,
     ms = 385,
     sprite = 'garen.jpg',

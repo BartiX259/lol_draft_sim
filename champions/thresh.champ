@@ -1,0 +1,76 @@
+champion thresh
+sprite thresh.jpg
+
+attributes:
+  health 2740
+  armor 113
+  mr 78.6
+  ms 355
+
+behavior:
+  if ready q then
+    range q - 50
+    movement aggressive
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.4, 1.0, 0.6 -- Greenish
+
+  aa:
+    cd 1.2
+    range 450
+    damage 146
+    cast ranged_aa
+
+  q:
+    cd 7.2
+    damage 345
+    range 1100
+    speed 1900
+    size 140
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect charm to self 1.5s speed 200 -- Pull towards Thresh
+
+  w:
+    cd 13.1
+    range 950
+    speed 1750
+    size 250
+    cast buff
+    pre-cast:
+      if cast.target:has_effect("root") or cast.pos:distance(enemies_avg_pos) < 500 and cast.target.health < 1600 then
+        return cast
+      end
+      return nil
+    use:
+      proj = missile from pos to cast.pos colliders nil
+      proj.after = function()
+        effect on cast.target dash to self speed 1900
+        effect on cast.target shield 250 2s
+      end
+      spawn proj
+
+  e:
+    cd 7.8
+    damage 290
+    range 300
+    size 220  -- width of the flay
+    speed 1000
+    cast ranged
+    use:
+        local start_pos = pos - cast.dir * range
+        end_pos = pos + cast.dir * range
+        proj = missile from start_pos to end_pos
+        spawn proj
+    hit:
+      damage magic
+      effect pull to end_pos speed speed

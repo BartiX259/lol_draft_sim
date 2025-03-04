@@ -24,7 +24,7 @@ function gwen.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(0.88, 255, 205),
+    aa = melee_aa_cast.new(0.88, 265, 223),
     q = ranged_cast.new(2.92, 220),
     w = dash_cast.new(15, 0, 0),
     e = dash_cast.new(9.17, 450, 500),
@@ -32,7 +32,7 @@ function gwen.new(x, y)
   }
 
 function champ.abilities.aa:hit(target)
-damage:new(205, damage.MAGIC):deal(champ, target)
+damage:new(223, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.q:use(context, cast)
@@ -57,7 +57,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(245, damage.MAGIC):deal(champ, target)
+damage:new(250, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)
@@ -104,8 +104,8 @@ target:effect(slow.new(1.5, 0.5))
 end
 
 function champ.behaviour(ready, context)
-if context.closest_dist < 255 + 50 then
-champ.range = 255
+if context.closest_dist < 265 + 50 then
+champ.range = 265
 champ.target = context.closest_enemy
 elseif ready.w then
 champ.range = 0

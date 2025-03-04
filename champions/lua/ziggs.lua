@@ -23,7 +23,7 @@ function ziggs.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.5, 550, 152.2, { 0.8,0.5,0.2 }),
-    q = ranged_cast.new(3.2, 1400),
+    q = ranged_cast.new(3.3, 1400),
     e = splash_cast.new(12.31, 1000, 300),
     e_bombs = none_cast.new(),
     r = big_cast.new(53.84, 5000, 525),

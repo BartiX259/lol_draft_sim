@@ -1,0 +1,62 @@
+champion jayce
+sprite jayce.jpg
+
+attributes:
+  health 2099
+  armor 82
+  mr 45.6
+  ms 380
+
+behavior:
+  range q_ranged
+  movement passive
+
+abilities:
+  color 0.3, 0.5, 0.8
+
+  aa:
+    cd 1.25
+    range 500
+    damage 230
+    cast ranged_aa
+
+  q_ranged: -- Shock Blast (Accelerated)
+    cd 6.55
+    damage 536
+    range 1550 -- Accelerated Range
+    speed 2350  -- Accelerated Speed
+    size 220  -- Increased size on explosion.
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+
+  e: -- Thundering Blow
+    cd 8.4
+    range 240
+    damage 440
+    cast ranged
+    use:
+      local target_pos =  cast.pos + cast.dir * 400
+      effect pull to target_pos speed 1200
+      damage magic
+
+q_melee:
+  color 0.8, 0.7, 0.1 -- Gold/Yellowish
+  cd 4.5
+  damage 503
+  range 600
+  dist 600
+  size 200
+  deploy_time 0.25
+  cast ranged
+  use:
+      effect on self dash to cast.pos speed 1800
+      proj = aoe at cast.pos
+      spawn proj
+  hit:
+      damage physical
+      effect slow 50% 2s

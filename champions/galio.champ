@@ -26,7 +26,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 6.3
+    cd 6.1
     damage 250
     range 825
     size 150

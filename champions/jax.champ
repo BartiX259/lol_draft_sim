@@ -1,0 +1,77 @@
+champion jax
+sprite jax.jpg
+
+attributes:
+  health 2465
+  armor 119
+  mr 77
+  ms 395
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  else
+    range q + 100
+    movement peel
+  end
+
+abilities:
+  color 0.7, 0.4, 0.9  -- Purplish
+
+  aa:
+    cd 0.66
+    range 125
+    damage 209
+    cast melee_aa
+
+  q:
+    cd 6.0
+    damage 295
+    range 700
+    cast ranged  -- Jax leaps to a target, dealing physical damage.
+    use:
+      effect on self dash to cast.target speed 1400
+    hit:
+      damage physical
+
+  w:
+    cd 3.0
+    damage 290
+    range 175
+    cast ranged    -- Empower, buff for next attack to deal bonus magic damage. Works with Q.
+    use:
+      active = true
+      delay 5 do
+        active = false
+      end
+
+  w_hit:
+    range w
+    damage 220
+    cast ranged if w
+    use:
+      damage magic
+
+  e:
+    cd 9.0
+    deploy_time 0.1
+    persist_time 2
+    range 187
+    size 375  -- Radius around Jax
+    cast ranged
+    use:
+      proj = aoe follow self colliders nil  -- visual
+      effect on self resist_buff 60 duration persist_time -- Dodge and AoE damage reduction stance
+      spawn proj
+
+  e_recast:
+    damage 570  -- Deals magic damage and burst damage from ultimate
+    size e
+    cast after e
+    use:
+      proj = aoe at pos
+      spawn proj
+    hit:
+      damage magic
+      effect stun 1s

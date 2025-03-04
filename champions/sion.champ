@@ -1,0 +1,76 @@
+champion sion
+sprite sion.jpg -- Replace with actual sprite filename
+
+attributes:
+  health 2678
+  armor 109.4
+  mr 88.6
+  ms 395
+
+behavior:
+  if ready q then
+    range q
+    movement aggressive
+  else
+    range q + 100
+    movement passive -- Or perhaps "kite" if you want him to back off
+  end
+
+abilities:
+  color 0.6, 0.4, 0.4  -- Dark Reddish-Brown
+
+  aa:
+    cd 1.2
+    range 175
+    damage 130
+    cast melee_aa
+
+  q:
+    cd 6
+    damage 430
+    deploy_time 1
+    size 400
+    range 400
+    cast ranged
+    use:
+      effect on self stun duration deploy_time
+      local cast_pos = (cast.pos + pos) / 2
+      proj = aoe at cast_pos
+      spawn proj
+    hit:
+      damage physical
+      effect airborne 1.25s
+
+  w:
+    cd 8
+    damage 250
+    range 300 -- cast range
+    size 500   -- consistent with range (it's his shield bubble)
+    opacity 0.9
+    cast ranged -- for the explosion to target better
+    use:
+      effect on self shield 6s 250 on finish do
+        proj = aoe follow self deploy_time 0.1
+        spawn proj
+      end
+    hit:
+      damage magic
+
+
+  r:
+    cd 90
+    damage 450
+    range 750
+    size 340
+    speed 1050
+    tick 0.1
+    cast ranged
+    use:
+      local persist_time = cast.mag / speed
+      effect on self dash to cast.pos speed speed
+      effect on self unstoppable duration persist_time
+      proj = aoe follow self re_hit false
+      spawn proj
+    hit:
+      damage physical
+      effect airborne 1s

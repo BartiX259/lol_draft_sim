@@ -1,0 +1,82 @@
+champion gragas
+sprite gragas.jpg
+
+attributes:
+  health 2470
+  armor 113
+  mr 76.6
+  ms 375
+
+behavior:
+  if ready e then
+    range e
+    movement aggressive
+  else
+    range q + 100
+    movement passive
+  end
+
+abilities:
+  color 0.8, 0.5, 0.3  -- Brownish-orange
+
+  aa:
+    cd 1.2
+    range 125
+    damage 150
+    cast melee_aa
+
+  q:
+    cd 4.6
+    damage 358
+    range 850
+    speed 1300
+    size 275
+    deploy_time 0.1
+    cast ranged
+    use:
+      proj = missile from pos to cast.pos colliders nil
+      proj.next = aoe
+      spawn proj
+    hit:
+      damage magic
+      effect slow 90% 2s
+
+  e:
+    cd 6.4
+    damage 234
+    range 600
+    speed 1400
+    size 200
+    cast ranged
+    use:
+      dir = cast.dir
+      proj = aoe follow self tick 0 re_hit false
+      spawn proj
+      effect on self dash to cast.pos speed speed
+    hit:
+      damage magic
+      proj.despawn = true
+      self:del_effect("dash")
+      local target_pos = target.pos + dir * 90
+      effect airborne 1s
+      effect pull to target_pos speed 600
+      self.health = self.health + 80
+
+  r:
+    cd 81
+    damage 512
+    range 1050
+    speed 1600
+    size 350
+    deploy_time 0.1
+    cast big
+    use:
+      proj = missile from pos to cast.pos colliders nil
+      proj.next = aoe
+      spawn proj
+    hit:
+      damage magic
+      local knockback_dir = (target.pos - proj.pos):normalize()
+      local knockback_dist = 400
+      local target_pos = target.pos + knockback_dir * knockback_dist
+      effect pull to target_pos speed 1800

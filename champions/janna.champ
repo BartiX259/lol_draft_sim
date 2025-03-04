@@ -1,0 +1,81 @@
+champion janna
+sprite janna.jpg
+
+attributes:
+  health 1800
+  armor 67
+  mr 45.6
+  ms 385
+
+behavior:
+  range w
+  movement peel
+
+abilities:
+  color 0.7, 0.9, 1.0  -- Light Blue / Cyan
+
+  aa:
+    cd 1.176
+    range 550
+    damage 95
+    cast ranged_aa
+
+  q:
+    cd 13.33
+    damage 249
+    range 1760  -- Uncharged range
+    speed 1408  -- Initial speed
+    size 240   -- Width of the tornado
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect airborne 1.25s
+
+  w:
+    cd 5.71
+    damage 215
+    size 80
+    range 550
+    speed 1600
+    cast ranged  -- Point and click, single target
+    use:
+      proj = missile from pos to cast.target
+      spawn proj
+    hit:
+      damage magic
+      effect slow 2s 36%
+
+  e:
+    cd 11.43
+    shield_amount 284
+    range 800
+    cast buff  -- Cast on allies or self
+    use:
+      effect on cast.target shield 4s shield_amount
+      effect on cast.target damage_buff 4s 38%
+
+
+  r:
+    cd 109.52
+    damage 47.5
+    range 725
+    size 725
+    tick 0.25
+    persist_time 3
+    cast big
+    use:
+      proj = aoe follow self re_hit false on impact do
+        for _, ally in pairs(in_range_list(self, allies, range)) do
+          ally.health = ally.health + 35
+        end
+      end
+      spawn proj
+    hit:
+      damage magic
+      local knockback_dir = (target.pos - pos):normalize()
+      local knockback_dist = 400
+      local target_pos = target.pos + knockback_dir * knockback_dist
+      effect pull to target_pos speed 1800

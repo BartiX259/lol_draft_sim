@@ -1,0 +1,103 @@
+champion renata
+sprite renata.jpg
+
+attributes:
+  health 1923
+  armor 78.4
+  mr 65.6
+  ms 385
+
+behavior:
+  if ready q then
+    range q
+    movement aggressive
+  else
+    range q + 150
+    movement passive
+  end
+
+abilities:
+  color 0.7, 0.3, 0.9
+
+  aa:
+    cd 1.1
+    range 550
+    damage 85
+    cast ranged_aa
+
+  q:
+    cd 6.1
+    damage 292
+    range 900
+    speed 1450
+    size 140
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect root 1s
+
+  q_recast:
+    stats q
+    cast after q
+    use:
+      local pull_dir = (cast.pos - q.proj.pos):normalize()
+      local pull_dest = cast.target.pos + pull_dir * 350
+      effect pull to pull_dest speed 1200
+
+  w:
+    cd 9.2
+    range 800
+    cast buff
+    use:
+      active = true
+      delay 5 active = false
+      target = cast.target
+      effect on cast.target speed 20% 5s
+      effect on cast.target damage_buff 30% 5s
+
+  w_res:
+    cast always if w
+    pre-cast:
+      if w.target.health <= 0 then return true end
+    use:
+      if w.target.health <= 0 then
+        w.target.health = 400
+        w.active = false
+      end
+
+  e:
+    cd 5
+    damage 207
+    range 800
+    speed 1450
+    size 220
+    shield_amount 240
+    cast ranged
+    use:
+        local hit_cols = {}
+        proj = missile from pos
+        spawn proj
+        for _, ally in pairs(in_range_list(self, allies, 330)) do
+            effect shield shield_amount 2s
+        end
+    hit:
+      damage magic
+      effect slow 30% 2s
+
+  r:
+    cd 104
+    damage 300
+    range 2000
+    speed 825
+    size 250
+    cast big
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect stun 2s

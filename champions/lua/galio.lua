@@ -27,7 +27,7 @@ function galio.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 150, 100),
-    q = ranged_cast.new(6.3, 825),
+    q = ranged_cast.new(6.1, 825),
     q_tick = none_cast.new(),
     w = ranged_cast.new(12.6, 350),
     e = ranged_cast.new(6.3, 650),

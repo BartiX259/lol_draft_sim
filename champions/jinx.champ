@@ -15,32 +15,22 @@ abilities:
   color 0.9, 0.5, 0.6
 
   aa:
-    cd 0.865
+    cd 0.845
     range 625
-    damage 190
+    damage 180
     speed 1800
     size 80
     cast ranged
     use:
       proj = missile from pos to cast.target range nil colliders nil
-      spawn proj
-    hit:
-      damage physical
-  
-  aa_aoe:
-    damage 190
-    size 250
-    opacity 0.9
-    cast after aa
-    use:
       local hit_cols = { [cast.target] = true }
-      proj = aoe at aa.proj.pos
+      proj.next = aoe size 250
       spawn proj
     hit:
       damage physical
 
   w:
-    cd 4.5
+    cd 5
     damage 383
     range 1500
     speed 3300

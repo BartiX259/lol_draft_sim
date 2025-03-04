@@ -1,0 +1,114 @@
+champion azir
+sprite azir.jpg
+
+attributes:
+  health 2139
+  armor 85
+  mr 45.6
+  ms 380
+
+behavior:
+  if ready q then
+    range q
+    movement aggressive
+  else
+    range q + 100
+    movement passive
+  end
+
+abilities:
+  color 0.9, 0.8, 0.3  -- Gold
+
+  aa:
+    cd 1.509
+    range 525
+    damage 98
+    cast ranged_aa
+
+  q:
+    cd 5
+    damage 275
+    range 740 -- Range to send soldiers, soldiers move in a line, it's NOT splash like other abilities.
+    speed 1800  -- Soldiers' dash speed
+    size 320 -- w size
+    cast ranged
+    pre-cast:
+      if #w.projs == 0 then
+        return nil
+      end
+      return cast
+    use:
+      for _, soldier in pairs(w.projs) do
+        local dash_pos = cast.pos + (soldier.pos - cast.pos):normalize() * 100
+        local proj = missile from soldier.pos to dash_pos
+        soldier.follow = proj
+        spawn proj
+      end
+    hit:
+      damage magic
+      effect slow 25% 1s
+
+  w: -- Do aoe damage in area instead of aa for simplicity
+    cd 4
+    range q
+    damage 190
+    size 320
+    tick 1.5
+    cast ranged
+    start:
+      projs = {}
+    use:
+      local cast_pos = pos + cast.dir * math.min(cast.mag, 525)
+      local proj = aoe at cast_pos persist_time 9 colliders nil soft_follow true
+
+      table.insert(projs, proj)
+      delay 9 do -- Soldier disappears after 9 seconds
+        proj.despawn = true
+        for i, v in pairs(projs) do
+          if v == proj then
+            table.remove(projs,i)
+            break
+          end
+        end
+      end
+      spawn proj
+    hit:
+      damage magic
+
+  e:
+    cd 10.67
+    damage 260
+    shield_amount 290
+    dist 600
+    range aa
+    speed 1700
+    cast dash
+    use:
+      effect on self dash to cast.pos speed 1300
+      effect on self shield 1.5s 200
+
+  r:
+    cd 70
+    damage 475
+    range 150 -- cast range
+    size 120     -- size of each soldier
+    dist 600    -- distance the wall travels
+    speed 1400   -- speed of the wall
+    soldiers 7
+    cast ranged
+    use:
+        local hit_cols = {}
+        local wall_start_pos = pos - cast.dir * 100
+
+        for _, dir in pairs(cast.dir:perp(soldiers)) do
+          local soldier_pos = wall_start_pos + dir * 100
+          local cast_pos = soldier_pos + cast.dir * dist
+          local proj = missile from soldier_pos to cast_pos
+          spawn proj
+        end
+
+    hit:
+        damage magic
+        local push_dir = (target.pos - pos):normalize()
+        local push_dest = target.pos + push_dir * dist
+        effect pull to push_dest speed speed

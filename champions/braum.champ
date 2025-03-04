@@ -26,7 +26,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 5.5
+    cd 5.2
     damage 275
     range 1050
     speed 1700
@@ -64,7 +64,7 @@ abilities:
     use:
       proj = aoe follow self colliders projectiles
       effect on self speed 10% duration persist_time
-      effect on self resist_buff duration persist_time 40
+      effect on self resist_buff duration persist_time 80
       spawn proj
     hit:
       if target.is_missile then

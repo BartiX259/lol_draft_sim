@@ -15,7 +15,7 @@ local leona = {}
 -- Constructor
 function leona.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2758,
+    health = 2798,
     armor = 186,
     mr = 147,
     ms = 395,
@@ -24,7 +24,7 @@ function leona.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.19, 125, 116),
-    q = melee_aa_cast.new(3.5, 125, 160),
+    q = melee_aa_cast.new(3.5, 125, 220),
     e = ranged_cast.new(4.2, 900),
     r = splash_cast.new(60.94, 1200, 380),
   }
@@ -62,7 +62,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(265, damage.MAGIC):deal(champ, target)
+damage:new(285, damage.MAGIC):deal(champ, target)
 target:effect(stun.new(1.75))
 end
 

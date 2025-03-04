@@ -1,0 +1,74 @@
+champion rell
+sprite rell.jpg -- Replace with actual sprite filename
+
+attributes:
+  health 2678
+  armor 146.4
+  mr 84.6
+  ms 385
+
+behavior:
+  range w + 150
+  movement peel
+
+abilities:
+  color 0.7, 0.7, 0.7  -- Gray, metallic
+
+  aa:
+    cd 1.2
+    range 175
+    damage 91
+    cast melee_aa
+
+  q:
+    cd 4.18
+    damage 280
+    range 400
+    speed 2000
+    size 150
+    cast ranged
+    pre-cast:
+      if cast.target:has_effect("root") then
+        return nil
+      end
+      return cast
+    use:
+      proj = missile from pos
+      spawn proj
+
+    hit:
+      damage magic
+      effect stun 1s
+
+  w:
+    cd 6.00
+    damage 200   -- damage on impact
+    range 450   -- dash range
+    size 280      -- AoE size
+    deploy_time 0.4
+    cast splash -- for the AoE crash down.  Rell *does* dash.
+    use:
+      local speed = cast.mag / deploy_time
+      effect on self dash to cast.pos speed speed  -- Dash to location
+      proj = aoe at cast.pos
+      spawn proj
+
+    hit:
+      damage magic
+      effect airborne 1s
+
+  r:
+    cd 72.73
+    damage 235
+    range 450      -- Radius of the magnetic field
+    size 450       -- consistent with range (it's an AoE around Rell)
+    cast ranged  -- important for behavior to target with it, although it *follows* Rell
+    use:
+      proj = aoe follow self
+      spawn proj
+    hit:
+      damage magic
+      effect pull to self speed 200  -- relatively slow pull, per tick
+      effect airborne 0.6s on finish do
+        target:del_effect("pull")
+      end

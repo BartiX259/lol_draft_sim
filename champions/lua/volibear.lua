@@ -27,7 +27,7 @@ function volibear.new(x, y)
     aa = melee_aa_cast.new(1.13, 150, 182),
     q = ranged_cast.new(9.55, 500),
     q_hit = ranged_cast.new(0, 175),
-    w = ranged_cast.new(4.77, 350),
+    w = ranged_cast.new(4.82, 350),
     r = splash_cast.new(129, 700, 550),
   }
 champ.abilities.q_hit:join(champ.abilities.q)

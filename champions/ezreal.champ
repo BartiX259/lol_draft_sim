@@ -14,13 +14,13 @@ behavior:
 abilities:
 color 0.8, 0.8, 0.4
 aa:
-  cd 0.83
+  cd 0.8
   range 550
   damage 208
   cast ranged_aa
 
 q:
-  cd 3.75
+  cd 3.6
   damage 390
   range 1200
   size 120

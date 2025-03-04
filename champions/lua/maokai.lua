@@ -24,7 +24,7 @@ function maokai.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 125, 88),
-    q = ranged_cast.new(3.5, 160),
+    q = ranged_cast.new(3.4, 160),
     w = ranged_cast.new(6.65, 525),
     r = big_cast.new(95.66, 3000, 240),
   }
@@ -40,9 +40,10 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(381, damage.MAGIC):deal(champ, target)
+damage:new(355, damage.MAGIC):deal(champ, target)
 local dir = ( target.pos - self.proj.pos ):normalize () * 100
 local pos = target.pos + dir
+champ.health = champ.health + 75
 target:effect(pull.new(1000, pos))
 end
 

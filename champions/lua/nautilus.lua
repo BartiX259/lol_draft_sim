@@ -15,7 +15,7 @@ local nautilus = {}
 -- Constructor
 function nautilus.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2846,
+    health = 2926,
     armor = 168.4,
     mr = 136.6,
     ms = 385,
@@ -24,7 +24,7 @@ function nautilus.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1, 175, 101),
-    q = ranged_cast.new(6.33, 1122),
+    q = ranged_cast.new(6.2, 1122),
     r = important_cast.new(83.33, 925),
   }
 
@@ -43,13 +43,13 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(250, damage.MAGIC):deal(champ, target)
+damage:new(260, damage.MAGIC):deal(champ, target)
 local distance = ( target.pos - champ.pos ):mag ()
 local pull_direction = ( target.pos - champ.pos ):normalize ()
 local pull_target = target.pos - pull_direction * ( distance * ( 1 - 0.5 ))
 local pull_self = champ.pos + pull_direction * ( distance * 0.5 )
 target:effect(pull.new(1300, pull_target):on_finish(function()
-target:effect(root.new(1.3))
+target:effect(root.new(1.5))
 end))
 champ:effect(dash.new(1300, pull_self))
 end

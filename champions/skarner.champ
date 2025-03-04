@@ -8,7 +8,10 @@ attributes:
   ms 380
 
 behavior:
-  if r.active then
+  if r.casting then
+    range aa
+    self.target = closest_enemy
+  elseif r.active then
     range q + 150
     movement peel
   elseif closest_dist < aa.range + 50 then
@@ -43,11 +46,11 @@ abilities:
       damage magic
 
   e:
-    cd 13.5
+    cd 12.5
     damage 150
     range 700
-    size 700
-    speed 1650
+    size 300
+    speed 850
     tick 0.1
     cast ranged
     use:
@@ -66,13 +69,18 @@ abilities:
     cd 82
     damage 250
     range 190
-    size 380
+    size 350
     deploy_time 0.65
     duration 1.5
     cast ranged
     use:
-      active = true
-      delay duration active = false
+      casting = true
+      delay deploy_time do
+        casting = false
+        active = true
+      end
+      local del = duration + deploy_time
+      delay del active = false
       proj = aoe follow self
       spawn proj
     hit:

@@ -28,8 +28,8 @@ abilities:
     range 125
     cast melee_aa
   q:
-    cd 3.5
-    damage 381
+    cd 3.4
+    damage 355
     range 160
     size 320
     cast ranged
@@ -40,6 +40,7 @@ abilities:
       damage magic
       local dir = (target.pos - proj.pos):normalize() * 100
       local pos = target.pos + dir
+      self.health = self.health + 75
       effect pull to pos speed 1000
 
   w:

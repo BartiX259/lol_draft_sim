@@ -41,7 +41,7 @@ abilities:
         effect stun 1s
 
   w:
-    cd 4.77
+    cd 4.82
     damage 351
     range 350
     cast ranged

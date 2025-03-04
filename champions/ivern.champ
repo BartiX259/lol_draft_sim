@@ -39,10 +39,10 @@ abilities:
       effect root 2s
 
   e:
-    cd 4.3
+    cd 4.2
     damage 252
     range 750
-    shield_amount 417.8
+    shield_amount 437.8
     deploy_time 0.1
     persist_time 0.2
     size 500

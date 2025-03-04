@@ -18,7 +18,7 @@ local jarvan_iv = {}
 function jarvan_iv.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2488,
-    armor = 118.4,
+    armor = 108.4,
     mr = 66.6,
     ms = 380,
     sprite = 'jarvan_iv.jpg',
@@ -26,8 +26,8 @@ function jarvan_iv.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 175, 223),
-    q = ranged_cast.new(4.3, 800),
-    e = ability:new(8.33),
+    q = ranged_cast.new(4.6, 800),
+    e = ability:new(8.5),
     knockup = none_cast.new(),
     r = splash_cast.new(75, 400, 400),
   }
@@ -82,7 +82,7 @@ end
 
 function champ.abilities.knockup:with_e(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
-size = 150,
+size = 100,
 color = { 0.9,0.7,0.2 },
 deploy_time = 0,
 persist_time = 10,

@@ -1,0 +1,78 @@
+champion seraphine
+sprite seraphine.jpg
+
+attributes:
+  health 2050
+  armor 76.4
+  mr 45.6
+  ms 380
+
+behavior:
+  range q
+  movement peel
+
+abilities:
+  color 0.9, 0.6, 0.8
+
+  aa:
+    cd 1.0
+    range 625
+    damage 140
+    cast ranged_aa
+
+  q:
+    cd 4.6
+    damage 200
+    range 900
+    size 300
+    deploy_time 0.6
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+        damage magic
+
+  w:
+    cd 13.8
+    shield_amount 190
+    range 400
+    duration 2.5
+    deploy_time 0.15
+    opacity 0.9
+    cast buff
+    use:
+      local size = range * 2
+      proj = aoe follow self colliders allies
+      spawn proj
+    hit:
+      effect shield shield_amount duration duration
+      effect speed 10% 5s
+
+  e:
+    cd 6.9
+    damage 150
+    range 1200
+    speed 1400
+    size 120
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect slow 50% 1.25s
+
+  r:
+    cd 108
+    damage 240
+    range 1600
+    speed 1600
+    size 280
+    cast important
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect charm to self 1.75s speed 200

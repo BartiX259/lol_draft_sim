@@ -15,7 +15,7 @@ local vi = {}
 -- Constructor
 function vi.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2493,
+    health = 2523,
     armor = 121.4,
     mr = 66.6,
     ms = 380,
@@ -24,7 +24,7 @@ function vi.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.25, 125, 238),
-    q = ranged_cast.new(4.3, 725),
+    q = ranged_cast.new(4.2, 725),
     r = important_cast.new(82.1, 800),
   }
 

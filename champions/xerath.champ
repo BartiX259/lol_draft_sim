@@ -1,0 +1,62 @@
+champion xerath
+sprite xerath.jpg
+
+attributes:
+  health 1868
+  armor 78.4
+  mr 45.6
+  ms 340
+
+behavior:
+  range q
+  movement passive
+
+abilities:
+  color 0.2, 0.4, 0.9
+
+  aa:
+    cd 1.3
+    range 525
+    damage 81
+    cast ranged_aa
+
+  q:
+    cd 5.5
+    damage 400
+    range 1450
+    speed 2800
+    size 140
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+
+  w:
+    cd 9.1
+    damage 330
+    range 1000
+    size 275
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage magic
+      effect slow 80% 2.5s
+
+  e:
+    cd 10.0
+    damage 205
+    range 1125
+    speed 1400
+    size 120
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect stun 2.25s

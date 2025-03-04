@@ -1,0 +1,75 @@
+champion kai_sa
+sprite kai_sa.jpg
+
+attributes:
+  health 1864
+  armor 75.4
+  mr 45.6
+  ms 380
+
+behavior:
+  range aa
+  movement kite
+
+abilities:
+  color 0.7, 0.3, 0.9
+
+  aa:
+    cd 0.9
+    range 525
+    damage 190.2
+    cast ranged_aa
+
+  q:
+    cd 6.2
+    damage 175
+    range 600
+    speed 1200
+    size 80
+    missiles 6
+    cast ranged
+    use:
+      local target = closest_enemy
+      if target == nil then return end
+
+      local angle_increment = 360 / missiles
+      for i = 1, missiles do
+          local angle = (i - 1) * angle_increment
+          local dir = (target.pos - pos):rotate(math.rad(angle)):normalize()
+          local proj_pos = pos + dir * 50
+          local proj = missile from proj_pos to target range nil
+          local del = i * 0.05
+          delay del spawn proj
+        end
+    hit:
+      damage physical
+
+  w:
+    cd 10
+    damage 352
+    range 3000
+    speed 1750
+    size 200
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+
+  r:
+    cd 100
+    range 2500
+    dist 500
+    speed 2000
+    cast important
+    pre-cast:
+      if cast.target:has_effect("root") then
+        return cast
+      end
+      return nil
+    use:
+        local dash_dir = (cast.pos - pos):normalize()
+        local dash_dest = cast.pos + dash_dir * dist
+        effect on self dash to dash_dest speed speed

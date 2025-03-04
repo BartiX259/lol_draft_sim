@@ -28,7 +28,7 @@ function braum.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 93),
-    q = ranged_cast.new(5.5, 1050),
+    q = ranged_cast.new(5.2, 1050),
     w = buff_cast.new(7.6, 650),
     e = dash_cast.new(7.6, 100, 800),
     r = big_cast.new(95.2, 1200, 300),
@@ -69,7 +69,7 @@ tick = 0,
 follow = champ,
 })
 champ:effect(speed.new(4, 0.1))
-champ:effect(resist_buff.new(4, 40.0))
+champ:effect(resist_buff.new(4, 80.0))
 context.spawn( self.proj
 )
 end

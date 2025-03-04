@@ -4,6 +4,7 @@ local distances = require("util.distances")
 local ui = require("ui.main")
 local dump = require("util.dump")
 local camera = require("util.camera")
+local font = love.graphics.newFont(require("ui.badr").FONT, 25)
 
 local PLAYING = 0
 local BLUE_WIN = 1
@@ -111,7 +112,7 @@ ui.new_sim = function()
   NewGame()
 end
 ui.random_sim = function()
-  local game_count = 1000
+  local game_count = 1500
   SimInfo = nil
   ---@class RandomSimInfo
   RandomSimInfo = { games = game_count, games_left = game_count, champs = {} }
@@ -533,6 +534,7 @@ function love.draw()
   local info = SimInfo or RandomSimInfo
   if info then
     love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(font)
     love.graphics.print("Games: " .. tostring(info.games - info.games_left) .. "/" .. tostring(info.games), 0, 0)
     love.graphics.print("TPS: " .. string.format("%.0f", tps), 0, 25)
   end

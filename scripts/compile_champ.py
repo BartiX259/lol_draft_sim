@@ -248,8 +248,8 @@ def alias(word, champion, info):
     domains = {
         "champ": ["pos", "range"],
         "math": ["min", "max", "clamp"],
-        "context": ["closest_enemy", "closest_ally", "closest_dist", "allies", "enemies", "allies_avg_pos", "enemies_avg_pos", "projectiles"],
-        "distances": ["in_range", "in_range_list", "find_clump"]
+        "context": ["closest_enemy", "closest_ally", "closest_dist", "allies", "enemies", "allies_avg_pos", "dt", "enemies_avg_pos", "projectiles"],
+        "distances": ["in_range", "in_range_list", "find_clump", "dash_pos"]
     }
     for match, replacement in replacements.items():
         rep = try_replace(word, match, replacement)
@@ -271,6 +271,10 @@ def default_args(func, info):
             if "range" in info and "clump_range" in info:
                 return "distances.find_clump(champ, context.enemies, " + info["range"] + ", " + info["clump_range"] + ")"
     return None
+
+def expect_token(i, tok_count, line_nr):
+    if i + 1 >= tok_count:
+        raise CompilerError("Unexpected end of statement", line_nr)
 
 def generate_pseudo_code(stmts, info, champion, block, line_nr):
     res = ""
@@ -320,9 +324,10 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     while i < tok_count:
                         key = stmt[i]
                         if key in keys:
+                            expect_token(i, tok_count, line_nr)
                             missile[key] = alias(stmt[i+1], champion, info)
                         else:
-                            raise CompilerError("Unexpected missile argument '" + token + "'", line_nr)
+                            raise CompilerError("Unexpected missile argument '" + key + "'", line_nr)
                         i += 2
                     for nec in ["size", "color", "speed"]:
                         if nec not in missile:
@@ -347,8 +352,10 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     while i < tok_count:
                         key = stmt[i]
                         if key in keys:
+                            expect_token(i, tok_count, line_nr)
                             aoe[key] = alias(stmt[i+1], champion, info)
                         elif key == "on":
+                            expect_token(i, tok_count, line_nr)
                             if stmt[i+1] in ["finish", "impact"]:
                                 on = stmt[i+1]
                                 i += 1
@@ -376,6 +383,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     i += 1
                     token = stmt[i]
                     if token == "on":
+                        expect_token(i, tok_count, line_nr)
                         line += alias(stmt[i+1], champion, info)
                         i += 2
                         token = stmt[i]
@@ -390,9 +398,11 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     while i < tok_count:
                         token = stmt[i]
                         if token == "to":
+                            expect_token(i, tok_count, line_nr)
                             effect["target"] = alias(stmt[i+1], champion, info)
                             i += 1
                         elif token in ["speed", "duration", "amount", "channel"]:
+                            expect_token(i, tok_count, line_nr)
                             effect[token] = alias(stmt[i+1], champion, info)
                             i += 1
                         elif re.match(r"^-?\d+(?:\.\d+)?s$", token): # 1s
@@ -412,6 +422,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     line = line[:-2]
                     line += ")"
                     if i < tok_count and stmt[i] == "on":
+                        expect_token(i, tok_count, line_nr)
                         if stmt[i+1] == "finish":
                             i += 1
                             line += ":on_finish(function()"
@@ -431,6 +442,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     line += "context.despawn("
                     unclosed.append(")")
                 case "delay":
+                    expect_token(i+1, tok_count, line_nr)
                     line += "context.delay(" + alias(stmt[i+1], champion, info) + ", function()"
                     if stmt[i+2] == "do":
                         close_after_end.append(")")
@@ -444,7 +456,11 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                     else:
                         champion["imports"]["util"].add("damage")
                         damage = {}
-                        if "damage" in info:
+                        if "dmg" in info["local"]:
+                            damage["damage"] = "dmg"
+                        elif "dmg" in info["global"]:
+                            damage["damage"] = "self.dmg"
+                        elif "damage" in info:
                             damage["damage"] = info["damage"]
                         if block == "hit":
                             damage["target"] = "target"
@@ -459,6 +475,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                                 if token in ["magic", "physical", "true"]:
                                     damage["type"] = token.upper()
                                 elif token == "to":
+                                    expect_token(i, tok_count, line_nr)
                                     damage["target"] = alias(stmt[i+1], champion, info)
                                     i += 1
                                 else:
@@ -472,6 +489,7 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                             raise CompilerError("Couldn't find damage type in constructor", line_nr)
                         line += f"damage:new({str(damage['damage'])}, damage.{damage['type']}):deal(champ, {damage['target']})"
                 case "ready":
+                    expect_token(i, tok_count, line_nr)
                     line += "ready." + stmt[i+1]
                     i += 1
                 case "range":
@@ -554,7 +572,7 @@ def generate_lua_code(champion):
         if "cast" not in ability_data:
             raise CompilerError("Couldn't find 'cast' for ability " + ability, champion["line_nrs"][ability][":main"])
         cast_type = ability_data["cast"]
-        if "cd" not in ability_data and cast_type != "none" and not isinstance(cast_type, tuple) and ":cast_join" not in ability_data:
+        if "cd" not in ability_data and cast_type not in ["none", "always"] and not isinstance(cast_type, tuple) and ":cast_join" not in ability_data:
             raise CompilerError("Couldn't find 'cd' for cast", champion["line_nrs"][ability]["cast"])
         if isinstance(cast_type, str):
             champion["imports"]["abilities"].add(cast_type) 
@@ -569,7 +587,6 @@ def generate_lua_code(champion):
             "ranged_aa": ["range", "damage", "color"],
             "dash": ["dist", "range"],
             "buff": ["range"],
-            "always": []
         }
         if isinstance(cast_type, str) and cast_type in fields:
             line += f"{cast_type}_cast.new({ability_data['cd']}, "
@@ -583,6 +600,8 @@ def generate_lua_code(champion):
             match ability_data["cast"]:
                 case "none":
                     line += "none_cast.new()"
+                case "always":
+                    line += "always_cast.new()"
                 case (_, _):
                     if "cd" in ability_data:
                         line += f"ability:new({ability_data['cd']})"

@@ -1,5 +1,4 @@
 local important_cast = require("abilities.important")
-local none_cast = require("abilities.none")
 local ranged_cast = require("abilities.ranged")
 local slow = require("effects.slow")
 local aoe = require("projectiles.aoe")
@@ -21,9 +20,8 @@ function jinx.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_cast.new(0.865, 625),
-    aa_aoe = none_cast.new(),
-    w = ranged_cast.new(4.5, 1500),
+    aa = ranged_cast.new(0.845, 625),
+    w = ranged_cast.new(5, 1500),
     r = important_cast.new(65, 5000),
   }
 function champ.abilities.aa:use(context, cast)
@@ -36,29 +34,18 @@ range = nil,
 from = champ.pos,
 to = cast.target,
 })
-context.spawn( self.proj
-)
-self.proj.after = function() champ.abilities.aa_aoe:after_aa(context, cast) end
-end
-
-function champ.abilities.aa:hit(target)
-damage:new(190, damage.PHYSICAL):deal(champ, target)
-end
-
-function champ.abilities.aa_aoe:after_aa(context, cast)
 local hit_cols = { [ cast.target ] = true }
-self.proj = aoe:new(self, { colliders = context.enemies,
+self.proj.next = aoe:new(self, { colliders = context.enemies,
 size = 250,
-color = { 0.9,0.5,0.6,0.9 },
+color = { 0.9,0.5,0.6 },
 hit_cols = hit_cols,
-at = champ.abilities.aa.proj.pos,
 })
 context.spawn( self.proj
 )
 end
 
-function champ.abilities.aa_aoe:hit(target)
-damage:new(190, damage.PHYSICAL):deal(champ, target)
+function champ.abilities.aa:hit(target)
+damage:new(180, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

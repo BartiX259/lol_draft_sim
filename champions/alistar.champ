@@ -22,8 +22,8 @@ abilities:
     cast melee_aa
 
   q:
-    cd 4.1
-    damage 220
+    cd 4.7
+    damage 250
     range 187
     size 375
     cast splash

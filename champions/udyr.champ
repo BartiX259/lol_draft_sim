@@ -1,0 +1,68 @@
+champion udyr
+sprite udyr.jpg
+
+attributes:
+  health 2438
+  armor 80.4
+  mr 66.7
+  ms 395
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  else
+    range 600
+    movement peel
+  end
+
+abilities:
+  color 0.8, 0.7, 0.3
+
+  aa:
+    cd 1.3
+    range 125
+    damage 220
+    cast melee_aa
+
+  w:
+    cd 5.7
+    range 3000 -- cast when possible
+    cast ranged
+    use:
+      effect on self shield 4s 198
+      self.health = self.health + 80
+
+  e:
+    cd 5.7
+    range aa
+    cast ranged
+    use:
+      active = true
+      delay 4 active = false
+      effect on self speed 65% 4s
+      effect on self unstoppable 3s
+
+  e_stun:
+    stats e
+    damage aa
+    range 125
+    cast ranged if e
+    use:
+      damage magic
+      effect stun 1s
+
+  r:
+    cd 5.7
+    damage 82.5
+    range 185
+    size 370
+    tick 0.5
+    persist_time 6
+    cast ranged
+    use:
+      proj = aoe follow self
+      spawn proj
+    hit:
+      damage magic
+      effect slow 30% duration tick

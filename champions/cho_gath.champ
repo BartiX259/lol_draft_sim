@@ -1,0 +1,79 @@
+champion cho_gath
+sprite cho_gath.jpg
+
+attributes:
+  health 2822
+  armor 90.1
+  mr 76.6
+  ms 395
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  elseif ready q then
+    range q
+    movement aggressive
+  else
+    range q + 100
+    movement passive
+  end
+
+abilities:
+  color 0.6, 0.3, 0.6
+
+  aa:
+    cd 1.2
+    range 125
+    damage 119.4
+    cast melee_aa
+
+  q:
+    cd 7.2
+    damage 240
+    range 950
+    size 250
+    deploy_time 0.627
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage magic
+      effect airborne 1s
+      effect slow 0.6 1.5s
+
+  w:
+    cd 9.7
+    damage 220
+    range 650
+    speed 2000
+    size 60
+    angle 60
+    cast ranged
+    use:
+      local hit_cols = {}
+      for _, dir in pairs(cast.dir:cone(angle, 5)) do
+        proj = missile from pos
+        spawn proj
+      end
+    hit:
+      damage magic
+      effect silence 2s
+
+  r:
+    cd 70
+    damage 590
+    range 175
+    size 200
+    deploy_time 0.25
+    cast:
+       if self.target and self.target.pos:distance(pos) < range and (self.target.health < damage or health% < 0.3) then
+          return { target = self.target }
+       end
+       return nil
+    use:
+       proj = aoe follow cast.target colliders nil on impact do
+            damage true
+        end
+        spawn proj

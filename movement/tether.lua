@@ -1,6 +1,9 @@
 local tether = {}
 
 function tether:__call(context)
+  if context.champ.range == nil then
+    print(context.champ.name)
+  end
   local dir = context.closest_enemy.pos - context.champ.pos
   local mag = dir:mag() - context.champ.range;
   if mag > 0 then

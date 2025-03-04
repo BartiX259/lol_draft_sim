@@ -27,7 +27,7 @@ aa:
   damage 88.8
   cast ranged_aa
 q:
-  cd 4.78
+  cd 4.9
   damage 305.4
   range 800
   size 210
@@ -41,7 +41,7 @@ q:
   damage magic
 
 e:
-  cd 11.6
+  cd 11.9
   damage 317.8
   speed 2500
   size 120

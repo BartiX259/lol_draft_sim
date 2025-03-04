@@ -18,7 +18,7 @@ local pantheon = {}
 -- Constructor
 function pantheon.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2308,
+    health = 2348,
     armor = 114.4,
     mr = 72.6,
     ms = 375,
@@ -26,11 +26,11 @@ function pantheon.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.122, 175, 173.6),
-    q = ranged_cast.new(6.8, 1200),
-    w = ranged_cast.new(8.4, 600),
+    aa = melee_aa_cast.new(1.122, 175, 223.6),
+    q = ranged_cast.new(5.9, 1200),
+    w = ranged_cast.new(8.2, 600),
     e = dash_cast.new(14.4, 0, 525),
-    r = big_cast.new(120, 3500, 450),
+    r = big_cast.new(120, 1500, 450),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -47,7 +47,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(536.5, damage.PHYSICAL):deal(champ, target)
+damage:new(576.5, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

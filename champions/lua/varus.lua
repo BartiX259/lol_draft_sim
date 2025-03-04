@@ -20,8 +20,8 @@ function varus.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(0.745, 575, 190, { 0.7,0.1,0.8 }),
-    q = ranged_cast.new(5.7, 1595),
+    aa = ranged_aa_cast.new(0.825, 575, 190, { 0.7,0.1,0.8 }),
+    q = ranged_cast.new(5.6, 1595),
     r = important_cast.new(72.72, 1370),
   }
 
@@ -62,7 +62,7 @@ target:effect(root.new(2.0))
 end
 
 function champ.behaviour(ready, context)
-champ.range = 575
+champ.range = 1595
 champ:change_movement(movement.PASSIVE)
 end
 

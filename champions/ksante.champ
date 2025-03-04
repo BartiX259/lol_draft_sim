@@ -1,0 +1,87 @@
+champion ksante
+sprite ksante.jpg
+
+attributes:
+  health 2815
+  armor 136.4
+  mr 77.2
+  ms 390
+
+behavior:
+  if closest_dist < aa.range + 100 then
+    range aa
+    self.target = closest_enemy
+  elseif ready w then
+    range w
+    movement aggressive
+  else
+    range 650
+    movement peel
+  end
+
+abilities:
+  color 0.1, 0.8, 0.7
+
+  aa:
+    cd 1.1
+    range 150
+    damage 196
+    cast melee_aa
+
+  q:
+    cd 2.92
+    damage 241.2
+    range 230
+    size 180
+    deploy_time 0.4
+    cast splash
+    use:
+      proj = aoe at cast.pos
+      spawn proj
+    hit:
+      damage physical
+      effect airborne 0.4s
+
+  w:
+    cd 9
+    damage 200
+    range 400
+    cast ranged
+    use:
+      effect on self resist_buff 1s 80
+      effect on self stun 1s
+      effect on self unstoppable 1s
+      delay 1 do
+        self:del_effect("unstoppable")
+        proj = aoe follow self persist_time 1 size 100 tick 0
+        spawn proj
+        local cpos = pos + cast.dir * range
+        effect on self dash to cpos speed 1800
+      end
+    hit:
+      damage physical
+      self:del_effect("dash")
+      proj.despawn = true
+      effect stun 1.75s
+
+  e:
+    cd 6.5
+    range aa
+    dist 250
+    cast dash
+    use:
+      effect on self dash to cast.pos speed 1400
+      effect on self shield 2.5s 397.5
+
+  r:
+    cd 83.33
+    range 300
+    cast ranged
+    use:
+      local ppos = pos + cast.dir * 700
+      effect pull to ppos speed 2000
+      effect on self pull to ppos speed 2000
+      effect on self damage_buff 30% 15s
+      local res_nerf = -20
+      effect on self resist_buff 15s amount res_nerf
+      effect on self speed 15% 15s

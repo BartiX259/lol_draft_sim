@@ -31,7 +31,7 @@ function graph:__call(key, blue_team, red_team)
             row = row + image { image = blue.sprite, height = icon_size, width = icon_size, borderRadius = 2*icon_size, borderColor = ui.BLUE_COL, borderWidth = 3 }
             row = row + component { width = padding }
             row = row + component { width = w, height = height, bg = ui.BLUE_COL, borderRadius = 5 }
-            fill = fill - w - icon_size
+            fill = fill - w - icon_size - padding
             i, blue = next(blue_team, i)
         end
         row = row + component { width = fill }

@@ -93,4 +93,20 @@ function distances.find_clump(unit, units, range, clump_range)
   return { count = best_count, target = best_target }
 end
 
+function distances.dash_pos(context, dash_range, champ_range)
+  local target = context.closest_enemy
+  local dir = target.pos - context.champ.pos
+  local mag = dir:mag()
+  dir = dir:normalize()
+  local x = (mag * mag + champ_range * champ_range - dash_range * dash_range) / (2 * mag)
+  if champ_range >= x then
+    local h = math.sqrt(champ_range * champ_range - x * x) * (context.champ.random.value > 0.5 and 1 or -1)
+    if h ~= h then --nan
+      return nil
+    end
+    return target.pos - dir * x + vec2.new(dir.y, -dir.x) * h
+  end
+  return nil
+end
+
 return distances

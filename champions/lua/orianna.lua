@@ -24,7 +24,7 @@ function orianna.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 525, 151, { 0.3,0.5,0.8 }),
-    q = splash_cast.new(3.2, 825, 175),
+    q = splash_cast.new(3.4, 825, 175),
     w = ability:new(7),
     r = ability:new(90.48),
   }

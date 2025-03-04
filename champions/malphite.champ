@@ -1,0 +1,65 @@
+champion malphite
+sprite malphite.jpg
+
+attributes:
+  health 2663
+  armor 191.4
+  mr 112.6
+  ms 335
+behavior:
+  if ready q then
+    range q
+    movement aggressive
+  else
+    range q + 100
+    movement passive
+  end
+abilities:
+  color 0.6, 0.7, 0.4
+  aa:
+    cd 1.36
+    range 125
+    damage 110
+    cast melee_aa
+  q:
+    cd 6.3
+    damage 270
+    range 625
+    speed 1600
+    size 150
+    cast ranged
+    use:
+      proj = missile from pos to cast.target
+      spawn proj
+    hit:
+      damage magic
+      effect slow 40% 3s
+      effect on self speed 40% 3s
+  e:
+    cd 7
+    damage 330
+    range 400
+    size 400
+    cast splash
+    use:
+      proj = aoe at self deploy_time 0.24
+      spawn proj
+    hit:
+      damage magic
+      effect slow 50% 3s
+  r:
+    cd 105
+    damage 400
+    range 1000
+    size 300
+    speed 2000
+    cast splash
+    use:
+        local deploy_time = cast.mag / speed
+        proj = aoe at cast.pos
+        effect on self unstoppable 1s
+        effect on self dash to cast.pos speed speed
+        spawn proj
+    hit:
+      damage magic
+      effect airborne 1.5s

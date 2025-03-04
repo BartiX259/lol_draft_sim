@@ -25,7 +25,7 @@ function ivern.new(x, y)
   champ.abilities = {
     aa = ranged_aa_cast.new(0.95, 475, 164, { 0.2,0.8,0.4 }),
     q = ranged_cast.new(5.5, 1150),
-    e = buff_cast.new(4.3, 750),
+    e = buff_cast.new(4.2, 750),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -48,7 +48,7 @@ target:effect(root.new(2.0))
 end
 
 function champ.abilities.e:use(context, cast)
-cast.target:effect(shield.new(2.0, 417.8))
+cast.target:effect(shield.new(2.0, 437.8))
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 500,
 color = { 0.2,0.8,0.4 },

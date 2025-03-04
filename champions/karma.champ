@@ -1,0 +1,75 @@
+champion karma
+sprite karma.jpg
+attributes:
+  health 2088
+  armor 103
+  mr 65.6
+  ms 390
+
+behavior:
+  if ready q then
+    range q
+    movement aggressive
+  else
+    range q + 100
+    movement passive
+  end
+
+abilities:
+  color 0.2, 0.9, 0.6
+
+  aa:
+    cd 1.6
+    range 525
+    damage 91
+    cast ranged_aa
+
+  q:
+    cd 3.85
+    damage 230
+    range 950
+    speed 1700
+    size 140
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect slow 40% 1.5s
+
+  q_splash:
+    stats q
+    size 280
+    range nil
+    cast after q
+    use:
+      proj = aoe at q.proj
+      spawn proj
+    hit:
+      damage magic
+      effect slow 40% 1.5s
+
+  w:
+    cd 9.23
+    size 50
+    speed 450
+    damage 194
+    range 675
+    cast ranged
+    use:
+      proj = missile from pos to cast.target colliders nil
+      spawn proj
+    hit:
+      effect root duration 2
+      damage magic
+
+  e:
+    cd 6.15
+    shield_amount 322
+    range 800
+    cast buff
+    use:
+      effect shield 2.5s shield_amount
+      effect speed 40% 2s

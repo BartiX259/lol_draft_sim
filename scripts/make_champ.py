@@ -21,7 +21,7 @@ with open("key.txt", "r", encoding="utf-8") as file:
 
 # Process each argument
 
-content = f"""I am sending some code written with a custom language for designing league of legends champions. Based on the examples, can you make {args.name}? The abilities you should make are {", ".join(args.abilities[:-1])} and {args.abilities[-1]}."""
+content = f"""I am sending some code written with a custom language for designing league of legends champions. Based on the examples, can you make {args.name}? The abilities you should make are {", ".join(args.abilities[:-1])} and {args.abilities[-1]}. Don't make it too complicated!"""
 if args.extra:
     content += " " + args.extra
 content += "\nExample code:"
@@ -34,8 +34,8 @@ content += "\n".join(open(file, "r", encoding="utf-8").read() for file in files)
 # print(content)
 # exit(1)
 
-model = "gemini-2.0-pro-exp-02-05"
-# model = "gemini-2.0-flash-thinking-exp-01-21"
+# model = "gemini-2.0-pro-exp-02-05"
+model = "gemini-2.0-flash-thinking-exp-01-21"
 print("Asking " + model)
 response = requests.post(
 url="https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + key,

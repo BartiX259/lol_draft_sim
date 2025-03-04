@@ -24,15 +24,15 @@ abilities:
 
   aa:
     cd 0.88
-    range 255
-    damage 205
+    range 265
+    damage 223
     cast melee_aa
     hit:
       damage magic
 
   q:
     cd 2.92
-    damage 245
+    damage 250
     range 220
     size 250
     angle 35

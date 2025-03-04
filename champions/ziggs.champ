@@ -23,7 +23,7 @@ abilities:
       damage magic
 
   q:
-    cd 3.2
+    cd 3.3
     damage 250
     range 1400
     speed 1700

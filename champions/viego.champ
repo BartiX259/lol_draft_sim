@@ -1,0 +1,83 @@
+champion viego
+sprite viego.jpg
+
+attributes:
+  health 2438
+  armor 104.2
+  mr 76.6
+  ms 390
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  else
+    range w + 150
+    movement passive
+  end
+
+abilities:
+  color 0.3, 0.7, 0.6
+
+  aa:
+    cd 0.95
+    range 200
+    damage 252
+    cast melee_aa
+
+  q:
+    cd 2.7
+    damage 268
+    range 350
+    size 150
+    speed 2000
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      self.health = self.health + 70
+
+
+  w:
+    cd 7
+    damage 300
+    range 400
+    dist 400
+    speed 1200
+    size 120
+    cast ranged
+    use:
+      effect on self dash to cast.pos speed speed on finish do
+          proj = missile from pos
+          spawn proj
+      end
+    hit:
+        damage magic
+        effect stun 1s
+
+  r:
+    cd 100
+    damage 742
+    range 500
+    size 300
+    deploy_time 0.5
+    cast:
+      for _, enemy in pairs(in_range_list) do
+        if enemy.health + 150 < damage then
+          local dir = enemy.pos - pos
+          return {
+            target = enemy,
+            pos = enemy.pos + dir:normalize() * 100,
+            mag = dir:mag(),
+          }
+        end
+      end
+    use:
+      local speed = cast.mag / deploy_time
+      proj = aoe at cast.pos
+      spawn proj
+      effect on self dash to cast.pos speed speed
+    hit:
+        damage physical

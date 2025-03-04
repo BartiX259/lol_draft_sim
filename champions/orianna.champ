@@ -25,7 +25,7 @@ abilities:
     damage 151
     cast ranged_aa
   q:
-    cd 3.2
+    cd 3.4
     range 825
     damage 211
     speed 1400

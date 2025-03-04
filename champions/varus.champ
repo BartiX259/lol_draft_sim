@@ -8,20 +8,20 @@ attributes:
   ms 375
 
 behavior:
-    range aa.range  -- auto attack range
+    range q
     movement passive
 
 abilities:
   color 0.7, 0.1, 0.8
 
    aa:
-      cd 0.745
+      cd 0.825
       damage 190
       range 575
       cast ranged_aa
 
   q:
-    cd 5.7
+    cd 5.6
     damage 595
     range 1595
     speed 1900

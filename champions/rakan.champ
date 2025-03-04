@@ -1,0 +1,72 @@
+champion rakan
+sprite rakan.jpg
+
+attributes:
+  health 2278
+  armor 104
+  mr 76.6
+  ms 390
+
+behavior:
+  if r.active then
+    range r
+    movement engage
+  elseif ready w then
+    range w
+    movement aggressive
+  else
+    range w + 100
+    movement peel
+  end
+
+abilities:
+  color 0.9, 0.7, 0.4
+
+  aa:
+    cd 1.0
+    range 300
+    damage 104
+    cast melee_aa
+
+  w:
+    cd 7
+    damage 286
+    range 600
+    size 300
+    speed 1700
+    cast splash
+    use:
+      local deploy_time = 0.15 + cast.mag / speed
+      proj = aoe at cast.pos
+      spawn proj
+      effect on self dash to cast.pos speed speed
+    hit:
+      damage magic
+      effect airborne 1s
+
+  e:
+    cd 8.5
+    damage 100
+    range 700
+    cast buff
+    use:
+      effect on self dash to cast.target speed 2000
+      effect shield 2s 273
+
+  r:
+    cd 75
+    damage 310
+    range 150
+    size 300
+    persist_time 4
+    tick 0
+    cast ranged
+    use:
+      active = true
+      delay persist_time active = false
+      proj = aoe follow self re_hit false
+      effect on self speed 75% duration persist_time
+      spawn proj
+    hit:
+      damage magic
+      effect charm to self 1.5s speed 200

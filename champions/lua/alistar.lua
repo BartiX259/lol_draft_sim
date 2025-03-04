@@ -23,7 +23,7 @@ function alistar.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.1, 125, 127),
-    q = splash_cast.new(4.1, 187, 375),
+    q = splash_cast.new(4.7, 187, 375),
     w = ranged_cast.new(6.3, 650),
   }
 
@@ -39,7 +39,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(220, damage.MAGIC):deal(champ, target)
+damage:new(250, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(1.5))
 end
 
