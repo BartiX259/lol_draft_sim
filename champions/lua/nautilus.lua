@@ -24,7 +24,7 @@ function nautilus.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1, 175, 101),
-    q = ranged_cast.new(6.2, 1122),
+    q = ranged_cast.new(6, 1122),
     r = important_cast.new(83.33, 925),
   }
 

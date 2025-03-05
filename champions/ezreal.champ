@@ -20,7 +20,7 @@ aa:
   cast ranged_aa
 
 q:
-  cd 3.6
+  cd 3.55
   damage 390
   range 1200
   size 120

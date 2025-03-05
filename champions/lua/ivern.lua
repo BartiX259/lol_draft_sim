@@ -24,8 +24,8 @@ function ivern.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(0.95, 475, 164, { 0.2,0.8,0.4 }),
-    q = ranged_cast.new(5.5, 1150),
-    e = buff_cast.new(4.2, 750),
+    q = ranged_cast.new(5.3, 1150),
+    e = buff_cast.new(4, 750),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -43,7 +43,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(288, damage.MAGIC):deal(champ, target)
+damage:new(302, damage.MAGIC):deal(champ, target)
 target:effect(root.new(2.0))
 end
 

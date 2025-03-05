@@ -15,8 +15,8 @@ local jax = {}
 function jax.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2465,
-    armor = 119,
-    mr = 77,
+    armor = 123,
+    mr = 81,
     ms = 395,
     sprite = 'jax.jpg',
   })
@@ -26,7 +26,7 @@ function jax.new(x, y)
     q = ranged_cast.new(6.0, 700),
     w = ranged_cast.new(3.0, 175),
     w_hit = ranged_cast.new(0, 175),
-    e = ranged_cast.new(9.0, 187),
+    e = ranged_cast.new(8, 187),
     e_recast = none_cast.new(),
   }
 champ.abilities.w_hit:join(champ.abilities.w)

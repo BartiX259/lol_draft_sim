@@ -25,8 +25,8 @@ function gragas.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 125, 150),
-    q = ranged_cast.new(4.6, 850),
-    e = ranged_cast.new(6.4, 600),
+    q = ranged_cast.new(4.5, 850),
+    e = ranged_cast.new(6.3, 600),
     r = big_cast.new(81, 1050, 350),
   }
 
@@ -75,7 +75,7 @@ champ :del_effect ( "dash" )
 local target_pos = target.pos + self.dir * 90
 target:effect(airborne.new(1.0))
 target:effect(pull.new(600, target_pos))
-champ.health = champ.health + 80
+champ.health = champ.health + 85
 end
 
 function champ.abilities.r:use(context, cast)

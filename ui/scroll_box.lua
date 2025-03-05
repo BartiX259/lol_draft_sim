@@ -1,19 +1,28 @@
 local component = require("ui.badr")
 
-local child_y = 0
-
 local function scroll_box(options)
     return component {
         column = true, center = true,
+        scaleFactor = 1,
+        child_y = 0,
         onUpdate = function(self)
-            if self:isMouseInside() and component.WHEEL[1] ~= 0 then
-                local delta = component.WHEEL[1] * 30
-                if child_y + delta <= 0 and -(child_y + delta) <= self.children[1].height - options.height then
+            if self:isMouseInside() and component.events.wheel ~= 0 then
+                local delta = component.events.wheel * 30
+                -- Ensure we don't scroll above the top limit
+                if self.child_y + delta > 0 then
+                    delta = -self.child_y
+                end
+                -- Ensure we don't scroll past the bottom limit
+                local maxScroll = self.children[1].height - options.height
+                if self.child_y + delta < -maxScroll then
+                    delta = -maxScroll - self.child_y
+                end
+                if delta ~= 0 then
                     self:updatePosition(0, delta)
-                    child_y = child_y + delta
+                    self.child_y = self.child_y + delta
                     self.y = self.y - delta
                 end
-                component.WHEEL[1] = 0
+                component.events.wheel = 0
             end
         end,
         draw = function(self)
@@ -26,6 +35,7 @@ local function scroll_box(options)
             love.graphics.setScissor()
         end,
         scale = function(self, value)
+            self.scaleFactor = self.scaleFactor * value
             self.x = self.x * value
             self.y = self.y * value
             self.width = self.width * value
@@ -37,7 +47,13 @@ local function scroll_box(options)
                 blend:scale(value)
             end
             options.height = options.height * value
-            child_y = child_y * value
+            if options.offsetTop then
+                options.offsetTop = options.offsetTop * value
+            end
+            if options.offsetBot then
+                options.offsetBot = options.offsetBot * value
+            end
+            self.child_y = self.child_y * value
         end
     }
 end

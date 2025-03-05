@@ -89,7 +89,7 @@ e:
 
 r:
   cd 59.3
-  damage 91
+  damage 86
   range 1300 -- Cast range
   speed 2500
   size 100

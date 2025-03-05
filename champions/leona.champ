@@ -26,7 +26,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 3.5
+    cd 3.4
     range 125
     damage 220
     cast melee_aa
@@ -35,7 +35,7 @@ abilities:
       effect stun 1.5s
 
   e:
-    cd 4.2
+    cd 4.1
     damage 210
     range 900
     speed 2000

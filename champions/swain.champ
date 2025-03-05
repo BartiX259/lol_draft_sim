@@ -27,7 +27,7 @@ aa:
 
 q:
   cd 2.9
-  damage 225
+  damage 210
   range 725
   size 150
   speed 2500
@@ -71,7 +71,7 @@ e_ret:
 
 r:
   cd 72.7
-  damage 20
+  damage 19
   range 300
   size 650
   persist_time 12
@@ -81,7 +81,7 @@ r:
   use:
     active = true
     proj = aoe follow self on impact do
-        self.health = self.health + 20 * in_range
+        self.health = self.health + 19 * in_range
     end
     delay persist_time active = false
     spawn proj

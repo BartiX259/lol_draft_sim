@@ -23,7 +23,7 @@ function vi.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.25, 125, 238),
+    aa = melee_aa_cast.new(1, 125, 238),
     q = ranged_cast.new(4.2, 725),
     r = important_cast.new(82.1, 800),
   }

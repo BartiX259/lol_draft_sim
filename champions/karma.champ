@@ -26,7 +26,7 @@ abilities:
 
   q:
     cd 3.85
-    damage 230
+    damage 240
     range 950
     speed 1700
     size 140

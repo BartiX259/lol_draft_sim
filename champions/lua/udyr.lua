@@ -15,7 +15,7 @@ local udyr = {}
 -- Constructor
 function udyr.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2438,
+    health = 2418,
     armor = 80.4,
     mr = 66.7,
     ms = 395,
@@ -23,7 +23,7 @@ function udyr.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.3, 125, 220),
+    aa = melee_aa_cast.new(1.3, 125, 190),
     w = ranged_cast.new(5.7, 3000),
     e = ranged_cast.new(5.7, 125),
     e_stun = ranged_cast.new(0, 125),
@@ -45,7 +45,7 @@ champ:effect(unstoppable.new(3.0))
 end
 
 function champ.abilities.e_stun:use(context, cast)
-damage:new(220, damage.MAGIC):deal(champ, cast.target)
+damage:new(190, damage.MAGIC):deal(champ, cast.target)
 cast.target:effect(stun.new(1.0))
 end
 

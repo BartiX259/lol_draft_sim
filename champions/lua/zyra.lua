@@ -14,7 +14,7 @@ local zyra = {}
 -- Constructor
 function zyra.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1840,
+    health = 1940,
     armor = 79.4,
     mr = 45.6,
     ms = 385,
@@ -23,8 +23,8 @@ function zyra.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.47, 575, 94, { 0.4,0.8,0.2 }),
-    q = splash_cast.new(4.45, 800, 200),
-    e = ranged_cast.new(8.05, 1100),
+    q = splash_cast.new(4.8, 800, 200),
+    e = ranged_cast.new(8.15, 1100),
     r = splash_cast.new(66.67, 700, 500),
   }
 

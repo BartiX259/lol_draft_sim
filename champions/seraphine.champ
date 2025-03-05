@@ -2,8 +2,8 @@ champion seraphine
 sprite seraphine.jpg
 
 attributes:
-  health 2050
-  armor 76.4
+  health 2000
+  armor 71.4
   mr 45.6
   ms 380
 

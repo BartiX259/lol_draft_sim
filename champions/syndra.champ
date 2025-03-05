@@ -26,9 +26,10 @@ aa:
   range 550
   damage 88.8
   cast ranged_aa
+
 q:
-  cd 4.9
-  damage 305.4
+  cd 4.8
+  damage 278.4
   range 800
   size 210
   deploy_time 0.4
@@ -41,8 +42,8 @@ q:
   damage magic
 
 e:
-  cd 11.9
-  damage 317.8
+  cd 11.2
+  damage 287.8
   speed 2500
   size 120
   angle 56
@@ -75,7 +76,7 @@ q_push:
 
 r:
   cd 74.1
-  damage 171.28
+  damage 171
   range 675
   speed 1500
   size 100

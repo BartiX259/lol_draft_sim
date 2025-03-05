@@ -24,8 +24,8 @@ abilities:
     damage 164
     cast ranged_aa
   q:
-    cd 5.5
-    damage 288
+    cd 5.3
+    damage 302
     range 1150
     speed 1300
     size 160
@@ -39,7 +39,7 @@ abilities:
       effect root 2s
 
   e:
-    cd 4.2
+    cd 4
     damage 252
     range 750
     shield_amount 437.8

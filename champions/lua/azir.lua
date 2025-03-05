@@ -25,7 +25,7 @@ function azir.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.509, 525, 98, { 0.9,0.8,0.3 }),
-    q = ranged_cast.new(5, 740),
+    q = ranged_cast.new(5.2, 740),
     w = ranged_cast.new(4, 740),
     e = dash_cast.new(10.67, 600, 525),
     r = ranged_cast.new(70, 150),

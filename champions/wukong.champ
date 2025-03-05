@@ -2,7 +2,7 @@ champion wukong
 sprite wukong.jpg
 
 attributes:
-  health 2523
+  health 2533
   armor 180.4
   mr 72.65
   ms 385

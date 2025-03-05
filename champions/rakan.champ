@@ -2,7 +2,7 @@ champion rakan
 sprite rakan.jpg
 
 attributes:
-  health 2278
+  health 2478
   armor 104
   mr 76.6
   ms 390

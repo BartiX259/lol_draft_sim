@@ -48,7 +48,7 @@ abilities:
       effect pull to target_pos speed 600
 
   w:
-    cd 4.3
+    cd 4.5
     damage 120 -- First hit damage
     range 350   --  cone range
     size 120    --  individual hit size (adjust as needed). It is NOT angle.

@@ -24,9 +24,9 @@ function syndra.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
-    q = splash_cast.new(4.9, 800, 210),
-    e = ability:new(11.9),
-    q_push = ability:new(11.9),
+    q = splash_cast.new(4.8, 800, 210),
+    e = ability:new(11.2),
+    q_push = ability:new(11.2),
     r = ability:new(74.1),
   }
 
@@ -51,7 +51,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(305.4, damage.MAGIC):deal(champ, target)
+damage:new(278.4, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:with_q(context, cast)
@@ -71,7 +71,7 @@ end
 end
 
 function champ.abilities.e:hit(target)
-damage:new(317.8, damage.MAGIC):deal(champ, target)
+damage:new(287.8, damage.MAGIC):deal(champ, target)
 local push_pos = target.pos + ( target.pos - champ.pos ):normalize () * 300
 target:effect(pull.new(1500, push_pos))
 target:effect(stun.new(1.0))
@@ -93,13 +93,13 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q_push:hit(target)
-damage:new(317.8, damage.MAGIC):deal(champ, target)
+damage:new(287.8, damage.MAGIC):deal(champ, target)
 target:effect(stun.new(1.0))
 end
 
 function champ.abilities.r:cast(context)
 for _,target in pairs ( distances.in_range_list(champ, context.enemies, 675) ) do
-if target.health <= 171.28 * 5 then
+if target.health <= 171 * 5 then
 return { target = target }
 end
 end
@@ -124,11 +124,11 @@ end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(171.28, damage.MAGIC):deal(champ, target)
+damage:new(171, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)
-if ready.r and context.closest_enemy.health <= 171.28 * 5 then
+if ready.r and context.closest_enemy.health <= 171 * 5 then
 champ.range = 675-50
 champ:change_movement(movement.AGGRESSIVE)
 elseif ready.q then

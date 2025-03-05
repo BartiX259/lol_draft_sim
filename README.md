@@ -24,7 +24,7 @@ Test if it works with the `love` command
 2. Clone the repository
 
 ```
-git clone https://github.com/BartiX259/lol_draft_sim.git`
+git clone https://github.com/BartiX259/lol_draft_sim.git
 cd lol_draft_sim
 ```
 

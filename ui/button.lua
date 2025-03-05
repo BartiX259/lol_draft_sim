@@ -70,7 +70,7 @@ return function(options)
             options.padding = self.padding
             local newFontSize = math.floor(originalSize * self.scaleFactor)
             if newFontSize > 0 then
-                self.font = love.graphics.newFont(component.FONT, newFontSize)
+                self.font = love.graphics.newFont(component.font, newFontSize)
                 local fontWidth = self.font:getWidth(self.text)
                 if fontWidth > self.width then
                     self.x = self.x - (fontWidth - self.width) / 2 - self.padding

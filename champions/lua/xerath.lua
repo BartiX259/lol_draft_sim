@@ -23,9 +23,9 @@ function xerath.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 81, { 0.2,0.4,0.9 }),
-    q = ranged_cast.new(5.5, 1450),
-    w = splash_cast.new(9.1, 1000, 275),
-    e = ranged_cast.new(10.0, 1125),
+    q = ranged_cast.new(5.75, 1450),
+    w = splash_cast.new(9.4, 1000, 275),
+    e = ranged_cast.new(10.2, 1125),
   }
 
 function champ.abilities.q:use(context, cast)
@@ -42,7 +42,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(400, damage.MAGIC):deal(champ, target)
+damage:new(380, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

@@ -2,8 +2,8 @@ champion renata
 sprite renata.jpg
 
 attributes:
-  health 1923
-  armor 78.4
+  health 1963
+  armor 71.4
   mr 65.6
   ms 385
 
@@ -26,7 +26,7 @@ abilities:
     cast ranged_aa
 
   q:
-    cd 6.1
+    cd 6.3
     damage 292
     range 900
     speed 1450
@@ -49,7 +49,7 @@ abilities:
       effect pull to pull_dest speed 1200
 
   w:
-    cd 9.2
+    cd 10.1
     range 800
     cast buff
     use:
@@ -70,19 +70,19 @@ abilities:
       end
 
   e:
-    cd 5
+    cd 6.2
     damage 207
     range 800
     speed 1450
     size 220
-    shield_amount 240
+    shield_amount 230
     cast ranged
     use:
         local hit_cols = {}
         proj = missile from pos
         spawn proj
         for _, ally in pairs(in_range_list(self, allies, 330)) do
-            effect shield shield_amount 2s
+            effect on ally shield shield_amount 2s
         end
     hit:
       damage magic

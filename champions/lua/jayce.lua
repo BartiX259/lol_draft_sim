@@ -22,8 +22,8 @@ function jayce.new(x, y)
   })
 
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.25, 500, 230, { 0.3,0.5,0.8 }),
-    q_ranged = ranged_cast.new(6.55, 1550),
+    aa = ranged_aa_cast.new(1.25, 500, 240, { 0.3,0.5,0.8 }),
+    q_ranged = ranged_cast.new(6.1, 1550),
     e = ranged_cast.new(8.4, 240),
     q_melee = ranged_cast.new(4.5, 600),
   }
@@ -43,7 +43,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q_ranged:hit(target)
-damage:new(536, damage.PHYSICAL):deal(champ, target)
+damage:new(546, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)

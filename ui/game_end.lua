@@ -8,7 +8,7 @@ local ui        = require("ui.main")
 local game_end    = {}
 
 function game_end:__call(winner, blue_team, red_team)
-  love.graphics.setFont(love.graphics.newFont(component.FONT, 20))
+  love.graphics.setFont(love.graphics.newFont(component.font, 20))
   local content
   if winner == ui.BLUE then
     content = "Blue Wins"

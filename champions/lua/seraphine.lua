@@ -18,8 +18,8 @@ local seraphine = {}
 -- Constructor
 function seraphine.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2050,
-    armor = 76.4,
+    health = 2000,
+    armor = 71.4,
     mr = 45.6,
     ms = 380,
     sprite = 'seraphine.jpg',

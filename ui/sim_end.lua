@@ -8,7 +8,7 @@ local ui        = require("ui.main")
 local sim_end    = {}
 
 function sim_end:__call(info)
-    love.graphics.setFont(love.graphics.newFont(component.FONT, 20))
+    love.graphics.setFont(love.graphics.newFont(component.font, 20))
     local res = component { column = true, gap = 20, center = true }
       + (component { row = true, gap = 100 }
       + label { text = "Blue wins: ".. tostring(info.blue_wins), color = { 1, 1, 1 } }

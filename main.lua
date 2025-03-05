@@ -4,7 +4,7 @@ local distances = require("util.distances")
 local ui = require("ui.main")
 local dump = require("util.dump")
 local camera = require("util.camera")
-local font = love.graphics.newFont(require("ui.badr").FONT, 25)
+local font = love.graphics.newFont(require("ui.badr").font, 25)
 
 local PLAYING = 0
 local BLUE_WIN = 1

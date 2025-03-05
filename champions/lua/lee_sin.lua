@@ -24,7 +24,7 @@ function lee_sin.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1, 125, 253.4),
+    aa = melee_aa_cast.new(0.8, 125, 253.4),
     q = ranged_cast.new(4.4, 1200),
     w = buff_cast.new(6.2, 700),
     r = ability:new(68),

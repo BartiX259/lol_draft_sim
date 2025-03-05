@@ -51,7 +51,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(230, damage.MAGIC):deal(champ, target)
+damage:new(240, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.5, 0.4))
 end
 
@@ -66,7 +66,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q_splash:hit(target)
-damage:new(230, damage.MAGIC):deal(champ, target)
+damage:new(240, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.5, 0.4))
 end
 

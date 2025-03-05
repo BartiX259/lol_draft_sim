@@ -21,9 +21,10 @@ abilities:
     range 125
     damage 110
     cast melee_aa
+
   q:
-    cd 6.3
-    damage 270
+    cd 6.1
+    damage 370
     range 625
     speed 1600
     size 150
@@ -36,8 +37,8 @@ abilities:
       effect slow 40% 3s
       effect on self speed 40% 3s
   e:
-    cd 7
-    damage 330
+    cd 6.8
+    damage 180
     range 400
     size 400
     cast splash
@@ -49,7 +50,7 @@ abilities:
       effect slow 50% 3s
   r:
     cd 105
-    damage 400
+    damage 430
     range 1000
     size 300
     speed 2000

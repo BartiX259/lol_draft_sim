@@ -54,7 +54,7 @@ function random_sim_end:__call(info)
     local height = 30
     local icon_size = 35
     local padding = 10
-    local font = love.graphics.newFont(component.FONT, 15)
+    local font = love.graphics.newFont(component.font, 15)
     for _, champ in pairs(champs) do
         local row = component { row = true, center = true }
         row = row + image { image = champ.sprite, height = icon_size, width = icon_size, borderRadius = 2*icon_size, borderColor = ui.SEL_COL, borderWidth = 3 }

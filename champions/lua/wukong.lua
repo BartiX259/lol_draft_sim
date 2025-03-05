@@ -13,7 +13,7 @@ local wukong = {}
 -- Constructor
 function wukong.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2523,
+    health = 2533,
     armor = 180.4,
     mr = 72.65,
     ms = 385,

@@ -20,7 +20,7 @@ abilities:
 color 0.4, 0.6, 0.8
 
 aa:
-  cd 1
+  cd 0.8
   range 125
   damage 253.4
   cast melee_aa

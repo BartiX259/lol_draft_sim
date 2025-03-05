@@ -17,7 +17,7 @@ local rakan = {}
 -- Constructor
 function rakan.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2278,
+    health = 2478,
     armor = 104,
     mr = 76.6,
     ms = 390,

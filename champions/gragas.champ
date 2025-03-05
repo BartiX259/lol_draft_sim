@@ -26,7 +26,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 4.6
+    cd 4.5
     damage 358
     range 850
     speed 1300
@@ -42,7 +42,7 @@ abilities:
       effect slow 90% 2s
 
   e:
-    cd 6.4
+    cd 6.3
     damage 234
     range 600
     speed 1400
@@ -60,7 +60,7 @@ abilities:
       local target_pos = target.pos + dir * 90
       effect airborne 1s
       effect pull to target_pos speed 600
-      self.health = self.health + 80
+      self.health = self.health + 85
 
   r:
     cd 81

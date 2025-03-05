@@ -26,8 +26,8 @@ function malphite.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.36, 125, 110),
-    q = ranged_cast.new(6.3, 625),
-    e = splash_cast.new(7, 400, 400),
+    q = ranged_cast.new(6.1, 625),
+    e = splash_cast.new(6.8, 400, 400),
     r = splash_cast.new(105, 1000, 300),
   }
 
@@ -46,7 +46,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(270, damage.MAGIC):deal(champ, target)
+damage:new(370, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(3.0, 0.4))
 champ:effect(speed.new(3.0, 0.4))
 end
@@ -63,7 +63,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.e:hit(target)
-damage:new(330, damage.MAGIC):deal(champ, target)
+damage:new(180, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(3.0, 0.5))
 end
 
@@ -82,7 +82,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(400, damage.MAGIC):deal(champ, target)
+damage:new(430, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(1.5))
 end
 

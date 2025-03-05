@@ -32,9 +32,9 @@ abilities:
     cast melee_aa
 
   q: -- fully charged, empowered
-    cd 5.9
+    cd 5.2
     range 1200
-    damage 576.5
+    damage 583
     size 120
     speed 2700
     cast ranged
@@ -45,7 +45,7 @@ abilities:
        damage physical
 
   w:
-    cd 8.2
+    cd 8
     range 600
     damage 144
     cast ranged
@@ -57,7 +57,7 @@ abilities:
       damage physical
 
   e:
-    cd 14.4
+    cd 14.1
     range 525
     size 300
     tick 0.125

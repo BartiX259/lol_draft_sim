@@ -22,7 +22,7 @@ function ashe.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(0.90, 600, 160, { 0.2,0.7,1.0 }),
-    w = ranged_cast.new(4, 1200),
+    w = ranged_cast.new(4.2, 1200),
     r = important_cast.new(80, 2500),
   }
 

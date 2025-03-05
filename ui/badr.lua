@@ -9,8 +9,8 @@
 local badr = {}
 badr.__index = badr
 
-badr.FONT = "assets/Nexa-Heavy.ttf"
-badr.WHEEL = { 0 }
+badr.font = "assets/Nexa-Heavy.ttf"
+badr.events = { wheel = 0, text = nil, key = nil }
 
 function badr:new(t)
   t = t or {}
@@ -240,11 +240,19 @@ function badr:update()
   end
 end
 
+love.keyboard.setKeyRepeat(true)
+
 function love.wheelmoved(x, y)
-	badr.WHEEL[1] = y
+	badr.events.wheel = y
+end
+function love.textinput(t)
+  badr.events.text = t
+end
+function love.keypressed(key)
+  badr.events.key = key
 end
 
-return setmetatable({ new = badr.new, FONT = badr.FONT, WHEEL = badr.WHEEL }, {
+return setmetatable({ new = badr.new, font = badr.font, events = badr.events }, {
   __call = function(t, ...)
     return badr:new(...)
   end,

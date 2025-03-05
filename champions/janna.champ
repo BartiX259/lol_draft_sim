@@ -2,7 +2,7 @@ champion janna
 sprite janna.jpg
 
 attributes:
-  health 1800
+  health 1900
   armor 67
   mr 45.6
   ms 385
@@ -21,7 +21,7 @@ abilities:
     cast ranged_aa
 
   q:
-    cd 13.33
+    cd 11.5
     damage 249
     range 1760  -- Uncharged range
     speed 1408  -- Initial speed
@@ -49,7 +49,7 @@ abilities:
       effect slow 2s 36%
 
   e:
-    cd 11.43
+    cd 8.43
     shield_amount 284
     range 800
     cast buff  -- Cast on allies or self
@@ -69,7 +69,7 @@ abilities:
     use:
       proj = aoe follow self re_hit false on impact do
         for _, ally in pairs(in_range_list(self, allies, range)) do
-          ally.health = ally.health + 35
+          ally.health = ally.health + 20
         end
       end
       spawn proj

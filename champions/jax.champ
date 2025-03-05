@@ -3,8 +3,8 @@ sprite jax.jpg
 
 attributes:
   health 2465
-  armor 119
-  mr 77
+  armor 123
+  mr 81
   ms 395
 
 behavior:
@@ -54,7 +54,7 @@ abilities:
       damage magic
 
   e:
-    cd 9.0
+    cd 8
     deploy_time 0.1
     persist_time 2
     range 187

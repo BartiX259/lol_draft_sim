@@ -22,8 +22,8 @@ local renata = {}
 -- Constructor
 function renata.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1923,
-    armor = 78.4,
+    health = 1963,
+    armor = 71.4,
     mr = 65.6,
     ms = 385,
     sprite = 'renata.jpg',
@@ -31,11 +31,11 @@ function renata.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.1, 550, 85, { 0.7,0.3,0.9 }),
-    q = ranged_cast.new(6.1, 900),
-    q_recast = ability:new(6.1),
-    w = buff_cast.new(9.2, 800),
+    q = ranged_cast.new(6.3, 900),
+    q_recast = ability:new(6.3),
+    w = buff_cast.new(10.1, 800),
     w_res = always_cast.new(),
-    e = ranged_cast.new(5, 800),
+    e = ranged_cast.new(6.2, 800),
     r = big_cast.new(104, 2000, 250),
   }
 champ.abilities.w_res:join(champ.abilities.w)
@@ -103,7 +103,7 @@ from = champ.pos,
 context.spawn( self.proj
 )
 for _,ally in pairs ( distances.in_range_list ( champ , context.allies , 330 )) do
-cast.target:effect(shield.new(2.0, 240.0))
+ally:effect(shield.new(2.0, 230.0))
 end
 end
 

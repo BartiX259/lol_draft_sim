@@ -26,6 +26,9 @@ local function image(options)
       if type(image) == "table" then
         image = image.image
       end
+      if image == nil then
+        return
+      end
       if options.center then
         love.graphics.draw(image, self.x, self.y + love.graphics:getFont():getHeight() / 2, 0, self.width / (image:getWidth()), self.height / (image:getHeight()), 0, image:getHeight() / 2)
       else

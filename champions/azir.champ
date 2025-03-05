@@ -26,7 +26,7 @@ abilities:
     cast ranged_aa
 
   q:
-    cd 5
+    cd 5.2
     damage 275
     range 740 -- Range to send soldiers, soldiers move in a line, it's NOT splash like other abilities.
     speed 1800  -- Soldiers' dash speed

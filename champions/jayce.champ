@@ -17,12 +17,12 @@ abilities:
   aa:
     cd 1.25
     range 500
-    damage 230
+    damage 240
     cast ranged_aa
 
   q_ranged: -- Shock Blast (Accelerated)
-    cd 6.55
-    damage 536
+    cd 6.1
+    damage 546
     range 1550 -- Accelerated Range
     speed 2350  -- Accelerated Speed
     size 220  -- Increased size on explosion.

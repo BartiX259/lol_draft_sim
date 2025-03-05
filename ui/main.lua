@@ -1,6 +1,6 @@
 local ui = {}
 
-love.graphics.setFont(love.graphics.newFont(require("ui.badr").FONT, 20))
+love.graphics.setFont(love.graphics.newFont(require("ui.badr").font, 20))
 
 ui.BLUE = 0
 ui.RED = 1

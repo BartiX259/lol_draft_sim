@@ -27,9 +27,9 @@ function pantheon.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.122, 175, 223.6),
-    q = ranged_cast.new(5.9, 1200),
-    w = ranged_cast.new(8.2, 600),
-    e = dash_cast.new(14.4, 0, 525),
+    q = ranged_cast.new(5.2, 1200),
+    w = ranged_cast.new(8, 600),
+    e = dash_cast.new(14.1, 0, 525),
     r = big_cast.new(120, 1500, 450),
   }
 
@@ -47,7 +47,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(576.5, damage.PHYSICAL):deal(champ, target)
+damage:new(583, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

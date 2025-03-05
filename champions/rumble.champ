@@ -50,7 +50,7 @@ abilities:
       return nil
 
   e:
-    cd 6.7
+    cd 6.55
     damage 235
     range 950
     speed 2000

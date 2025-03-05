@@ -29,7 +29,7 @@ function sejuani.new(x, y)
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 114),
     q = ranged_cast.new(11.3, 650),
-    w = ranged_cast.new(4.3, 350),
+    w = ranged_cast.new(4.5, 350),
     w_second = none_cast.new(),
     r = important_cast.new(95.7, 1100),
     r_explosion = ability:new(95.7),

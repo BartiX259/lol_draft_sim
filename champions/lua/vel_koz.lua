@@ -155,7 +155,7 @@ end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(91, damage.MAGIC):deal(champ, target)
+damage:new(86, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

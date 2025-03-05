@@ -24,7 +24,7 @@ abilities:
       effect slow 25% 2s
 
   w:
-    cd 4
+    cd 4.2
     damage 209
     range 1200
     speed 2000

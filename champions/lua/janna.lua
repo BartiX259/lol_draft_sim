@@ -19,7 +19,7 @@ local janna = {}
 -- Constructor
 function janna.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1800,
+    health = 1900,
     armor = 67,
     mr = 45.6,
     ms = 385,
@@ -28,9 +28,9 @@ function janna.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.176, 550, 95, { 0.7,0.9,1.0 }),
-    q = ranged_cast.new(13.33, 1760),
+    q = ranged_cast.new(11.5, 1760),
     w = ranged_cast.new(5.71, 550),
-    e = buff_cast.new(11.43, 800),
+    e = buff_cast.new(8.43, 800),
     r = big_cast.new(109.52, 725, 725),
   }
 
@@ -86,7 +86,7 @@ follow = champ,
 re_hit = false,
 }):on_impact(function()
 for _,ally in pairs ( distances.in_range_list ( champ , context.allies , 725 )) do
-ally.health = ally.health + 35
+ally.health = ally.health + 20
 end
 end)
 context.spawn( self.proj
