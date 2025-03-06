@@ -25,7 +25,7 @@ function kalista.new(x, y)
 
   champ.abilities = {
     dash = ability:new(0),
-    aa = ranged_cast.new(0.75, 525),
+    aa = ranged_cast.new(0.77, 525),
     rend_stack_timers = always_cast.new(),
     q = ranged_cast.new(5.93, 1200),
     e = ability:new(5.93),

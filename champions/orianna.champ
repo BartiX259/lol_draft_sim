@@ -4,8 +4,8 @@ sprite orianna.jpg
 attributes:
   health 2055
   armor 65.4
-  mr 41.6
-  ms 370
+  mr 45.6
+  ms 380
 
 behavior:
   if ready q then
@@ -40,7 +40,7 @@ abilities:
     hit:
       damage magic
   w:
-    cd 7
+    cd 6.9
     damage 368
     size 225
     cast:

@@ -24,9 +24,9 @@ function rumble.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.5, 125, 102.4),
-    q = ranged_cast.new(5.5, 600),
+    q = ranged_cast.new(5.6, 600),
     q_pos = always_cast.new(),
-    e = ranged_cast.new(6.55, 950),
+    e = ranged_cast.new(6.6, 950),
     r = big_cast.new(64, 1700, 200),
   }
 champ.abilities.q_pos:join(champ.abilities.q)

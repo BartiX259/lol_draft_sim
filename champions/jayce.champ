@@ -2,9 +2,9 @@ champion jayce
 sprite jayce.jpg
 
 attributes:
-  health 2099
-  armor 82
-  mr 45.6
+  health 2111
+  armor 80.1
+  mr 53.6
   ms 380
 
 behavior:

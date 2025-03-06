@@ -30,7 +30,7 @@ abilities:
 
   q:
     cd 2.92
-    damage 241.2
+    damage 231.2
     range 230
     size 180
     deploy_time 0.4

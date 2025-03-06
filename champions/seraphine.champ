@@ -21,8 +21,8 @@ abilities:
     cast ranged_aa
 
   q:
-    cd 4.6
-    damage 200
+    cd 4.5
+    damage 220
     range 900
     size 300
     deploy_time 0.6
@@ -34,7 +34,7 @@ abilities:
         damage magic
 
   w:
-    cd 13.8
+    cd 11.8
     shield_amount 190
     range 400
     duration 2.5

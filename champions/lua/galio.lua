@@ -26,11 +26,11 @@ function galio.new(x, y)
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1.2, 150, 100),
-    q = ranged_cast.new(6.2, 825),
+    aa = melee_aa_cast.new(1.2, 150, 120),
+    q = ranged_cast.new(6.1, 825),
     q_tick = none_cast.new(),
     w = ranged_cast.new(12.6, 350),
-    e = ranged_cast.new(6.6, 650),
+    e = ranged_cast.new(6.4, 650),
     r = ability:new(144),
   }
 
@@ -66,7 +66,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q_tick:hit(target)
-damage:new(70, damage.MAGIC):deal(champ, target)
+damage:new(75, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

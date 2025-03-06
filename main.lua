@@ -62,7 +62,11 @@ function NewGame()
 end
 
 function RandomDraft()
-  Draft = {blue = {}, red = {}}
+  if BaseDraft then
+    Draft = {blue = table.shallow_copy(BaseDraft.blue), red = table.shallow_copy(BaseDraft.red)}
+  else
+    Draft = {blue = {}, red = {}}
+  end
   
   -- Shuffle function to randomize the pool
   local function shuffleTable(tbl)
@@ -89,13 +93,14 @@ function RandomDraft()
   
   -- Select random champions for both teams
   shuffleTable(championPool)
-  for i = 1, math.min(5, #championPool) do
+  local i = 1
+  while #Draft.blue < 5 do
     table.insert(Draft.blue, championPool[i])
+    i = i + 1
   end
-  
-  shuffleTable(championPool)
-  for i = 1, math.min(5, #championPool) do
+  while #Draft.red < 5 do
     table.insert(Draft.red, championPool[i])
+    i = i + 1
   end
 end
 
@@ -112,7 +117,7 @@ ui.new_sim = function()
   NewGame()
 end
 ui.random_sim = function()
-  local game_count = 1500
+  local game_count = 1800
   SimInfo = nil
   ---@class RandomSimInfo
   RandomSimInfo = { games = game_count, games_left = game_count, champs = {} }
@@ -120,6 +125,9 @@ ui.random_sim = function()
 end
 ui.set_draft = function(draft)
   Draft = draft
+end
+ui.set_base_draft = function(draft)
+  BaseDraft = draft
 end
 ui.draft_mode = function ()
   GameState = DRAFT
@@ -150,7 +158,7 @@ function DespawnRed(projectile)
 end
 
 function Delay(time, func)
-    table.insert(Delays, { time = time, func = func })
+  table.insert(Delays, { time = time, func = func })
 end
 
 local avg_tps = 0
@@ -171,6 +179,7 @@ function RandomSimResult(res)
   RandomSimInfo.games_left = RandomSimInfo.games_left - 1
   if RandomSimInfo.games_left == 0 then
     GameState = RANDOM_SIM_END
+    BaseDraft = nil
     for _, champ in pairs(RandomSimInfo.champs) do
       champ.win_rate = champ.wins / (champ.wins + champ.losses)
     end

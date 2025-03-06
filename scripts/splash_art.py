@@ -17,12 +17,16 @@ for pattern in args.champ_files:
 
 for file in files:
     name = os.path.basename(file).split(".")[0]
+    vgu = ""
+    if name in {"viktor"}:
+        vgu = "." + name + "vgu"
     replacements = {"wukong": "monkeyking" }
     url_name = name.replace("_", "")
     if url_name in replacements:
         url_name = replacements[url_name]
     print(url_name)
-    image_url = f"https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/{url_name}/skins/base/images/{url_name}_splash_tile_0.jpg"
+    image_url = f"https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/{url_name}/skins/base/images/{url_name}_splash_tile_0{vgu}.jpg"
+    print(image_url)
     img_data = requests.get(image_url).content
     with open(f"assets/champions/{name}.jpg", 'wb') as handler:
         handler.write(img_data)

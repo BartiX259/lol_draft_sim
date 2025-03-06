@@ -26,8 +26,8 @@ abilities:
     cast melee_aa
 
   q:
-    cd 2.7
-    damage 268
+    cd 2.8
+    damage 260
     range 350
     size 150
     speed 2000
@@ -37,12 +37,12 @@ abilities:
       spawn proj
     hit:
       damage physical
-      self.health = self.health + 70
+      self:heal(70)
 
 
   w:
     cd 7
-    damage 300
+    damage 250
     range 400
     dist 400
     speed 1200

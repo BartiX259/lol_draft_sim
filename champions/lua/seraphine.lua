@@ -27,8 +27,8 @@ function seraphine.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.0, 625, 140, { 0.9,0.6,0.8 }),
-    q = splash_cast.new(4.6, 900, 300),
-    w = buff_cast.new(13.8, 400),
+    q = splash_cast.new(4.5, 900, 300),
+    w = buff_cast.new(11.8, 400),
     e = ranged_cast.new(6.9, 1200),
     r = important_cast.new(108, 1600),
   }
@@ -45,7 +45,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(200, damage.MAGIC):deal(champ, target)
+damage:new(220, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

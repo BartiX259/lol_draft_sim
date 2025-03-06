@@ -46,8 +46,8 @@ function champ.abilities.q:hit(target)
 damage:new(260, damage.MAGIC):deal(champ, target)
 local distance = ( target.pos - champ.pos ):mag ()
 local pull_direction = ( target.pos - champ.pos ):normalize ()
-local pull_target = target.pos - pull_direction * ( distance * ( 1 - 0.5 ))
-local pull_self = champ.pos + pull_direction * ( distance * 0.5 )
+local pull_target = target.pos - pull_direction * ( distance * ( 1 - 0.6 ))
+local pull_self = champ.pos + pull_direction * ( distance * 0.6 )
 target:effect(pull.new(1300, pull_target):on_finish(function()
 target:effect(root.new(1.5))
 end))
@@ -58,7 +58,7 @@ function champ.abilities.r:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
 colliders = context.enemies,
 size = 300,
-speed = 275,
+speed = 325,
 color = { 0.3,0.9,0.9 },
 range = 925,
 from = champ.pos,
@@ -69,7 +69,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(275, damage.MAGIC):deal(champ, target)
+damage:new(295, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(1.5))
 end
 

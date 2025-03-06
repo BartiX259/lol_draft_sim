@@ -1,0 +1,100 @@
+champion camille
+sprite camille.jpg
+
+attributes:
+  health 2588
+  armor 115
+  mr 77
+  ms 385
+
+behavior:
+  if closest_dist < aa.range + 100 then
+    range aa
+    self.target = closest_enemy
+  else
+    range 650
+    movement passive
+  end
+
+abilities:
+  color 0.8, 0.8, 0.8
+
+aa:
+  cd 0.93
+  range 175
+  damage 154
+  cast melee_aa
+
+q:
+  cd 4.5
+  damage 520
+  range 225
+  cast ranged
+  use:
+    damage true
+
+w:
+  cd 10
+  damage 180
+  range 600
+  angle 70
+  size 100
+  speed 1900
+  cast ranged
+  use:
+    local hit_cols = {}
+    for _, dir in pairs(cast.dir:cone(angle, 5)) do
+      proj = missile from pos
+      spawn proj
+    end
+  hit:
+    damage physical
+    effect slow 80% 2s
+
+e:
+  cd 11
+  range 800
+  dist 300
+  speed 1400
+  cast dash
+  use:
+    local persist_time = cast.mag / speed
+    -- There needs to be a proj for cast after e to work
+    proj = aoe follow self size 1 colliders nil
+    spawn proj
+    effect on self dash to cast.pos speed speed
+
+e_recast:
+  stats e
+  dist 750
+  damage 190
+  cast after e
+  use:
+    local cpos
+    if closest_dist < dist then
+      cpos = pos + (closest_enemy.pos - pos):normalize() * dist
+    else
+      cpos = pos + (pos - closest_enemy.pos):normalize() * dist / 2
+    end
+    effect on self dash to cpos speed 1400
+    proj = aoe follow self size 100 tick 0 re_hit false
+    spawn proj
+  hit:
+    damage physical
+    effect stun 0.75s
+    proj.despawn = true
+    self:del_effect("dash")
+
+r:
+  cd 105
+  damage 30 -- Initial damage
+  range 450
+  cast ranged
+  use:
+    effect on self dash to cast.target speed 1600 on finish do
+      proj = aoe at pos size 100
+      spawn proj
+    end
+  hit:
+    damage magic
+    effect stun 0.5s

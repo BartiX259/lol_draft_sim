@@ -48,7 +48,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(241.2, damage.PHYSICAL):deal(champ, target)
+damage:new(231.2, damage.PHYSICAL):deal(champ, target)
 target:effect(airborne.new(0.4))
 end
 

@@ -19,15 +19,15 @@ function jarvan_iv.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2488,
     armor = 108.4,
-    mr = 66.6,
+    mr = 68.6,
     ms = 380,
     sprite = 'jarvan_iv.jpg',
   })
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 175, 223),
-    q = ranged_cast.new(4.6, 800),
-    e = ability:new(8.5),
+    q = ranged_cast.new(4.5, 800),
+    e = ability:new(8.3),
     knockup = none_cast.new(),
     r = splash_cast.new(75, 400, 400),
   }

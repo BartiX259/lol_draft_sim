@@ -14,9 +14,9 @@ local jayce = {}
 -- Constructor
 function jayce.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2099,
-    armor = 82,
-    mr = 45.6,
+    health = 2111,
+    armor = 80.1,
+    mr = 53.6,
     ms = 380,
     sprite = 'jayce.jpg',
   })

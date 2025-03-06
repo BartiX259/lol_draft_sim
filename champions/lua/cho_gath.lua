@@ -16,8 +16,8 @@ local cho_gath = {}
 -- Constructor
 function cho_gath.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2822,
-    armor = 90.1,
+    health = 2952,
+    armor = 85.1,
     mr = 76.6,
     ms = 395,
     sprite = 'cho_gath.jpg',
@@ -42,7 +42,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(240, damage.MAGIC):deal(champ, target)
+damage:new(220, damage.MAGIC):deal(champ, target)
 target:effect(airborne.new(1.0))
 target:effect(slow.new(1.5, 0.6))
 end
@@ -52,7 +52,7 @@ local hit_cols = {}
 for _,dir in pairs ( cast.dir :cone ( 60 , 5 )) do
 self.proj = missile.new(self, { dir = dir,
 colliders = context.enemies,
-size = 60,
+size = 100,
 speed = 2000,
 color = { 0.6,0.3,0.6 },
 range = 650,
@@ -65,7 +65,7 @@ end
 end
 
 function champ.abilities.w:hit(target)
-damage:new(220, damage.MAGIC):deal(champ, target)
+damage:new(210, damage.MAGIC):deal(champ, target)
 target:effect(silence.new(2.0))
 end
 

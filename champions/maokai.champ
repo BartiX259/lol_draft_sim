@@ -40,7 +40,7 @@ abilities:
       damage magic
       local dir = (target.pos - proj.pos):normalize() * 100
       local pos = target.pos + dir
-      self.health = self.health + 75
+      self:heal(75)
       effect pull to pos speed 1000
 
   w:

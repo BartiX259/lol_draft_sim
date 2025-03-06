@@ -34,15 +34,15 @@ abilities:
         damage magic
         effect slow 2s 80%
   w:
-    cd 9.5
+    cd 9.3
     cast with e
     use:
         effect speed 4s 31%
-        effect damage_buff 4s 15%
+        effect damage_buff 4s 17%
   e:
     cd 5.5
     range 650
     cast buff
     use:
         effect shield 3.5s 376
-        effect damage_buff 3.5s 20%
+        effect damage_buff 3.5s 22%

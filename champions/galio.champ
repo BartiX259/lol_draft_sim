@@ -22,11 +22,11 @@ abilities:
   aa: -- no passive
     cd 1.2
     range 150
-    damage 100
+    damage 120
     cast melee_aa
 
   q:
-    cd 6.2
+    cd 6.1
     damage 250
     range 825
     size 150
@@ -39,7 +39,7 @@ abilities:
       damage magic
   
   q_tick:
-    damage 70
+    damage 75
     size q
     persist_time 2
     tick 0.5
@@ -68,7 +68,7 @@ abilities:
       damage magic
 
   e:
-    cd 6.6
+    cd 6.4
     damage 240
     range 650
     size 320

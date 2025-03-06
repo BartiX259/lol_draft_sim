@@ -15,15 +15,15 @@ local vi = {}
 -- Constructor
 function vi.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2523,
-    armor = 121.4,
+    health = 2423,
+    armor = 111.4,
     mr = 66.6,
     ms = 380,
     sprite = 'vi.jpg',
   })
 
   champ.abilities = {
-    aa = melee_aa_cast.new(1, 125, 238),
+    aa = melee_aa_cast.new(1.2, 125, 228),
     q = ranged_cast.new(4.2, 725),
     r = important_cast.new(82.1, 800),
   }
@@ -48,7 +48,7 @@ champ:effect(dash.new(1400, cast.pos))
 end
 
 function champ.abilities.q:hit(target)
-damage:new(352, damage.PHYSICAL):deal(champ, target)
+damage:new(332, damage.PHYSICAL):deal(champ, target)
 champ:effect(shield.new(3.0, 263.0))
 self.proj.despawn = true
 champ :del_effect ( "dash" )
@@ -57,21 +57,21 @@ end
 
 function champ.abilities.r:use(context, cast)
 champ:effect(unstoppable.new(1.5))
-self.active = true
-champ:effect(dash.new(1400, cast.target):on_finish(function()
-champ :del_effect ( "unstoppable" )
 context.spawn( aoe:new(self, { colliders = context.enemies,
 size = 150,
 color = { 0.9,0.2,0.2 },
-at = champ.pos,
+follow = champ,
+tick = 0,
+re_hit = false,
 })
 )
+champ:effect(dash.new(1400, cast.target):on_finish(function()
+champ :del_effect ( "unstoppable" )
 end))
 end
 
 function champ.abilities.r:hit(target)
 damage:new(353, damage.PHYSICAL):deal(champ, target)
-self.active = false
 target:effect(airborne.new(1.3))
 end
 

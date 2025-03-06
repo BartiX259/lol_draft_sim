@@ -23,8 +23,8 @@ local renata = {}
 function renata.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 1963,
-    armor = 71.4,
-    mr = 65.6,
+    armor = 65.4,
+    mr = 45.6,
     ms = 385,
     sprite = 'renata.jpg',
   })
@@ -33,7 +33,7 @@ function renata.new(x, y)
     aa = ranged_aa_cast.new(1.1, 550, 85, { 0.7,0.3,0.9 }),
     q = ranged_cast.new(6.3, 900),
     q_recast = ability:new(6.3),
-    w = buff_cast.new(10.1, 800),
+    w = buff_cast.new(10.2, 800),
     w_res = always_cast.new(),
     e = ranged_cast.new(6.2, 800),
     r = big_cast.new(104, 2000, 250),

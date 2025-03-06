@@ -4,7 +4,7 @@ sprite jarvan_iv.jpg
 attributes:
   health 2488
   armor 108.4
-  mr 66.6
+  mr 68.6
   ms 380
 
 behavior:
@@ -28,7 +28,7 @@ aa: -- no passive
     damage physical
 
 q:
-  cd 4.6
+  cd 4.5
   range 800
   damage 310
   speed 1600
@@ -42,7 +42,7 @@ q:
 
 e:
   color 0.2, 0.6, 0.9
-  cd 8.5
+  cd 8.3
   range 700
   damage 240
   size 120

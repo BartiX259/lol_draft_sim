@@ -1,0 +1,83 @@
+champion viktor
+sprite viktor.jpg
+
+attributes:
+  health 2000
+  armor 75
+  mr 45
+  ms 335
+
+behavior:
+  range q + 100
+  movement passive
+
+abilities:
+  color 0.7, 0.7, 0.7
+
+aa:
+  cd 1.2
+  range 525
+  damage 90
+  cast ranged_aa
+
+q:
+  cd 4.8
+  range 600
+  damage 200
+  speed 2000
+  size 100
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage magic
+    effect shield 242 2s
+
+w:
+  cd 12.4
+  range 800
+  size 300
+  deploy_time 0.1
+  cast splash
+  use:
+    proj = aoe at cast.pos persist_time 1
+    proj.after = function()
+      for _, enemy in pairs(in_range_list(proj, enemies, size / 2)) do
+        effect on enemy stun 1s
+      end
+    end
+    spawn proj
+  hit:
+    effect slow 30% 1s
+
+e:
+  cd 7.6
+  damage 330
+  range 550
+  speed 1500
+  size 80
+  dist 200
+  cast ranged
+  use:
+    local dir = cast.dir * dist / 2
+    local cpos = cast.pos - dir
+    local tpos = cast.pos + dir
+    proj = missile from cpos to tpos
+    spawn proj
+  hit:
+    damage magic
+
+r:
+  cd 76.2
+  damage 155
+  range 700
+  size 400
+  tick 0.5
+  persist_time 6
+  cast big
+  use:
+    proj = aoe at cast.pos follow closest_enemy
+    spawn proj
+  hit:
+    damage magic

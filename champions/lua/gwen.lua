@@ -16,8 +16,8 @@ local gwen = {}
 -- Constructor
 function gwen.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2150,
-    armor = 116,
+    health = 2170,
+    armor = 98,
     mr = 77,
     ms = 385,
     sprite = 'gwen.jpg',

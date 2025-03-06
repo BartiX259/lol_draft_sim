@@ -1,0 +1,75 @@
+champion senna
+sprite senna.jpg
+
+attributes:
+  health 1981
+  armor 65
+  mr 46.9
+  ms 375
+
+behavior:
+    range aa
+    movement kite
+
+abilities:
+  color 0.6, 0.7, 0.8 -- Spectral colors
+
+  aa:
+    cd 1.4
+    range 630
+    damage 230
+    cast ranged_aa
+
+  q:
+    cd 5.4
+    damage 263
+    range 1000
+    speed 1600
+    size 100
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      self:heal(30) -- Simple self heal
+
+  w:
+    cd 9.3
+    damage 170
+    range 900
+    speed 1000
+    size 120
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      effect root 1.75s
+
+  r:
+    cd 81
+    damage 487
+    range 2000
+    speed 1800
+    size 200
+    cast big
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+  
+  r_shield:
+    opacity 0.8
+    range r
+    speed r
+    size 500
+    cast with r
+    use:
+      proj = missile from pos colliders allies
+      spawn proj
+    hit:
+      effect shield 260 2s

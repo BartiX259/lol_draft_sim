@@ -1,0 +1,79 @@
+champion sona
+sprite sona.jpg
+
+attributes:
+  health 1892
+  armor 61.4
+  mr 45.6
+  ms 385
+
+behavior:
+  range q + 200
+  movement peel
+
+abilities:
+  -- visual circles
+  deploy_time 0.2
+  persist_time 2
+  size 400
+
+aa:
+  color 0.8, 0.9, 1.0
+  cd 1.2
+  range 550
+  damage 85
+  cast ranged_aa
+
+q:
+  color 0.4, 0.6, 0.9, 0.9
+  cd 4.8
+  damage 232
+  range 825
+  speed 1500
+  cast ranged
+  use:
+    spawn aoe follow self colliders nil
+    proj = missile from pos to cast.target colliders nil size 80
+    spawn proj
+  hit:
+    damage magic
+
+w:
+  color 0.4, 0.9, 0.6, 0.9
+  cd 6
+  heal 240
+  range 1000
+  cast buff
+  use:
+    spawn aoe follow self colliders nil
+    for _, ally in pairs(in_range_list(self, allies, range)) do
+      ally:heal(heal)
+      effect on ally shield 2s 205
+    end
+
+e:
+  color 0.8, 0.4, 0.85, 0.9
+  cd 7.1
+  range 400
+  duration 3
+  cast buff
+  use:
+    spawn aoe follow self colliders nil
+    for _, ally in pairs(in_range_list(self, allies, range)) do
+      effect on ally speed 2s 25%
+    end
+
+r:
+  color 0.8, 0.7, 0.2
+  cd 83.33
+  damage 290
+  range 1000
+  size 280
+  speed 2400
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage magic
+    effect stun 1.5s

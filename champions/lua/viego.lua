@@ -24,7 +24,7 @@ function viego.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(0.95, 200, 252),
-    q = ranged_cast.new(2.7, 350),
+    q = ranged_cast.new(2.8, 350),
     w = ranged_cast.new(7, 400),
     r = ability:new(100),
   }
@@ -43,8 +43,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(268, damage.PHYSICAL):deal(champ, target)
-champ.health = champ.health + 70
+damage:new(260, damage.PHYSICAL):deal(champ, target)
+champ :heal ( 70 )
 end
 
 function champ.abilities.w:use(context, cast)
@@ -63,7 +63,7 @@ end))
 end
 
 function champ.abilities.w:hit(target)
-damage:new(300, damage.MAGIC):deal(champ, target)
+damage:new(250, damage.MAGIC):deal(champ, target)
 target:effect(stun.new(1.0))
 end
 

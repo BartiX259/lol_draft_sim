@@ -54,7 +54,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(340, damage.MAGIC):deal(champ, target)
+damage:new(360, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.0, 0.3))
 end
 
@@ -77,7 +77,7 @@ end
 end
 
 function champ.abilities.q_split:hit(target)
-damage:new(340, damage.MAGIC):deal(champ, target)
+damage:new(360, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(1.0, 0.3))
 end
 
@@ -155,7 +155,7 @@ end
 end
 
 function champ.abilities.r:hit(target)
-damage:new(86, damage.MAGIC):deal(champ, target)
+damage:new(89, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

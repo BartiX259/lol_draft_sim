@@ -42,7 +42,7 @@ abilities:
 
 
   w:
-    cd 7.6
+    cd 7.4
     range 650
     cast buff
     use:
@@ -53,7 +53,7 @@ abilities:
 
 
   e:
-    cd 7.6
+    cd 7.4
     range 800
     persist_time 4
     size 250

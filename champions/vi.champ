@@ -2,8 +2,8 @@ champion vi
 sprite vi.jpg
 
 attributes:
-  health 2523
-  armor 121.4
+  health 2423
+  armor 111.4
   mr 66.6
   ms 380
 
@@ -23,14 +23,14 @@ abilities:
   color 0.9, 0.2, 0.2
 
   aa:
-    cd 1
-    damage 238
+    cd 1.2
+    damage 228
     range 125
     cast melee_aa
 
   q:
     cd 4.2
-    damage 352
+    damage 332
     range 725
     size 120
     cast ranged
@@ -58,12 +58,10 @@ abilities:
     cast important
     use:
       effect on self unstoppable 1.5s
-      active = true
+      spawn aoe follow self tick 0 re_hit false
       effect on self dash to cast.target speed 1400 on finish do
         self:del_effect("unstoppable")
-        spawn aoe at pos
       end
     hit:
       damage physical
-      active = false
       effect airborne 1.3s

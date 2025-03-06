@@ -16,8 +16,8 @@ local volibear = {}
 -- Constructor
 function volibear.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2655,
-    armor = 128,
+    health = 2615,
+    armor = 118,
     mr = 66.6,
     ms = 385,
     sprite = 'volibear.jpg',
@@ -27,7 +27,7 @@ function volibear.new(x, y)
     aa = melee_aa_cast.new(1.13, 150, 182),
     q = ranged_cast.new(9.55, 500),
     q_hit = ranged_cast.new(0, 175),
-    w = ranged_cast.new(4.82, 350),
+    w = ranged_cast.new(4.9, 350),
     r = splash_cast.new(129, 700, 550),
   }
 champ.abilities.q_hit:join(champ.abilities.q)
@@ -45,7 +45,7 @@ end
 
 function champ.abilities.w:use(context, cast)
 damage:new(351, damage.PHYSICAL):deal(champ, cast.target)
-champ.health = champ.health + 0.16 * ( champ.max_health - champ.health )
+champ :heal ( 0.16 * ( champ.max_health - champ.health ))
 end
 
 function champ.abilities.r:use(context, cast)

@@ -43,7 +43,7 @@ function champ.abilities.q:hit(target)
 damage:new(355, damage.MAGIC):deal(champ, target)
 local dir = ( target.pos - self.proj.pos ):normalize () * 100
 local pos = target.pos + dir
-champ.health = champ.health + 75
+champ :heal ( 75 )
 target:effect(pull.new(1000, pos))
 end
 

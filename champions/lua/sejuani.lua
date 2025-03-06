@@ -19,7 +19,7 @@ local sejuani = {}
 -- Constructor
 function sejuani.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2778,
+    health = 2718,
     armor = 131.9,
     mr = 106.6,
     ms = 380,
@@ -96,7 +96,7 @@ end)
 end
 
 function champ.abilities.w_second:hit(target)
-damage:new(250, damage.PHYSICAL):deal(champ, target)
+damage:new(200, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.r:use(context, cast)
@@ -133,7 +133,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r_explosion:hit(target)
-damage:new(300, damage.MAGIC):deal(champ, target)
+damage:new(270, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(3.0, 0.8))
 end
 

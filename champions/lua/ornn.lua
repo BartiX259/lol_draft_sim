@@ -25,7 +25,7 @@ function ornn.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 111),
-    e = splash_cast.new(8.1, 800, 360),
+    e = splash_cast.new(7.7, 800, 360),
     r = big_cast.new(100, 2500, 340),
     r_recast = none_cast.new(),
   }

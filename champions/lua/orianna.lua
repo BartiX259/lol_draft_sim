@@ -17,15 +17,15 @@ function orianna.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2055,
     armor = 65.4,
-    mr = 41.6,
-    ms = 370,
+    mr = 45.6,
+    ms = 380,
     sprite = 'orianna.jpg',
   })
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 525, 151, { 0.3,0.5,0.8 }),
     q = splash_cast.new(3.4, 825, 175),
-    w = ability:new(7),
+    w = ability:new(6.9),
     r = ability:new(90.48),
   }
 

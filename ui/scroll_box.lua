@@ -5,22 +5,25 @@ local function scroll_box(options)
         column = true, center = true,
         scaleFactor = 1,
         child_y = 0,
+        scrollSpeed = options.scrollSpeed or 40,
         onUpdate = function(self)
             if self:isMouseInside() and component.events.wheel ~= 0 then
-                local delta = component.events.wheel * 30
-                -- Ensure we don't scroll above the top limit
-                if self.child_y + delta > 0 then
-                    delta = -self.child_y
-                end
-                -- Ensure we don't scroll past the bottom limit
-                local maxScroll = self.children[1].height - options.height
-                if self.child_y + delta < -maxScroll then
-                    delta = -maxScroll - self.child_y
-                end
-                if delta ~= 0 then
-                    self:updatePosition(0, delta)
-                    self.child_y = self.child_y + delta
-                    self.y = self.y - delta
+                if not self.freeze then
+                    local delta = component.events.wheel * self.scrollSpeed
+                    -- Ensure we don't scroll above the top limit
+                    if self.child_y + delta > 0 then
+                        delta = -self.child_y
+                    end
+                    -- Ensure we don't scroll past the bottom limit
+                    local maxScroll = self.children[1].height - options.height
+                    if self.child_y + delta < -maxScroll then
+                        delta = -maxScroll - self.child_y
+                    end
+                    if delta ~= 0 then
+                        self:updatePosition(0, delta)
+                        self.child_y = self.child_y + delta
+                        self.y = self.y - delta
+                    end
                 end
                 component.events.wheel = 0
             end
@@ -54,6 +57,7 @@ local function scroll_box(options)
                 options.offsetBot = options.offsetBot * value
             end
             self.child_y = self.child_y * value
+            self.scrollSpeed = self.scrollSpeed * value
         end
     }
 end

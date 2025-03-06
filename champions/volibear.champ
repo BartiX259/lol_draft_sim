@@ -2,8 +2,8 @@ champion volibear
 sprite volibear.jpg
 
 attributes:
-  health 2655
-  armor 128
+  health 2615
+  armor 118
   mr 66.6
   ms 385
 
@@ -41,13 +41,13 @@ abilities:
         effect stun 1s
 
   w:
-    cd 4.82
+    cd 4.9
     damage 351
     range 350
     cast ranged
     use:
         damage physical
-        self.health = self.health + 0.16 * (self.max_health - self.health)
+        self:heal(0.16 * (self.max_health - self.health))
 
   r:
     cd 129

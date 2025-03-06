@@ -17,7 +17,7 @@ local gragas = {}
 function gragas.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2470,
-    armor = 113,
+    armor = 105,
     mr = 76.6,
     ms = 375,
     sprite = 'gragas.jpg',
@@ -50,7 +50,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(358, damage.MAGIC):deal(champ, target)
+damage:new(368, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(2.0, 0.9))
 end
 
@@ -69,13 +69,13 @@ champ:effect(dash.new(1400, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
-damage:new(234, damage.MAGIC):deal(champ, target)
+damage:new(244, damage.MAGIC):deal(champ, target)
 self.proj.despawn = true
 champ :del_effect ( "dash" )
 local target_pos = target.pos + self.dir * 90
 target:effect(airborne.new(1.0))
 target:effect(pull.new(600, target_pos))
-champ.health = champ.health + 85
+champ :heal ( 85 )
 end
 
 function champ.abilities.r:use(context, cast)
@@ -98,7 +98,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(512, damage.MAGIC):deal(champ, target)
+damage:new(522, damage.MAGIC):deal(champ, target)
 local knockback_dir = ( target.pos - self.proj.pos ):normalize ()
 local knockback_dist = 400
 local target_pos = target.pos + knockback_dir * knockback_dist

@@ -1,0 +1,63 @@
+champion gangplank
+sprite gangplank.jpg
+
+attributes:
+  health 2138
+  armor 87.4
+  mr 56.6
+  ms 390
+
+behavior:
+  range q + 100
+  movement peel
+
+abilities:
+color 0.7, 0.5, 0.3 -- Brownish
+
+aa:
+  cd 1.3
+  range 175
+  damage 238.4
+  cast melee_aa
+
+q:
+  cd 3.8
+  range 725
+  damage 460.5
+  speed 2600
+  size 100
+  cast ranged
+  use:
+    proj = missile from pos to cast.target colliders nil
+    spawn proj
+  hit:
+    damage physical
+
+e:
+  cd 6.4
+  range 750
+  damage 640
+  size 250
+  deploy_time 0.2
+  cast splash
+  use:
+    proj = aoe at cast.pos deploy_time deploy_time
+    spawn proj
+  hit:
+    damage physical
+    effect slow 80% 2s
+
+r:
+  cd 142.86
+  damage 70
+  range 1000
+  size 580
+  tick 2
+  persist_time 8
+  cast big
+  use:
+    proj = aoe at cast.pos
+    spawn proj
+  hit:
+    damage magic
+    effect slow 30% 1s

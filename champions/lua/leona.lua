@@ -24,8 +24,8 @@ function leona.new(x, y)
 
   champ.abilities = {
     aa = melee_aa_cast.new(1.19, 125, 116),
-    q = melee_aa_cast.new(3.4, 125, 220),
-    e = ranged_cast.new(4.1, 900),
+    q = melee_aa_cast.new(3.5, 125, 220),
+    e = ranged_cast.new(4.2, 900),
     r = splash_cast.new(60.94, 1200, 380),
   }
 

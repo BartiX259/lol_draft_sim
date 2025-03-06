@@ -2,8 +2,8 @@ champion cho_gath
 sprite cho_gath.jpg
 
 attributes:
-  health 2822
-  armor 90.1
+  health 2952
+  armor 85.1
   mr 76.6
   ms 395
 
@@ -30,7 +30,7 @@ abilities:
 
   q:
     cd 7.2
-    damage 240
+    damage 220
     range 950
     size 250
     deploy_time 0.627
@@ -45,10 +45,10 @@ abilities:
 
   w:
     cd 9.7
-    damage 220
+    damage 210
     range 650
     speed 2000
-    size 60
+    size 100
     angle 60
     cast ranged
     use:

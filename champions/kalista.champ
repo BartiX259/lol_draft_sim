@@ -31,7 +31,7 @@ abilities:
       effect on self dash to dpos speed 1500
 
   aa:
-    cd 0.75
+    cd 0.77
     range 525
     damage 239
     size 50

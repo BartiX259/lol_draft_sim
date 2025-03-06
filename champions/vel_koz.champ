@@ -22,7 +22,7 @@ aa:
 
 q:
   cd 5.4
-  damage 340
+  damage 360
   range 1000
   speed 1500
   size 100
@@ -89,7 +89,7 @@ e:
 
 r:
   cd 59.3
-  damage 86
+  damage 89
   range 1300 -- Cast range
   speed 2500
   size 100

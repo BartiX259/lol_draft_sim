@@ -2,7 +2,7 @@ champion sejuani
 sprite sejuani.jpg
 
 attributes:
-  health 2778
+  health 2718
   armor 131.9
   mr 106.6
   ms 380
@@ -66,7 +66,7 @@ abilities:
         effect slow 30% 0.5s
 
   w_second:
-    damage 250
+    damage 200
     range 400
     size 150
     speed 1500
@@ -95,7 +95,7 @@ abilities:
 
   r_explosion:
      stats r
-     damage 300
+     damage 270
      size 400
      cast after r
      use:

@@ -21,7 +21,7 @@ abilities:
     cast ranged_aa
 
   q:
-    cd 11.5
+    cd 10.5
     damage 249
     range 1760  -- Uncharged range
     speed 1408  -- Initial speed
@@ -35,7 +35,7 @@ abilities:
       effect airborne 1.25s
 
   w:
-    cd 5.71
+    cd 5.5
     damage 215
     size 80
     range 550
@@ -49,7 +49,7 @@ abilities:
       effect slow 2s 36%
 
   e:
-    cd 8.43
+    cd 8.2
     shield_amount 284
     range 800
     cast buff  -- Cast on allies or self
@@ -69,7 +69,7 @@ abilities:
     use:
       proj = aoe follow self re_hit false on impact do
         for _, ally in pairs(in_range_list(self, allies, range)) do
-          ally.health = ally.health + 20
+          ally:heal(30)
         end
       end
       spawn proj

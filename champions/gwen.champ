@@ -2,8 +2,8 @@ champion gwen
 sprite gwen.jpg
 
 attributes:
-  health 2150
-  armor 116
+  health 2170
+  armor 98
   mr 77
   ms 385
 

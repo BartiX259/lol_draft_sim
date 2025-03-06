@@ -26,10 +26,10 @@ function karma.new(x, y)
 
   champ.abilities = {
     aa = ranged_aa_cast.new(1.6, 525, 91, { 0.2,0.9,0.6 }),
-    q = ranged_cast.new(3.85, 950),
-    q_splash = ability:new(3.85),
-    w = ranged_cast.new(9.23, 675),
-    e = buff_cast.new(6.15, 800),
+    q = ranged_cast.new(3.8, 950),
+    q_splash = ability:new(3.8),
+    w = ranged_cast.new(8.9, 675),
+    e = buff_cast.new(5.8, 800),
   }
 
 function champ.abilities.q:use(context, cast)

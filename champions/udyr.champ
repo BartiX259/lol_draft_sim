@@ -8,7 +8,7 @@ attributes:
   ms 395
 
 behavior:
-  if closest_dist < aa.range + 50 then
+  if closest_dist < aa.range + 50 or e.active then
     range aa
     self.target = closest_enemy
   else
@@ -31,11 +31,11 @@ abilities:
     cast ranged
     use:
       effect on self shield 4s 198
-      self.health = self.health + 80
+      self:heal(80)
 
   e:
     cd 5.7
-    range aa
+    range 400 -- engage range
     cast ranged
     use:
       active = true
@@ -53,6 +53,7 @@ abilities:
       effect stun 1s
 
   r:
+    color 0.3, 0.7, 0.8, 0.9
     cd 5.7
     damage 82.5
     range 185

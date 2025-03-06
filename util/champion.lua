@@ -73,6 +73,10 @@ function champion:effect(effect)
   table.insert(self.effects, effect)
 end
 
+function champion:heal(amount)
+  self.health = self.health + math.min(self.max_health - self.health, amount)
+end
+
 function champion:has_effect(tag)
   for _, effect in pairs(self.effects) do
     if effect.tags[tag] then

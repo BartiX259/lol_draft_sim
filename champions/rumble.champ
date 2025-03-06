@@ -29,7 +29,7 @@ abilities:
     cast melee_aa
 
   q:
-    cd 5.5
+    cd 5.6
     damage 32
     range 600
     size 300
@@ -50,7 +50,7 @@ abilities:
       return nil
 
   e:
-    cd 6.55
+    cd 6.6
     damage 235
     range 950
     speed 2000

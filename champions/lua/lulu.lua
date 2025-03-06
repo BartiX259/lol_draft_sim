@@ -27,7 +27,7 @@ function lulu.new(x, y)
   champ.abilities = {
     aa = ranged_aa_cast.new(1.1, 550, 154, { 0.8,0.5,0.8 }),
     q = ranged_cast.new(4.9, 950),
-    w = ability:new(9.5),
+    w = ability:new(9.3),
     e = buff_cast.new(5.5, 650),
   }
 
@@ -62,12 +62,12 @@ end
 
 function champ.abilities.w:with_e(context, cast)
 cast.target:effect(speed.new(4.0, 0.31))
-cast.target:effect(damage_buff.new(4.0, 0.15))
+cast.target:effect(damage_buff.new(4.0, 0.17))
 end
 
 function champ.abilities.e:use(context, cast)
 cast.target:effect(shield.new(3.5, 376.0))
-cast.target:effect(damage_buff.new(3.5, 0.2))
+cast.target:effect(damage_buff.new(3.5, 0.22))
 if champ.abilities.w.timer <= 0 then
 champ.abilities.w.timer = champ.abilities.w.cd
 champ.abilities.w:with_e(context, cast)

@@ -1,0 +1,54 @@
+champion vayne
+sprite vayne.jpg
+
+attributes:
+  health 1936
+  armor 78.2
+  mr 45.6
+  ms 375
+
+behavior:
+    range aa + 50
+    movement kite
+
+abilities:
+  color 0.3, 0.3, 0.3
+
+  aa:
+    cd 0.68
+    range 550
+    damage 220
+    cast ranged_aa
+    start:
+      counter = 2
+    hit:
+      counter = (counter + 1) % 3
+      if counter == 2 then
+        damage true
+      else
+        damage physical
+      end
+
+  q:
+    cd 2
+    dist 300
+    range aa
+    cast dash
+    use:
+      effect on self dash to cast.pos speed 875
+
+  e:
+    cd 10
+    damage 240
+    range 450 -- lower range because e doesn't get used at max range
+    speed 2200
+    size 100
+    cast ranged
+    use:
+      proj = missile from pos to cast.target colliders nil
+      spawn proj
+    hit:
+      damage magic
+      local ppos = (target.pos - pos):normalize() * 400
+      effect stun 1.5s
+      effect pull to ppos speed speed

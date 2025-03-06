@@ -93,6 +93,11 @@ function draft:__call()
     scroll_component:updatePosition(0, delta)
     scroll_component.child_y = scroll_component.child_y + delta
     scroll_component.y = scroll_component.y - delta
+    if i < 20 then
+      scroll_component.freeze = true
+    else
+      scroll_component.freeze = false
+    end
   end
   }
 
@@ -220,6 +225,7 @@ function draft:__call()
     end}
   local item = component {row = true, gap = 0} + button { text = "Test winrates", hoverColor = ui.SEL_COL,
     onClick = function ()
+      ui.set_base_draft(picks)
       ui.random_sim()
     end} + component {width = 50}
     res = res + item

@@ -1,0 +1,87 @@
+champion soraka
+sprite soraka.jpg
+
+attributes:
+  health 1961
+  armor 59
+  mr 45.6
+  ms 385
+
+behavior:
+  range q + 100
+  movement passive
+
+abilities:
+  color 0.8, 1.0, 0.8
+
+aa:
+  cd 1.2
+  range 550
+  damage 86
+  cast ranged_aa
+
+q:
+  cd 4.7
+  range 800
+  damage 260
+  speed 1500
+  size 265
+  deploy_time 0.3
+  cast splash
+  use:
+    proj = aoe at cast.pos deploy_time deploy_time
+    spawn proj
+  hit:
+    self:heal(12.5)
+    damage magic
+    effect slow 20% 1s
+
+w:
+  cd 3.5
+  range 550
+  heal 240
+  health_loss 196
+  cast buff
+  pre-cast:
+    if cast.target.max_health - cast.target.health < heal or self.health < health_loss then
+      return nil
+    end
+    return cast
+  use:
+    cast.target:heal(heal)
+    self:heal(-health_loss)
+
+e:
+  cd 11.24
+  damage 150
+  range 925
+  size 260
+  cast splash
+  use:
+    proj = aoe at cast.pos
+    spawn proj
+  hit:
+    damage magic
+    effect silence 1.5s
+
+r:
+  cd 128.51
+  heal 330
+  cast:
+    local total = 0
+    local potential = 0
+    for _, ally in pairs(allies) do
+      if ally.health < 400 then
+        return true
+      end
+      total = total + math.min(ally.max_health - ally.health, heal)
+      potential = potential + heal
+    end
+    if total > 0.8 * potential then
+      return true
+    end
+    return false
+  use:
+    for _, ally in pairs(allies) do
+      ally:heal(heal)
+    end

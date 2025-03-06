@@ -25,7 +25,7 @@ function udyr.new(x, y)
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 125, 190),
     w = ranged_cast.new(5.7, 3000),
-    e = ranged_cast.new(5.7, 125),
+    e = ranged_cast.new(5.7, 400),
     e_stun = ranged_cast.new(0, 125),
     r = ranged_cast.new(5.7, 185),
   }
@@ -33,7 +33,7 @@ champ.abilities.e_stun:join(champ.abilities.e)
 
 function champ.abilities.w:use(context, cast)
 champ:effect(shield.new(4.0, 198.0))
-champ.health = champ.health + 80
+champ :heal ( 80 )
 end
 
 function champ.abilities.e:use(context, cast)
@@ -52,7 +52,7 @@ end
 function champ.abilities.r:use(context, cast)
 self.proj = aoe:new(self, { colliders = context.enemies,
 size = 370,
-color = { 0.8,0.7,0.3 },
+color = { 0.3,0.7,0.8,0.9 },
 persist_time = 6,
 tick = 0.5,
 follow = champ,
@@ -67,7 +67,7 @@ target:effect(slow.new(0.5, 0.3))
 end
 
 function champ.behaviour(ready, context)
-if context.closest_dist < 125 + 50 then
+if context.closest_dist < 125 + 50 or champ.abilities.e.active then
 champ.range = 125
 champ.target = context.closest_enemy
 else

@@ -24,7 +24,7 @@ local function sort(champs)
 end
 
 local function calc_win_rate_probability(wins, losses, threshold)
-    local overdispersion_factor = 15 + math.log(1 + wins + losses, 2)
+    local overdispersion_factor = 25 + math.log(1 + wins + losses, 2)
     
     local alpha = wins + overdispersion_factor
     local beta = losses + overdispersion_factor

@@ -102,7 +102,7 @@ persist_time = 12,
 tick = 0.5,
 follow = champ,
 }):on_impact(function()
-champ.health = champ.health + 19 * distances.in_range(champ, context.enemies, 300)
+champ :heal ( 19 * distances.in_range(champ, context.enemies, 300) )
 end)
 context.delay(12, function() self.active = false
 end)
