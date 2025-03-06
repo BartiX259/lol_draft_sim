@@ -21,8 +21,8 @@ function gragas.new(x, y)
     mr = 76.6,
     ms = 375,
     sprite = 'gragas.jpg',
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 125, 150),
     q = ranged_cast.new(4.5, 850),

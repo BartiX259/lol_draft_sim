@@ -20,8 +20,8 @@ function maokai.new(x, y)
     mr = 121.60,
     ms = 380,
     sprite = 'maokai.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 125, 88),
     q = ranged_cast.new(3.4, 160),

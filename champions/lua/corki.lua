@@ -19,8 +19,8 @@ function corki.new(x, y)
     mr = 45.6,
     ms = 350,
     sprite = 'corki.jpg',
+    damage_split = { 0.8540447404242076, 0.1459552595757923, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(0.859, 550, 179, { 0.8,0.6,0.3 }),
     q = splash_cast.new(7.36, 825, 275),

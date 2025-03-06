@@ -21,8 +21,8 @@ function ahri.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'ahri.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.185, 550, 89, { 0.4,0.5,0.9 }),
     q = splash_cast.new(6.5, 900, 200),

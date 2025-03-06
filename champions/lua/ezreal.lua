@@ -16,8 +16,8 @@ function ezreal.new(x, y)
     mr = 45.6,
     ms = 360,
     sprite = 'ezreal.jpg',
+    damage_split = { 0.8211265071081518, 0.1788734928918481, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(0.8, 550, 208, { 0.8,0.8,0.4 }),
     q = ranged_cast.new(3.55, 1200),

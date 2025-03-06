@@ -19,8 +19,8 @@ function alistar.new(x, y)
     mr = 126.6,
     ms = 385,
     sprite = 'alistar.jpg',
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.1, 125, 127),
     q = splash_cast.new(4.7, 187, 375),

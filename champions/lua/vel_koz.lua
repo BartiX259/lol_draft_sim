@@ -21,8 +21,8 @@ function vel_koz.new(x, y)
     mr = 65.6,
     ms = 385,
     sprite = 'vel_koz.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 82.7, { 0.9,0.5,0.8 }),
     q = ranged_cast.new(5.4, 1000),

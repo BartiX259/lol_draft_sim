@@ -23,8 +23,8 @@ function pantheon.new(x, y)
     mr = 72.6,
     ms = 375,
     sprite = 'pantheon.jpg',
+    damage_split = { 0.9750216159093092, 0.02497838409069075, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.122, 175, 223.6),
     q = ranged_cast.new(5.2, 1200),

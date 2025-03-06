@@ -17,8 +17,8 @@ function kai_sa.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'kai_sa.jpg',
+    damage_split = { 0.4450208524056556, 0.5549791475943444, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(0.9, 525, 190.2, { 0.7,0.3,0.9 }),
     q = ranged_cast.new(6.2, 600),

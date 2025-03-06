@@ -24,8 +24,8 @@ function sejuani.new(x, y)
     mr = 106.6,
     ms = 380,
     sprite = 'sejuani.jpg',
+    damage_split = { 0.746953466372359, 0.25304653362764085, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 114),
     q = ranged_cast.new(11.3, 650),

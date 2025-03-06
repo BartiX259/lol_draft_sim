@@ -21,8 +21,8 @@ function gwen.new(x, y)
     mr = 77,
     ms = 385,
     sprite = 'gwen.jpg',
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(0.88, 265, 223),
     q = ranged_cast.new(2.92, 220),

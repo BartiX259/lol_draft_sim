@@ -19,8 +19,8 @@ function gangplank.new(x, y)
     mr = 56.6,
     ms = 390,
     sprite = 'gangplank.jpg',
+    damage_split = { 0.9977895930216953, 0.0022104069783046893, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 175, 238.4),
     q = ranged_cast.new(3.8, 725),

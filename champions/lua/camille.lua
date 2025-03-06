@@ -21,8 +21,8 @@ function camille.new(x, y)
     mr = 77,
     ms = 385,
     sprite = 'camille.jpg',
+    damage_split = { 0.23341800194801474, 0.001890720192509692, 0.7646912778594755 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(0.93, 175, 154),
     q = ranged_cast.new(4.5, 225),

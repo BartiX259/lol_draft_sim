@@ -18,8 +18,8 @@ function garen.new(x, y)
     mr = 85.66,
     ms = 385,
     sprite = 'garen.jpg',
+    damage_split = { 0.9045813467482574, 0.0, 0.09541865325174256 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(0.9, 175, 188),
     q = ranged_cast.new(6.45, 400),

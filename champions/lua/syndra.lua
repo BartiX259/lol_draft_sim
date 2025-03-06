@@ -20,8 +20,8 @@ function syndra.new(x, y)
     mr = 45.6,
     ms = 390,
     sprite = 'syndra.jpg',
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 550, 88.8, { 0.8,0.5,0.8 }),
     q = splash_cast.new(4.8, 800, 210),

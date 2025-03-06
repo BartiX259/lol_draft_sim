@@ -19,8 +19,8 @@ function zyra.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'zyra.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.47, 575, 94, { 0.4,0.8,0.2 }),
     q = splash_cast.new(4.8, 800, 200),

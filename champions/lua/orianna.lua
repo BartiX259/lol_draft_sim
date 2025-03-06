@@ -20,8 +20,8 @@ function orianna.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'orianna.jpg',
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 525, 151, { 0.3,0.5,0.8 }),
     q = splash_cast.new(3.4, 825, 175),

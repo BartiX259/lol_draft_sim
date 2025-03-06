@@ -20,8 +20,8 @@ function rumble.new(x, y)
     mr = 46.6,
     ms = 375,
     sprite = 'rumble.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.5, 125, 102.4),
     q = ranged_cast.new(5.6, 600),

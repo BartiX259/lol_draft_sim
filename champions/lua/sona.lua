@@ -21,8 +21,8 @@ function sona.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'sona.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 550, 85, { 0.8,0.9,1.0 }),
     q = ranged_cast.new(4.8, 825),

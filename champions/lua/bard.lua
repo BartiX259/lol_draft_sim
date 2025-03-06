@@ -20,8 +20,8 @@ function bard.new(x, y)
     mr = 76,
     ms = 390,
     sprite = 'bard.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.1, 550, 155, { 0.8,0.9,0.7 }),
     q = ranged_cast.new(8.3, 900),

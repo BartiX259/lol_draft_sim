@@ -27,8 +27,8 @@ function renata.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'renata.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.1, 550, 85, { 0.7,0.3,0.9 }),
     q = ranged_cast.new(6.3, 900),

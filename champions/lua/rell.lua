@@ -21,8 +21,8 @@ function rell.new(x, y)
     mr = 84.6,
     ms = 385,
     sprite = 'rell.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 91),
     q = ranged_cast.new(4.18, 400),

@@ -17,8 +17,8 @@ function varus.new(x, y)
     mr = 45.6,
     ms = 375,
     sprite = 'varus.jpg',
+    damage_split = { 0.9670412311332542, 0.03295876886674569, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(0.9, 575, 190, { 0.7,0.1,0.8 }),
     q = ranged_cast.new(5.75, 1595),

@@ -24,8 +24,8 @@ function braum.new(x, y)
     mr = 97,
     ms = 360,
     sprite = 'braum.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 93),
     q = ranged_cast.new(5.1, 1050),

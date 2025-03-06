@@ -19,8 +19,8 @@ function xerath.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'xerath.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 81, { 0.2,0.4,0.9 }),
     q = ranged_cast.new(5.7, 1450),

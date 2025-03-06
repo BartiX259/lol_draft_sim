@@ -73,6 +73,10 @@ function random_sim_end:__call(info)
         + label { text = "Win rate", width = 150, font = font, color = {1, 1, 1} }
         + label { text = "Imbalanced probability", font = font, color = {1, 1, 1} }
     res = component { column = true, gap = 20 } + desc_row + res
+        + component { height = 40 }
+        + button { text = "Draft", hoverColor = ui.SEL_COL, onClick = function()
+        ui.draft_mode()
+      end }
     return res
 end
 

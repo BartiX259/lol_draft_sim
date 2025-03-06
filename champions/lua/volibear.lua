@@ -21,8 +21,8 @@ function volibear.new(x, y)
     mr = 66.6,
     ms = 385,
     sprite = 'volibear.jpg',
+    damage_split = { 0.9999999999999999, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.13, 150, 182),
     q = ranged_cast.new(9.55, 500),

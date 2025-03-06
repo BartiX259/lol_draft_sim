@@ -21,8 +21,8 @@ function lee_sin.new(x, y)
     mr = 78.6,
     ms = 385,
     sprite = 'lee_sin.jpg',
+    damage_split = { 1.0, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(0.8, 125, 237.4),
     q = ranged_cast.new(4.4, 1200),

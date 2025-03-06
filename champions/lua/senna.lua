@@ -19,8 +19,8 @@ function senna.new(x, y)
     mr = 46.9,
     ms = 375,
     sprite = 'senna.jpg',
+    damage_split = { 1.0, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.4, 630, 230, { 0.6,0.7,0.8 }),
     q = ranged_cast.new(5.4, 1000),

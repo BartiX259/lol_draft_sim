@@ -20,8 +20,8 @@ function thresh.new(x, y)
     mr = 78.6,
     ms = 355,
     sprite = 'thresh.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 450, 146, { 0.4,1.0,0.6 }),
     q = ranged_cast.new(7.2, 1100),

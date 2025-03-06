@@ -21,8 +21,8 @@ function zilean.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'zilean.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.52, 550, 88, { 0.9,0.8,0.5 }),
     q = splash_cast.new(5.7, 900, 350),

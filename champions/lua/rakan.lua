@@ -22,8 +22,8 @@ function rakan.new(x, y)
     mr = 76.6,
     ms = 390,
     sprite = 'rakan.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.0, 300, 104),
     w = splash_cast.new(7, 600, 300),

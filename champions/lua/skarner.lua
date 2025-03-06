@@ -18,8 +18,8 @@ function skarner.new(x, y)
     mr = 96.6,
     ms = 380,
     sprite = 'skarner.jpg',
+    damage_split = { 0.42264508399966566, 0.5773549160003343, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.0, 175, 169),
     q = melee_aa_cast.new(5.4, 175, 222),

@@ -20,8 +20,8 @@ function ivern.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'ivern.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(0.95, 475, 164, { 0.2,0.8,0.4 }),
     q = ranged_cast.new(5.3, 1150),

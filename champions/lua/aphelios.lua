@@ -18,8 +18,8 @@ function aphelios.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'aphelios.jpg',
+    damage_split = { 1.0, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_cast.new(0.84, 550),
     aa_wave = ability:new(0.84),

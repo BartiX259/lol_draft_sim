@@ -28,27 +28,41 @@ function NewGame()
   ui.clear()
   BlueTeam = {}
   RedTeam = {}
-  local x = -600
-  for _, champ in pairs(Draft.blue) do
-    local champ = require("champions.lua."..champ).new(x, 1300)
-    for _, ability in pairs(champ.abilities) do
-      if ability.start then
-        ability:start()
+  local blue_damage_split = { 0, 0, 0 }
+  local red_damage_split = { 0, 0, 0 }
+  for _, pair in ipairs({{ Draft.blue, BlueTeam, 1300, blue_damage_split }, { Draft.red, RedTeam, -1300, red_damage_split }}) do
+    local draft, team, y, split = pair[1], pair[2], pair[3], pair[4]
+    local x = -600
+    local count = #draft
+    for _, name in pairs(draft) do
+      local champ = require("champions.lua."..name).new(x, y)
+      for k, v in pairs(split) do
+        split[k] = v + champ.damage_split[k] / count
       end
+      for _, ability in pairs(champ.abilities) do
+        if ability.start then
+          ability:start()
+        end
+      end
+      table.insert(team, champ)
+      x = x + 250
     end
-    table.insert(BlueTeam, champ)
-    x = x + 200
   end
-  x = -600
-  for _, champ in pairs(Draft.red) do
-    local champ = require("champions.lua."..champ).new(x, -1300)
-    for _, ability in pairs(champ.abilities) do
-      if ability.start then
-        ability:start()
-      end
+  for _, split in ipairs({blue_damage_split, red_damage_split}) do
+    if split[1] > split[2] then
+      split[1] = split[1] - split[2]
+      split[2] = 0
+    else
+      split[2] = split[2] - split[1]
+      split[1] = 0
     end
-    table.insert(RedTeam, champ)
-    x = x + 200
+  end
+  for _, pair in ipairs({{BlueTeam, red_damage_split}, {RedTeam, blue_damage_split}}) do
+    local team, split = pair[1], pair[2]
+    for _, champ in pairs(team) do
+      champ.armor = champ.armor * (1 + split[1] * 0.5)
+      champ.mr = champ.mr * (1 + split[2] * 0.5)
+    end
   end
   BlueProjectiles = {}
   RedProjectiles = {}
@@ -89,17 +103,32 @@ function RandomDraft()
     return champions
   end
   
+  local function is_in_draft(champ)
+    for _, team in pairs(Draft) do
+      for _, c in pairs(team) do
+        if c == champ then
+          return true
+        end
+      end
+    end
+    return false
+  end
+  
   local championPool = loadChampionPool()
   
   -- Select random champions for both teams
   shuffleTable(championPool)
   local i = 1
   while #Draft.blue < 5 do
-    table.insert(Draft.blue, championPool[i])
+    if not is_in_draft(championPool[i]) then
+      table.insert(Draft.blue, championPool[i])
+    end
     i = i + 1
   end
   while #Draft.red < 5 do
-    table.insert(Draft.red, championPool[i])
+    if not is_in_draft(championPool[i]) then
+      table.insert(Draft.red, championPool[i])
+    end
     i = i + 1
   end
 end
@@ -118,6 +147,14 @@ ui.new_sim = function()
 end
 ui.random_sim = function()
   local game_count = 1800
+  if BaseDraft then
+    local champ_count = #BaseDraft.blue + #BaseDraft.red
+    if champ_count == 1 then
+      game_count = 300
+    elseif champ_count > 1 then
+      game_count = 700
+    end
+  end
   SimInfo = nil
   ---@class RandomSimInfo
   RandomSimInfo = { games = game_count, games_left = game_count, champs = {} }

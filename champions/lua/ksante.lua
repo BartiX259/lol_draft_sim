@@ -26,8 +26,8 @@ function ksante.new(x, y)
     mr = 77.2,
     ms = 390,
     sprite = 'ksante.jpg',
+    damage_split = { 0.9999999999999999, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.1, 150, 196),
     q = splash_cast.new(2.92, 230, 180),

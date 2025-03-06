@@ -15,6 +15,7 @@ function champion.new(data)
   self.range = data.range or 500
   self.armor = data.armor or 50
   self.mr = data.mr or 50
+  self.damage_split = data.damage_split or { 0, 0, 1 }
   -- self.movement_scripts = table.shallow_copy(data.movement) or {}
   self.movement_scripts = {}
   self.sprite = love.graphics.newImage("assets/champions/" .. data.sprite)

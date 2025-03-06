@@ -20,8 +20,8 @@ function udyr.new(x, y)
     mr = 66.7,
     ms = 395,
     sprite = 'udyr.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.3, 125, 190),
     w = ranged_cast.new(5.7, 3000),

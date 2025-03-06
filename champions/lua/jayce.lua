@@ -19,8 +19,8 @@ function jayce.new(x, y)
     mr = 53.6,
     ms = 380,
     sprite = 'jayce.jpg',
+    damage_split = { 0.7935049987587732, 0.20649500124122677, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.25, 500, 240, { 0.3,0.5,0.8 }),
     q_ranged = ranged_cast.new(6.1, 1550),

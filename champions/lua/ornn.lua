@@ -21,8 +21,8 @@ function ornn.new(x, y)
     mr = 127,
     ms = 380,
     sprite = 'ornn.jpg',
+    damage_split = { 0.4302472477892077, 0.5697527522107922, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 111),
     e = splash_cast.new(7.7, 800, 360),

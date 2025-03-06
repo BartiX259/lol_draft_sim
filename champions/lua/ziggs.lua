@@ -19,8 +19,8 @@ function ziggs.new(x, y)
     mr = 45.6,
     ms = 325,
     sprite = 'ziggs.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.5, 550, 152.2, { 0.8,0.5,0.2 }),
     q = ranged_cast.new(3.3, 1400),

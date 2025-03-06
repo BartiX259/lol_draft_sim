@@ -18,8 +18,8 @@ function wukong.new(x, y)
     mr = 72.65,
     ms = 385,
     sprite = 'wukong.jpg',
+    damage_split = { 0.1073038773669973, 0.8926961226330028, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 223),
     e = splash_cast.new(5.6, 625, 250),

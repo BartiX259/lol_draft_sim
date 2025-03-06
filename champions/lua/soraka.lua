@@ -19,8 +19,8 @@ function soraka.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'soraka.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 550, 86, { 0.8,1.0,0.8 }),
     q = splash_cast.new(4.7, 800, 265),

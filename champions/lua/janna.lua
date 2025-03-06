@@ -24,8 +24,8 @@ function janna.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'janna.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.176, 550, 95, { 0.7,0.9,1.0 }),
     q = ranged_cast.new(10.5, 1760),

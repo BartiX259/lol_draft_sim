@@ -22,8 +22,8 @@ function karma.new(x, y)
     mr = 65.6,
     ms = 390,
     sprite = 'karma.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.6, 525, 91, { 0.2,0.9,0.6 }),
     q = ranged_cast.new(3.8, 950),

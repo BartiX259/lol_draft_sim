@@ -23,8 +23,8 @@ function galio.new(x, y)
     mr = 96.6,
     ms = 385,
     sprite = 'galio.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 150, 120),
     q = ranged_cast.new(6.1, 825),

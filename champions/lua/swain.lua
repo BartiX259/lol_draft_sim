@@ -19,8 +19,8 @@ function swain.new(x, y)
     mr = 49.6,
     ms = 330,
     sprite = 'swain.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 90.4, { 0.5,0.1,0.1 }),
     q = ranged_cast.new(2.9, 725),

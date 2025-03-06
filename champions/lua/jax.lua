@@ -19,8 +19,8 @@ function jax.new(x, y)
     mr = 81,
     ms = 395,
     sprite = 'jax.jpg',
+    damage_split = { 0.3296089385474861, 0.670391061452514, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(0.66, 125, 209),
     q = ranged_cast.new(6.0, 700),

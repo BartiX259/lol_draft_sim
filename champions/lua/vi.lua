@@ -20,8 +20,8 @@ function vi.new(x, y)
     mr = 66.6,
     ms = 380,
     sprite = 'vi.jpg',
+    damage_split = { 1.0, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 125, 228),
     q = ranged_cast.new(4.2, 725),

@@ -201,10 +201,11 @@ def build_champion_table(tokens):
     del champion["abilities"][":global"]
     # Reserve tables
     for ability, data in champion["abilities"].items():
-        for res in ["local", "global"]:
+        for res in ["local", "global", "damage_split"]:
             if res in data:
                 raise CompilerError("'" + res + "' is reserved", champion["line_nrs"][ability][res])
             data[res] = []
+    champion["damage_split"] = { "PHYSICAL": 0, "MAGIC": 0, "TRUE": 0 }
     # Apply opacity
     for ability, data in champion["abilities"].items():
         if "opacity" in data:
@@ -487,6 +488,11 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
                             raise CompilerError("Couldn't find 'damage' for damage constructor", line_nr)
                         if "type" not in damage:
                             raise CompilerError("Couldn't find damage type in constructor", line_nr)
+                        try:
+                            champion["damage_split"][damage["type"]] += float(damage["damage"]) / float(info["cd"])
+                        except:
+                            champion["damage_split"][damage["type"]] += 50
+                        
                         line += f"damage:new({str(damage['damage'])}, damage.{damage['type']}):deal(champ, {damage['target']})"
                 case "ready":
                     expect_token(i, tok_count, line_nr)
@@ -551,18 +557,19 @@ def generate_pseudo_code(stmts, info, champion, block, line_nr):
     return res
 
 def generate_lua_code(champion):
-    lua_code = []
+    constructor = []
 
     # Champion Constructor
-    lua_code.append(f"\nlocal {champion['name']} = {{}}")
+    constructor.append(f"\nlocal {champion['name']} = {{}}")
 
     # Champion attributes (health, armor, etc.)
-    lua_code.append(f"\n-- Constructor\nfunction {champion['name']}.new(x, y)")
-    lua_code.append(f"  local champ = champion.new({{ x = x, y = y,")
+    constructor.append(f"\n-- Constructor\nfunction {champion['name']}.new(x, y)")
+    constructor.append(f"  local champ = champion.new({{ x = x, y = y,")
     for key, value in champion['attributes'].items():
-        lua_code.append(f"    {key} = {value},")
-    lua_code.append(f"    sprite = '{champion['sprite']}',")
-    lua_code.append(f"  }})")
+        constructor.append(f"    {key} = {value},")
+    constructor.append(f"    sprite = '{champion['sprite']}',")
+
+    lua_code = []
 
     # Abilities declaration
     lua_code.append("\n  champ.abilities = {")
@@ -685,7 +692,7 @@ def generate_lua_code(champion):
             if i in line:
                 champion["imports"]["util"].add(i)
 
-    # Return the full Lua code
+    # Create imports string
     imports = ""
     for key, values in sorted(champion["imports"].items()):
         for value in sorted(values):
@@ -693,7 +700,14 @@ def generate_lua_code(champion):
             if key == "abilities":
                 imports += "_cast"
             imports += f" = require(\"{key}.{value}\")\n"
-    return imports + '\n'.join(lua_code)
+
+    # Add damage split to constructor
+    factor=1.0/sum(champion["damage_split"].values())
+    for k in champion["damage_split"]:
+        champion["damage_split"][k] *= factor
+    constructor.append(f'    damage_split = {{ {champion["damage_split"]["PHYSICAL"]}, {champion["damage_split"]["MAGIC"]}, {champion["damage_split"]["TRUE"]} }}')
+    constructor.append(f"  }})")
+    return imports + '\n'.join(constructor) + '\n'.join(lua_code)
 
 import argparse
 import os

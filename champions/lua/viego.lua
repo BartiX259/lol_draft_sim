@@ -20,8 +20,8 @@ function viego.new(x, y)
     mr = 76.6,
     ms = 390,
     sprite = 'viego.jpg',
+    damage_split = { 0.7373784062020716, 0.26262159379792843, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(0.95, 200, 252),
     q = ranged_cast.new(2.8, 350),

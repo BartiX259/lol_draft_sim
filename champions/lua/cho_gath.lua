@@ -21,8 +21,8 @@ function cho_gath.new(x, y)
     mr = 76.6,
     ms = 395,
     sprite = 'cho_gath.jpg',
+    damage_split = { 0.0, 0.8609917631945418, 0.1390082368054581 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 125, 119.4),
     q = splash_cast.new(7.2, 950, 250),

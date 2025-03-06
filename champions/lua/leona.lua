@@ -20,8 +20,8 @@ function leona.new(x, y)
     mr = 147,
     ms = 395,
     sprite = 'leona.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.19, 125, 116),
     q = melee_aa_cast.new(3.5, 125, 220),

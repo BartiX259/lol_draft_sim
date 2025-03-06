@@ -17,8 +17,8 @@ function jinx.new(x, y)
     mr = 45.6,
     ms = 370,
     sprite = 'jinx.jpg',
+    damage_split = { 1.0, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_cast.new(0.845, 625),
     w = ranged_cast.new(5, 1500),

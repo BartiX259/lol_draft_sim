@@ -22,8 +22,8 @@ function viktor.new(x, y)
     mr = 45,
     ms = 335,
     sprite = 'viktor.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 525, 90, { 0.7,0.7,0.7 }),
     q = ranged_cast.new(4.8, 600),

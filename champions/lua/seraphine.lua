@@ -23,8 +23,8 @@ function seraphine.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'seraphine.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.0, 625, 140, { 0.9,0.6,0.8 }),
     q = splash_cast.new(4.5, 900, 300),

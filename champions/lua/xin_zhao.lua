@@ -22,8 +22,8 @@ function xin_zhao.new(x, y)
     mr = 77,
     ms = 390,
     sprite = 'xin_zhao.jpg',
+    damage_split = { 1.0, 0.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.0, 175, 249),
     w = ranged_cast.new(5.3, 350),

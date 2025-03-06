@@ -21,8 +21,8 @@ function kalista.new(x, y)
     mr = 65.6,
     ms = 385,
     sprite = 'kalista.jpg',
+    damage_split = { 0.9984149828947909, 0.0015850171052091248, 0.0 }
   })
-
   champ.abilities = {
     dash = ability:new(0),
     aa = ranged_cast.new(0.77, 525),

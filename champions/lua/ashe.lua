@@ -18,8 +18,8 @@ function ashe.new(x, y)
     mr = 45.6,
     ms = 391,
     sprite = 'ashe.jpg',
+    damage_split = { 0.9784982935153583, 0.021501706484641638, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(0.90, 600, 160, { 0.2,0.7,1.0 }),
     w = ranged_cast.new(4.2, 1200),

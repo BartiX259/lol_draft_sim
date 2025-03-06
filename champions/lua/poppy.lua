@@ -25,8 +25,8 @@ function poppy.new(x, y)
     mr = 88.2,
     ms = 395,
     sprite = 'poppy.jpg',
+    damage_split = { 0.8856806591778942, 0.11431934082210586, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.1, 175, 134),
     q = ranged_cast.new(4.17, 200),

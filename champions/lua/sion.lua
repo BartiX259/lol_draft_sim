@@ -20,8 +20,8 @@ function sion.new(x, y)
     mr = 88.6,
     ms = 395,
     sprite = 'sion.jpg',
+    damage_split = { 0.7104247104247104, 0.28957528957528955, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 130),
     q = ranged_cast.new(6, 400),

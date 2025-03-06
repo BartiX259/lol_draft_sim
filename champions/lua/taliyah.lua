@@ -21,8 +21,8 @@ function taliyah.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'taliyah.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = ranged_aa_cast.new(1.1, 525, 98, { 0.7,0.5,0.3 }),
     q = ranged_cast.new(4.5, 1000),

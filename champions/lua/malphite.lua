@@ -22,8 +22,8 @@ function malphite.new(x, y)
     mr = 112.6,
     ms = 335,
     sprite = 'malphite.jpg',
+    damage_split = { 0.0, 1.0, 0.0 }
   })
-
   champ.abilities = {
     aa = melee_aa_cast.new(1.36, 125, 110),
     q = ranged_cast.new(6.1, 625),
