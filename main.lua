@@ -12,10 +12,15 @@ local RED_WIN = 2
 local DRAFT = 3
 local SIM_END = 4
 local RANDOM_SIM_END = 5
-local GLITCH = 6
+local FIND_BEST_END = 6
+local GLITCH = 7
+
+local avg_tps = 0
 
 function love.load()
   love.window.setMode(1200, 800, {resizable = true})
+  local o = false == false
+  print(o)
   -- love.window.maximize()
   Draft = { blue = {}, red = {} }
   GameState = DRAFT
@@ -75,13 +80,37 @@ function NewGame()
   RedTeamAll = table.shallow_copy(RedTeam)
 end
 
+local function is_in_draft(champ)
+  for _, team in pairs(Draft) do
+    for _, c in pairs(team) do
+      if c == champ then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+-- Load available champions from the champions/lua directory
+local function loadChampionPool()
+  local champions = {}
+  local files = love.filesystem.getDirectoryItems("champions/lua")
+  for _, file in ipairs(files) do
+    if file:match("%.lua$") then
+      local champName = file:gsub("%.lua$", "")
+      table.insert(champions, champName)
+    end
+  end
+  return champions
+end
+
 function RandomDraft()
   if BaseDraft then
     Draft = {blue = table.shallow_copy(BaseDraft.blue), red = table.shallow_copy(BaseDraft.red)}
   else
     Draft = {blue = {}, red = {}}
   end
-  
+
   -- Shuffle function to randomize the pool
   local function shuffleTable(tbl)
     for i = #tbl, 2, -1 do
@@ -89,33 +118,9 @@ function RandomDraft()
       tbl[i], tbl[j] = tbl[j], tbl[i]
     end
   end
-  
-  -- Load available champions from the champions/lua directory
-  local function loadChampionPool()
-    local champions = {}
-    local files = love.filesystem.getDirectoryItems("champions/lua")
-    for _, file in ipairs(files) do
-      if file:match("%.lua$") then
-        local champName = file:gsub("%.lua$", "")
-        table.insert(champions, champName)
-      end
-    end
-    return champions
-  end
-  
-  local function is_in_draft(champ)
-    for _, team in pairs(Draft) do
-      for _, c in pairs(team) do
-        if c == champ then
-          return true
-        end
-      end
-    end
-    return false
-  end
-  
+
   local championPool = loadChampionPool()
-  
+
   -- Select random champions for both teams
   shuffleTable(championPool)
   local i = 1
@@ -135,14 +140,47 @@ end
 
 ui.new_game = function ()
   SimInfo = nil
-  RandomSimInfo = nil
+  SimCallback = nil
   NewGame()
 end
 ui.new_sim = function()
   local game_count = 100
-  ---@class SimInfo
   SimInfo = { games = game_count, games_left = game_count, blue_wins = 0, red_wins = 0, blue = {}, red = {} }
-  RandomSimInfo = nil
+  SimCallback = function (res)
+    if res == BLUE_WIN then
+      SimInfo.blue_wins = SimInfo.blue_wins + 1
+    elseif res == RED_WIN then
+        SimInfo.red_wins = SimInfo.red_wins + 1
+    end
+    for _, pair in ipairs({ { BlueTeamAll, "blue" }, { RedTeamAll, "red" } }) do
+      for id, champ in pairs(pair[1]) do
+        local function update_val(key, value)
+          local ptr = SimInfo[pair[2]]
+          if ptr[id] == nil then
+            ptr[id] = {}
+          end
+          ptr = ptr[id]
+          if ptr[key] == nil then
+              ptr[key] = 0
+          end
+          ptr[key] = ptr[key] + value
+        end
+        update_val("damage_dealt", champ.damage_dealt)
+      end
+    end
+    SimInfo.games_left = SimInfo.games_left - 1
+    if SimInfo.games_left == 0 then
+      GameState = SIM_END
+      for _, pair in ipairs({ { BlueTeamAll, "blue" }, { RedTeamAll, "red" } }) do
+        for id, champ in pairs(pair[1]) do
+          SimInfo[pair[2]][id].sprite = champ.sprite
+          SimInfo[pair[2]][id].name = champ.name
+        end
+      end
+    else
+      NewGame()
+    end
+  end
   NewGame()
 end
 ui.random_sim = function()
@@ -155,11 +193,137 @@ ui.random_sim = function()
       game_count = 700
     end
   end
-  SimInfo = nil
-  ---@class RandomSimInfo
-  RandomSimInfo = { games = game_count, games_left = game_count, champs = {} }
+  SimInfo = { games = game_count, games_left = game_count, champs = {} }
+  SimCallback = function (res)
+    local function add_res(champ, res)
+      if SimInfo.champs[champ.name] == nil then
+        SimInfo.champs[champ.name] = {wins = 0, losses = 0, sprite = champ.sprite}
+      end
+      SimInfo.champs[champ.name][res] = SimInfo.champs[champ.name][res] + 1
+    end
+    for _, champ in pairs(res == BLUE_WIN and BlueTeamAll or RedTeamAll) do
+      add_res(champ, "wins")
+    end
+    for _, champ in pairs(res == BLUE_WIN and RedTeamAll or BlueTeamAll) do
+      add_res(champ, "losses")
+    end
+    SimInfo.games_left = SimInfo.games_left - 1
+    if SimInfo.games_left == 0 then
+      GameState = RANDOM_SIM_END
+      BaseDraft = nil
+      for _, champ in pairs(SimInfo.champs) do
+        champ.win_rate = champ.wins / (champ.wins + champ.losses)
+      end
+      print("Average TPS: " .. string.format("%.0f", avg_tps))
+    else
+      RandomDraft()
+      NewGame()
+    end
+  end
+  RandomDraft()
   NewGame()
 end
+ui.find_best = function ()
+  if not BaseDraft then
+    print("No draft set")
+    return
+  end
+  if #BaseDraft.blue + #BaseDraft.red ~= 9 then
+    print("Expected one available slot in draft")
+    return
+  end
+
+  local is_blue = #BaseDraft.red == 5
+
+  -- Load champion pool and create move list
+  local championPool = loadChampionPool()
+  local moves = {}
+  Draft = { blue = table.shallow_copy(BaseDraft.blue), red = table.shallow_copy(BaseDraft.red) }
+  for _, name in pairs(championPool) do
+    if not is_in_draft(name) then
+      table.insert(moves, { name = name, wins = 0, plays = 0, win_rate = 0, ucb = 1 })
+    end
+  end
+
+  -- Parameters
+  local min_samples = 5
+  local total_simulations = 400
+  local confidence_factor = 2  -- Controls exploration vs. exploitation
+  local current_simulation = 0
+  local current_move_index = 1
+  local initial_phase = true
+
+  local game_count = #moves * min_samples + total_simulations
+  SimInfo = { games = game_count, games_left = game_count }
+
+  local function simulate_move(move, after)
+    Draft = { blue = table.shallow_copy(BaseDraft.blue), red = table.shallow_copy(BaseDraft.red) }
+    table.insert(is_blue and Draft.blue or Draft.red, move.name)
+    SimCallback = function (res)
+      SimInfo.games_left = SimInfo.games_left - 1
+      local is_win = is_blue == (res == BLUE_WIN)
+      move.wins = move.wins + (is_win and 1 or 0)
+      move.plays = move.plays + 1
+      move.win_rate = move.wins / move.plays
+      move.ucb = move.win_rate + confidence_factor * math.sqrt(math.log(total_simulations) / (move.plays + 1))
+      if not move.sprite then
+        for _, champ in pairs(is_blue and BlueTeamAll or RedTeamAll) do
+          if champ.name == move.name then
+            move.sprite = champ.sprite
+            break
+          end
+        end
+      end
+      after()
+    end
+    NewGame()
+  end
+
+  -- Function to handle simulations sequentially
+  local function run_simulations()
+    if current_simulation >= total_simulations then
+      -- Final sorting by win rate
+      table.sort(moves, function(a, b) return a.win_rate > b.win_rate end)
+      GameState = FIND_BEST_END
+      SimInfo = moves
+      return
+    end
+
+    if initial_phase then
+      -- Ensure each move gets min_samples simulations before moving to UCB
+      local move = moves[current_move_index]
+      simulate_move(move, function()
+        if move.plays < min_samples then
+          -- Keep simulating the same move until it reaches min_samples
+          run_simulations()
+        else
+          -- Move to the next move in the list
+          current_move_index = current_move_index + 1
+          if current_move_index > #moves then
+            initial_phase = false
+          end
+          run_simulations()
+        end
+      end)
+      return
+    end
+
+    local best_move = moves[1]
+    for _, move in pairs(moves) do
+      if move.ucb > best_move.ucb then
+        best_move = move
+      end
+    end
+    current_simulation = current_simulation + 1
+    simulate_move(best_move, run_simulations)
+  end
+
+  -- Start the initial phase of simulations
+  run_simulations()
+end
+
+
+
 ui.set_draft = function(draft)
   Draft = draft
 end
@@ -198,71 +362,6 @@ function Delay(time, func)
   table.insert(Delays, { time = time, func = func })
 end
 
-local avg_tps = 0
-
-function RandomSimResult(res)
-  local function add_res(champ, res)
-    if RandomSimInfo.champs[champ.name] == nil then
-      RandomSimInfo.champs[champ.name] = {wins = 0, losses = 0, sprite = champ.sprite}
-    end
-    RandomSimInfo.champs[champ.name][res] = RandomSimInfo.champs[champ.name][res] + 1
-  end
-  for _, champ in pairs(res == BLUE_WIN and BlueTeamAll or RedTeamAll) do
-    add_res(champ, "wins")
-  end
-  for _, champ in pairs(res == BLUE_WIN and RedTeamAll or BlueTeamAll) do
-    add_res(champ, "losses")
-  end
-  RandomSimInfo.games_left = RandomSimInfo.games_left - 1
-  if RandomSimInfo.games_left == 0 then
-    GameState = RANDOM_SIM_END
-    BaseDraft = nil
-    for _, champ in pairs(RandomSimInfo.champs) do
-      champ.win_rate = champ.wins / (champ.wins + champ.losses)
-    end
-    print("Average TPS: " .. string.format("%.0f", avg_tps))
-    --dump.dump(RandomSimInfo)
-  else
-    RandomDraft()
-    NewGame()
-  end
-end
-
-function SimResult(res)
-  if res == BLUE_WIN then
-      SimInfo.blue_wins = SimInfo.blue_wins + 1
-  elseif res == RED_WIN then
-      SimInfo.red_wins = SimInfo.red_wins + 1
-  end
-  for _, pair in ipairs({ { BlueTeamAll, "blue" }, { RedTeamAll, "red" } }) do
-    for id, champ in pairs(pair[1]) do
-      local function update_val(key, value)
-        local ptr = SimInfo[pair[2]]
-        if ptr[id] == nil then
-          ptr[id] = {}
-        end
-        ptr = ptr[id]
-        if ptr[key] == nil then
-            ptr[key] = 0
-        end
-        ptr[key] = ptr[key] + value
-      end
-      update_val("damage_dealt", champ.damage_dealt)
-    end
-  end
-  SimInfo.games_left = SimInfo.games_left - 1
-  if SimInfo.games_left == 0 then
-    GameState = SIM_END
-    for _, pair in ipairs({ { BlueTeamAll, "blue" }, { RedTeamAll, "red" } }) do
-      for id, champ in pairs(pair[1]) do
-        SimInfo[pair[2]][id].sprite = champ.sprite
-        SimInfo[pair[2]][id].name = champ.name
-      end
-    end
-  else
-    NewGame()
-  end
-end
 
 local tick_rate = 0.02 -- 50 logic updates per second
 local tick_count = 0 -- Tracks ticks per second
@@ -271,7 +370,7 @@ local tps = 0
 local tps_samples = 0
 
 function love.update(dt)
-  if (SimInfo or RandomSimInfo) and GameState == PLAYING then
+  if SimCallback and GameState == PLAYING then
     local start_time = love.timer.getTime()
 
     -- Run as many ticks as possible within the frame time budget
@@ -309,27 +408,23 @@ function GameTick(dt)
   end
 
   if Capture >= 1 or rawequal(next(RedTeam), nil) then
-      if SimInfo then
-        SimResult(BLUE_WIN)
-      elseif RandomSimInfo then
-        RandomSimResult(BLUE_WIN)
-      else
-        GameState = BLUE_WIN
-        ui.update()
-      end
-      return
+    if SimCallback then
+      SimCallback(BLUE_WIN)
+    else
+      GameState = BLUE_WIN
+      ui.update()
+    end
+    return
   elseif Capture <= -1 or rawequal(next(BlueTeam), nil) then
-      if SimInfo then
-        SimResult(RED_WIN)
-      elseif RandomSimInfo then
-        RandomSimResult(RED_WIN)
-      else
-        GameState = RED_WIN
-        ui.update()
-      end
-      return
+    if SimCallback then
+      SimCallback(RED_WIN)
+    else
+      GameState = RED_WIN
+      ui.update()
+    end
+    return
   end
-  
+
   Tick = Tick + 1
 
   -- Handle delays
@@ -502,7 +597,11 @@ function love.draw()
     return
   end
   if GameState == RANDOM_SIM_END then
-    ui.random_sim_end(RandomSimInfo)
+    ui.random_sim_end(SimInfo)
+    return
+  end
+  if GameState == FIND_BEST_END then
+    ui.find_best_end(SimInfo)
     return
   end
 
@@ -577,11 +676,10 @@ function love.draw()
         end
     end
   Camera:detach()
-  local info = SimInfo or RandomSimInfo
-  if info then
+  if SimInfo then
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(font)
-    love.graphics.print("Games: " .. tostring(info.games - info.games_left) .. "/" .. tostring(info.games), 0, 0)
+    love.graphics.print("Games: " .. tostring(SimInfo.games - SimInfo.games_left) .. "/" .. tostring(SimInfo.games), 0, 0)
     love.graphics.print("TPS: " .. string.format("%.0f", tps), 0, 25)
   end
 end

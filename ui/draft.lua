@@ -223,11 +223,17 @@ function draft:__call()
       ui.set_draft(picks)
       ui.new_sim()
     end}
-  local item = component {row = true, gap = 0} + button { text = "Test winrates", hoverColor = ui.SEL_COL,
+    local item = component { row = true, gap = 0 } + (component { column = true, center = true, gap = 30 }
+    + button { text = "Test winrates", hoverColor = ui.SEL_COL,
     onClick = function ()
       ui.set_base_draft(picks)
       ui.random_sim()
-    end} + component {width = 50}
+    end}
+   + button { text = "Find best", hoverColor = ui.SEL_COL,
+    onClick = function ()
+      ui.set_base_draft(picks)
+      ui.find_best()
+    end}) + component {width = 50}
     res = res + item
   return res
 end

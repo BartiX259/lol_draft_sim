@@ -16,6 +16,7 @@ local DRAFT = 1
 local GAME_END = 2
 local SIM_END = 3
 local RANDOM_SIM_END = 4
+local FIND_BEST_END = 5
 
 local STATE = NONE
 
@@ -52,6 +53,14 @@ function ui.random_sim_end(sim_info)
   if STATE ~= RANDOM_SIM_END then
     STATE = RANDOM_SIM_END
     screen = require("ui.random_sim_end")(sim_info)
+  end
+  screen:fitScreen(0.6)
+  screen:draw()
+end
+function ui.find_best_end(sim_info)
+  if STATE ~= FIND_BEST_END then
+    STATE = FIND_BEST_END
+    screen = require("ui.find_best_end")(sim_info)
   end
   screen:fitScreen(0.6)
   screen:draw()

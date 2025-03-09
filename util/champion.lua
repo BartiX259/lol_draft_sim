@@ -19,7 +19,7 @@ function champion.new(data)
   -- self.movement_scripts = table.shallow_copy(data.movement) or {}
   self.movement_scripts = {}
   self.sprite = love.graphics.newImage("assets/champions/" .. data.sprite)
-  self.name = data.sprite
+  self.name = data.sprite:match("(.+)%..+$")
   self.effects = {}
   self.move_dir = vec2.new(0, 0)
   self.random = random:new()
