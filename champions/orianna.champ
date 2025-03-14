@@ -27,7 +27,7 @@ abilities:
   q:
     cd 3.4
     range 825
-    damage 211
+    damage 231
     speed 1400
     size 175
     persist_time 1
@@ -41,7 +41,7 @@ abilities:
       damage magic
   w:
     cd 6.9
-    damage 368
+    damage 378
     size 225
     cast:
       return q.proj and in_range(q.proj, enemies, size / 2 + 30) >= 1

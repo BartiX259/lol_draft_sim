@@ -17,7 +17,7 @@ function vi.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2423,
     armor = 111.4,
-    mr = 66.6,
+    mr = 69.6,
     ms = 380,
     sprite = 'vi.jpg',
     damage_split = { 1.0, 0.0, 0.0 }
@@ -49,7 +49,7 @@ end
 
 function champ.abilities.q:hit(target)
 damage:new(332, damage.PHYSICAL):deal(champ, target)
-champ:effect(shield.new(3.0, 263.0))
+champ:effect(shield.new(3.0, 273.0))
 self.proj.despawn = true
 champ :del_effect ( "dash" )
 target:effect(airborne.new(1.0))

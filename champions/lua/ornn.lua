@@ -17,7 +17,7 @@ local ornn = {}
 function ornn.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2650,
-    armor = 200,
+    armor = 185,
     mr = 127,
     ms = 380,
     sprite = 'ornn.jpg',

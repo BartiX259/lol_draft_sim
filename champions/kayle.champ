@@ -1,0 +1,75 @@
+champion kayle
+sprite kayle.jpg
+
+attributes:
+  health 2024
+  armor 61.4
+  mr 47.6
+  ms 380
+
+behavior:
+    range aa
+    movement kite
+
+abilities:
+  color 0.9, 0.9, 0.1 -- Gold color for ascended form
+
+  aa:
+    cd 0.8
+    range 525
+    damage 180
+    speed 1800
+    size 80
+    cast ranged
+    use:
+      proj = missile from pos to cast.target range nil colliders nil
+      local hit_cols = { [cast.target] = true }
+      proj.next = aoe size 200
+      spawn proj
+    hit:
+      damage magic
+
+  q:
+    cd 7.27
+    damage 320
+    range 900
+    speed 1600
+    size 120
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      effect slow 50% 2s
+
+  w:
+    cd 13.64
+    range 500 -- Self cast
+    cast buff
+    use:
+      if cast.target ~= self then
+        cast.target:heal(205) -- Instant heal
+        effect on cast.target speed 56% 2s -- Speed boost
+      end
+      -- On self
+      self:heal(205)
+      effect on self speed 56% 2s
+  r:
+    cd 109.09
+    range 400
+    duration 2.5
+    cast:
+      for _, ally in pairs(in_range_list(self, allies, range)) do
+        if ally.health < 500 then
+          return {target = ally}
+        end
+      end
+      return nil
+    use:
+      effect on cast.target invulnerable duration duration on finish do
+        proj = aoe follow cast.target size 300 deploy_time 0.1 -- AoE damage at the end of invulnerability
+        spawn proj
+      end
+    hit:
+      damage magic 370 -- Damage on the AoE

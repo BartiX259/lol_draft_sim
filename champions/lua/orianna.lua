@@ -20,7 +20,7 @@ function orianna.new(x, y)
     mr = 45.6,
     ms = 380,
     sprite = 'orianna.jpg',
-    damage_split = { 0.0, 0.9999999999999999, 0.0 }
+    damage_split = { 0.0, 1.0, 0.0 }
   })
   champ.abilities = {
     aa = ranged_aa_cast.new(1, 525, 151, { 0.3,0.5,0.8 }),
@@ -51,7 +51,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(211, damage.MAGIC):deal(champ, target)
+damage:new(231, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:cast(context)
@@ -71,7 +71,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.w:hit(target)
-damage:new(368, damage.MAGIC):deal(champ, target)
+damage:new(378, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(3.0, 0.4))
 end
 

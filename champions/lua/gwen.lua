@@ -1,3 +1,4 @@
+local big_cast = require("abilities.big")
 local dash_cast = require("abilities.dash")
 local melee_aa_cast = require("abilities.melee_aa")
 local ranged_cast = require("abilities.ranged")
@@ -28,10 +29,11 @@ function gwen.new(x, y)
     q = ranged_cast.new(2.92, 220),
     w = dash_cast.new(15, 0, 0),
     e = dash_cast.new(9.17, 450, 500),
-    r = ranged_cast.new(83, 1350),
+    r = big_cast.new(83, 1350, 80),
   }
 
 function champ.abilities.aa:hit(target)
+champ.abilities.e.timer = champ.abilities.e.timer - 0.8
 damage:new(223, damage.MAGIC):deal(champ, target)
 end
 

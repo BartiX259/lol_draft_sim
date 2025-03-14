@@ -16,7 +16,7 @@ function buff.new(cd, range)
       end
     end
     if target == nil then
-      target = context.champ
+      return nil
     end
     local dir = (target.pos - context.champ.pos)
     local mag = dir:mag()

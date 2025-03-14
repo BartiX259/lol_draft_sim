@@ -21,12 +21,12 @@ function sona.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'sona.jpg',
-    damage_split = { 0.0, 1.0, 0.0 }
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 550, 85, { 0.8,0.9,1.0 }),
     q = ranged_cast.new(4.8, 825),
-    w = buff_cast.new(6, 1000),
+    w = buff_cast.new(6.2, 1000),
     e = buff_cast.new(7.1, 400),
     r = ranged_cast.new(83.33, 1000),
   }
@@ -67,7 +67,7 @@ follow = champ,
 })
 )
 for _,ally in pairs ( distances.in_range_list ( champ , context.allies , 1000 )) do
-ally :heal ( 240 )
+ally :heal ( 200 )
 ally:effect(shield.new(2.0, 205.0))
 end
 end
@@ -100,7 +100,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(290, damage.MAGIC):deal(champ, target)
+damage:new(240, damage.MAGIC):deal(champ, target)
 target:effect(stun.new(1.5))
 end
 

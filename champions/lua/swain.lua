@@ -6,7 +6,6 @@ local missile = require("projectiles.missile")
 local ability = require("util.ability")
 local champion = require("util.champion")
 local damage = require("util.damage")
-local distances = require("util.distances")
 local movement = require("util.movement")
 
 local swain = {}
@@ -47,7 +46,7 @@ end
 end
 
 function champ.abilities.q:hit(target)
-damage:new(210, damage.MAGIC):deal(champ, target)
+damage:new(230, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.e:use(context, cast)
@@ -101,9 +100,7 @@ color = { 0.5,0.1,0.1,0.9 },
 persist_time = 12,
 tick = 0.5,
 follow = champ,
-}):on_impact(function()
-champ :heal ( 19 * distances.in_range(champ, context.enemies, 300) )
-end)
+})
 context.delay(12, function() self.active = false
 end)
 context.spawn( self.proj
@@ -111,7 +108,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(19, damage.MAGIC):deal(champ, target)
+champ :heal ( 20 )
+damage:new(20, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

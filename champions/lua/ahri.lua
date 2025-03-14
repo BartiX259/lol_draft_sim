@@ -16,7 +16,7 @@ local ahri = {}
 -- Constructor
 function ahri.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1838,
+    health = 1958,
     armor = 67.4,
     mr = 45.6,
     ms = 385,

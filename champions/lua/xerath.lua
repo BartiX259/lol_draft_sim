@@ -14,7 +14,7 @@ local xerath = {}
 -- Constructor
 function xerath.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1908,
+    health = 2008,
     armor = 68.4,
     mr = 45.6,
     ms = 380,
@@ -23,8 +23,8 @@ function xerath.new(x, y)
   })
   champ.abilities = {
     aa = ranged_aa_cast.new(1.3, 525, 81, { 0.2,0.4,0.9 }),
-    q = ranged_cast.new(5.7, 1450),
-    w = splash_cast.new(9.6, 1000, 275),
+    q = ranged_cast.new(5.5, 1450),
+    w = splash_cast.new(9.4, 1000, 275),
     e = ranged_cast.new(10.2, 1125),
   }
 
@@ -42,7 +42,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(360, damage.MAGIC):deal(champ, target)
+damage:new(365, damage.MAGIC):deal(champ, target)
 end
 
 function champ.abilities.w:use(context, cast)

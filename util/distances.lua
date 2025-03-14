@@ -27,7 +27,7 @@ function distances.weighted_position(unit, units)
 
   for _, ally in pairs(units) do
     if ally ~= unit then
-      local distance = (ally.pos - unit.pos):mag()
+      local distance = ally.pos:distance(unit.pos)
       local weight = 1 / (distance + 1)
       total_weight = total_weight + weight
       weighted_pos = weighted_pos + (ally.pos * weight)
@@ -58,10 +58,8 @@ end
 function distances.in_range_list(unit, units, range)
   local res = {}
   for _,u in pairs(units) do
-    if u ~= unit then
-      if u.pos:distance(unit.pos) < range then
-        table.insert(res, u)
-      end
+    if u.pos:distance(unit.pos) < range then
+      table.insert(res, u)
     end
   end
   return res

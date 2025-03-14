@@ -16,12 +16,28 @@ local FIND_BEST_END = 6
 local GLITCH = 7
 
 local avg_tps = 0
+local sim_start_time = love.timer.getTime()
+
+-- Load available champions from the champions/lua directory
+local function loadChampionPool()
+  local champions = {}
+  local files = love.filesystem.getDirectoryItems("champions/lua")
+  for _, file in ipairs(files) do
+    if file:match("%.lua$") then
+      local champName = file:gsub("%.lua$", "")
+      table.insert(champions, champName)
+    end
+  end
+  return champions
+end
 
 function love.load()
   love.window.setMode(1200, 800, {resizable = true})
-  local o = false == false
-  print(o)
   -- love.window.maximize()
+  -- love.profiler = require('profile')
+  -- love.profiler.start()
+  ChampionPool = loadChampionPool()
+  ChampionPoolCount = #ChampionPool
   Draft = { blue = {}, red = {} }
   GameState = DRAFT
 end
@@ -80,6 +96,17 @@ function NewGame()
   RedTeamAll = table.shallow_copy(RedTeam)
 end
 
+local function normalize_draft(draft)
+  local new_draft = {blue = {}, red = {}}
+  for _, value in pairs(draft.blue) do
+    table.insert(new_draft.blue, value)
+  end
+  for _, value in pairs(draft.red) do
+    table.insert(new_draft.red, value)
+  end
+  return new_draft
+end
+
 local function is_in_draft(champ)
   for _, team in pairs(Draft) do
     for _, c in pairs(team) do
@@ -89,19 +116,6 @@ local function is_in_draft(champ)
     end
   end
   return false
-end
-
--- Load available champions from the champions/lua directory
-local function loadChampionPool()
-  local champions = {}
-  local files = love.filesystem.getDirectoryItems("champions/lua")
-  for _, file in ipairs(files) do
-    if file:match("%.lua$") then
-      local champName = file:gsub("%.lua$", "")
-      table.insert(champions, champName)
-    end
-  end
-  return champions
 end
 
 function RandomDraft()
@@ -119,20 +133,18 @@ function RandomDraft()
     end
   end
 
-  local championPool = loadChampionPool()
-
   -- Select random champions for both teams
-  shuffleTable(championPool)
+  shuffleTable(ChampionPool)
   local i = 1
   while #Draft.blue < 5 do
-    if not is_in_draft(championPool[i]) then
-      table.insert(Draft.blue, championPool[i])
+    if not is_in_draft(ChampionPool[i]) then
+      table.insert(Draft.blue, ChampionPool[i])
     end
     i = i + 1
   end
   while #Draft.red < 5 do
-    if not is_in_draft(championPool[i]) then
-      table.insert(Draft.red, championPool[i])
+    if not is_in_draft(ChampionPool[i]) then
+      table.insert(Draft.red, ChampionPool[i])
     end
     i = i + 1
   end
@@ -141,9 +153,11 @@ end
 ui.new_game = function ()
   SimInfo = nil
   SimCallback = nil
+  love.profiler.reset()
   NewGame()
 end
 ui.new_sim = function()
+  sim_start_time = love.timer.getTime()
   local game_count = 100
   SimInfo = { games = game_count, games_left = game_count, blue_wins = 0, red_wins = 0, blue = {}, red = {} }
   SimCallback = function (res)
@@ -184,7 +198,8 @@ ui.new_sim = function()
   NewGame()
 end
 ui.random_sim = function()
-  local game_count = 1800
+  sim_start_time = love.timer.getTime()
+  local game_count = 300 * ChampionPoolCount / 10 -- 300 games per champion
   if BaseDraft then
     local champ_count = #BaseDraft.blue + #BaseDraft.red
     if champ_count == 1 then
@@ -223,7 +238,8 @@ ui.random_sim = function()
   RandomDraft()
   NewGame()
 end
-ui.find_best = function ()
+ui.find_best = function()
+  sim_start_time = love.timer.getTime()
   if not BaseDraft then
     print("No draft set")
     return
@@ -235,11 +251,10 @@ ui.find_best = function ()
 
   local is_blue = #BaseDraft.red == 5
 
-  -- Load champion pool and create move list
-  local championPool = loadChampionPool()
+  -- Create move list
   local moves = {}
   Draft = { blue = table.shallow_copy(BaseDraft.blue), red = table.shallow_copy(BaseDraft.red) }
-  for _, name in pairs(championPool) do
+  for _, name in pairs(ChampionPool) do
     if not is_in_draft(name) then
       table.insert(moves, { name = name, wins = 0, plays = 0, win_rate = 0, ucb = 1 })
     end
@@ -325,10 +340,10 @@ end
 
 
 ui.set_draft = function(draft)
-  Draft = draft
+  Draft = normalize_draft(draft)
 end
 ui.set_base_draft = function(draft)
-  BaseDraft = draft
+  BaseDraft = normalize_draft(draft)
 end
 ui.draft_mode = function ()
   GameState = DRAFT
@@ -362,8 +377,7 @@ function Delay(time, func)
   table.insert(Delays, { time = time, func = func })
 end
 
-
-local tick_rate = 0.02 -- 50 logic updates per second
+local tick_rate = 0.025
 local tick_count = 0 -- Tracks ticks per second
 local last_tps_update = love.timer.getTime() -- Time tracker for TPS
 local tps = 0
@@ -412,6 +426,7 @@ function GameTick(dt)
       SimCallback(BLUE_WIN)
     else
       GameState = BLUE_WIN
+      -- print(love.profiler.report(10) or "no report")
       ui.update()
     end
     return
@@ -420,6 +435,7 @@ function GameTick(dt)
       SimCallback(RED_WIN)
     else
       GameState = RED_WIN
+      -- print(love.profiler.report(10) or "no report")
       ui.update()
     end
     return
@@ -679,7 +695,18 @@ function love.draw()
   if SimInfo then
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(font)
-    love.graphics.print("Games: " .. tostring(SimInfo.games - SimInfo.games_left) .. "/" .. tostring(SimInfo.games), 0, 0)
+    local games = SimInfo.games - SimInfo.games_left
+    love.graphics.print("Games: " .. tostring(games) .. "/" .. tostring(SimInfo.games), 0, 0)
     love.graphics.print("TPS: " .. string.format("%.0f", tps), 0, 25)
+    love.graphics.print("Speed: " .. string.format("%.0fx", tps * tick_rate), 0, 50)
+    local cur_time = love.timer.getTime()
+    local gps = games / (cur_time - sim_start_time)
+    love.graphics.print("Games/s: " .. string.format("%.0f", gps), 0, 75)
+    local eta = SimInfo.games_left / gps + 1
+    if eta > 60 then
+      love.graphics.print("ETA: " .. string.format("%.0fm", eta / 60), 0, 100)
+    else
+      love.graphics.print("ETA: " .. string.format("%.0fs", eta), 0, 100)
+    end
   end
 end

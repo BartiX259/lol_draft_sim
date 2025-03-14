@@ -26,7 +26,7 @@ function xin_zhao.new(x, y)
   })
   champ.abilities = {
     aa = melee_aa_cast.new(1.0, 175, 249),
-    w = ranged_cast.new(5.3, 350),
+    w = ranged_cast.new(5.1, 350),
     w_second = none_cast.new(),
     e = ranged_cast.new(6.4, 650),
     r = dash_cast.new(99, 0, 0),
@@ -40,7 +40,7 @@ end
 function champ.abilities.aa:hit(target)
 self.hits = ( self.hits + 1 ) % 3
 if self.hits == 2 then
-target:effect(airborne.new(0.7))
+target:effect(airborne.new(0.9))
 end
 damage:new(249, damage.PHYSICAL):deal(champ, target)
 end
@@ -64,7 +64,7 @@ self.proj.after = function() champ.abilities.w_second:after_w(context, cast) end
 end
 
 function champ.abilities.w:hit(target)
-damage:new(211, damage.PHYSICAL):deal(champ, target)
+damage:new(221, damage.PHYSICAL):deal(champ, target)
 end
 
 function champ.abilities.w_second:after_w(context, cast)
@@ -88,7 +88,7 @@ end
 
 function champ.abilities.e:use(context, cast)
 champ:effect(dash.new(2500, cast.pos):on_finish(function()
-damage:new(180, damage.PHYSICAL):deal(champ, cast.target)
+damage:new(210, damage.PHYSICAL):deal(champ, cast.target)
 end))
 end
 

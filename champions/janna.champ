@@ -60,7 +60,6 @@ abilities:
 
   r:
     cd 109.52
-    damage 47.5
     range 725
     size 725
     tick 0.25
@@ -69,13 +68,12 @@ abilities:
     use:
       proj = aoe follow self re_hit false on impact do
         for _, ally in pairs(in_range_list(self, allies, range)) do
-          ally:heal(30)
+          ally:heal(25)
         end
       end
       spawn proj
     hit:
-      damage magic
       local knockback_dir = (target.pos - pos):normalize()
-      local knockback_dist = 400
+      local knockback_dist = 350
       local target_pos = target.pos + knockback_dir * knockback_dist
       effect pull to target_pos speed 1800

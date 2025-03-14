@@ -25,7 +25,7 @@ function ivern.new(x, y)
   champ.abilities = {
     aa = ranged_aa_cast.new(0.95, 475, 164, { 0.2,0.8,0.4 }),
     q = ranged_cast.new(5.3, 1150),
-    e = buff_cast.new(4.1, 750),
+    e = buff_cast.new(4.5, 750),
   }
 
 function champ.abilities.q:use(context, cast)

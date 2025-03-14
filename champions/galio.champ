@@ -91,8 +91,10 @@ abilities:
     deploy_time 2
     cast:
       for _, ally in pairs(in_range_list(self, allies, range)) do
-        if in_range(ally, enemies, size / 4) >= clamp(#enemies-1, 1, 3) then
-          return { pos = ally.pos }
+        if ally ~= self then
+          if in_range(ally, enemies, size / 4) >= clamp(#enemies-1, 1, 3) then
+            return { pos = ally.pos }
+          end
         end
       end
     use:

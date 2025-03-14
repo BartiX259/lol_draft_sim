@@ -8,6 +8,7 @@ local dash = require("effects.dash")
 local resist_buff = require("effects.resist_buff")
 local slow = require("effects.slow")
 local speed = require("effects.speed")
+local stun = require("effects.stun")
 local aoe = require("projectiles.aoe")
 local missile = require("projectiles.missile")
 local champion = require("util.champion")
@@ -20,19 +21,31 @@ local braum = {}
 function braum.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2704,
-    armor = 199,
+    armor = 169,
     mr = 97,
-    ms = 360,
+    ms = 380,
     sprite = 'braum.jpg',
-    damage_split = { 0.0, 1.0, 0.0 }
+    damage_split = { 0.5713179495121574, 0.4286820504878427, 0.0 }
   })
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 93),
-    q = ranged_cast.new(5.1, 1050),
+    q = ranged_cast.new(5, 1050),
     w = buff_cast.new(7.4, 650),
     e = dash_cast.new(7.4, 100, 800),
     r = big_cast.new(95.2, 1200, 300),
   }
+function champ.abilities.aa:start()
+self.counter = 0
+end
+
+
+function champ.abilities.aa:hit(target)
+self.counter = ( self.counter + 1 ) % 3
+if self.counter == 0 then
+target:effect(stun.new(1.0))
+end
+damage:new(93, damage.PHYSICAL):deal(champ, target)
+end
 
 function champ.abilities.q:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,

@@ -17,8 +17,8 @@ local cho_gath = {}
 function cho_gath.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2952,
-    armor = 85.1,
-    mr = 76.6,
+    armor = 80.1,
+    mr = 70.6,
     ms = 395,
     sprite = 'cho_gath.jpg',
     damage_split = { 0.0, 0.8609917631945418, 0.1390082368054581 }

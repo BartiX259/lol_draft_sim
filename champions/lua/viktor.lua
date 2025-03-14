@@ -17,37 +17,38 @@ local viktor = {}
 -- Constructor
 function viktor.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2000,
+    health = 1970,
     armor = 75,
     mr = 45,
-    ms = 335,
+    ms = 385,
     sprite = 'viktor.jpg',
     damage_split = { 0.0, 1.0, 0.0 }
   })
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 525, 90, { 0.7,0.7,0.7 }),
-    q = ranged_cast.new(4.8, 600),
+    q = ranged_cast.new(5.4, 600),
     w = splash_cast.new(12.4, 800, 300),
-    e = ranged_cast.new(7.6, 550),
+    e = ranged_cast.new(7.9, 550),
     r = big_cast.new(76.2, 700, 400),
   }
 
 function champ.abilities.q:use(context, cast)
 self.proj = missile.new(self, { dir = cast.dir,
-colliders = context.enemies,
+colliders = nil,
 size = 100,
 speed = 2000,
 color = { 0.7,0.7,0.7 },
 range = 600,
 from = champ.pos,
+to = cast.target,
 })
 context.spawn( self.proj
 )
 end
 
 function champ.abilities.q:hit(target)
-damage:new(200, damage.MAGIC):deal(champ, target)
-target:effect(shield.new(2.0, 242.0))
+damage:new(250, damage.MAGIC):deal(champ, target)
+champ:effect(shield.new(2.0, 242.0))
 end
 
 function champ.abilities.w:use(context, cast)
@@ -106,7 +107,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(155, damage.MAGIC):deal(champ, target)
+damage:new(135, damage.MAGIC):deal(champ, target)
 end
 
 function champ.behaviour(ready, context)

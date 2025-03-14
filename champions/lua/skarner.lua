@@ -2,8 +2,10 @@ local melee_aa_cast = require("abilities.melee_aa")
 local ranged_cast = require("abilities.ranged")
 local pull = require("effects.pull")
 local shield = require("effects.shield")
+local slow = require("effects.slow")
 local suppress = require("effects.suppress")
 local aoe = require("projectiles.aoe")
+local missile = require("projectiles.missile")
 local champion = require("util.champion")
 local damage = require("util.damage")
 local movement = require("util.movement")
@@ -14,23 +16,36 @@ local skarner = {}
 function skarner.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2580,
-    armor = 150.6,
+    armor = 135.6,
     mr = 96.6,
     ms = 380,
     sprite = 'skarner.jpg',
-    damage_split = { 0.42264508399966566, 0.5773549160003343, 0.0 }
+    damage_split = { 0.7320368672489506, 0.2679631327510496, 0.0 }
   })
   champ.abilities = {
     aa = melee_aa_cast.new(1.0, 175, 169),
-    q = melee_aa_cast.new(5.4, 175, 222),
+    q = ranged_cast.new(5.4, 475),
     e = ranged_cast.new(12.5, 700),
     r = ranged_cast.new(82, 190),
   }
 
+function champ.abilities.q:use(context, cast)
+self.proj = missile.new(self, { dir = cast.dir,
+colliders = context.enemies,
+size = 250,
+speed = 1600,
+color = { 0.6,0.4,0.8 },
+range = 475,
+stop_on_hit = true,
+from = champ.pos,
+})
+context.spawn( self.proj
+)
+end
 
 function champ.abilities.q:hit(target)
 damage:new(222, damage.PHYSICAL):deal(champ, target)
-damage:new(222, damage.MAGIC):deal(champ, target)
+target:effect(slow.new(2.0, 0.2))
 end
 
 function champ.abilities.e:use(context, cast)
@@ -85,13 +100,13 @@ if champ.abilities.r.casting then
 champ.range = 175
 champ.target = context.closest_enemy
 elseif champ.abilities.r.active then
-champ.range = 175+150
+champ.range = 475+150
 champ:change_movement(movement.PEEL)
 elseif context.closest_dist < 175 + 50 then
 champ.range = 175
 champ.target = context.closest_enemy
 else
-champ.range = 175+100
+champ.range = 475+100
 champ:change_movement(movement.PEEL)
 end
 end

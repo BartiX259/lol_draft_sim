@@ -2,7 +2,7 @@ champion xerath
 sprite xerath.jpg
 
 attributes:
-  health 1908
+  health 2008
   armor 68.4
   mr 45.6
   ms 380
@@ -21,8 +21,8 @@ abilities:
     cast ranged_aa
 
   q:
-    cd 5.7
-    damage 360
+    cd 5.5
+    damage 365
     range 1450
     speed 2800
     size 140
@@ -34,7 +34,7 @@ abilities:
       damage magic
 
   w:
-    cd 9.6
+    cd 9.4
     damage 320
     range 1000
     size 275

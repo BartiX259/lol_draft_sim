@@ -8,14 +8,14 @@ attributes:
   ms 375
 
 behavior:
-    range aa
-    movement kite
+  range aa
+  movement kite
 
 abilities:
   color 0.6, 0.7, 0.8 -- Spectral colors
 
   aa:
-    cd 1.4
+    cd 1.3
     range 630
     damage 230
     cast ranged_aa
@@ -35,7 +35,7 @@ abilities:
       self:heal(30) -- Simple self heal
 
   w:
-    cd 9.3
+    cd 9
     damage 170
     range 900
     speed 1000

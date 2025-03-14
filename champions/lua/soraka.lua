@@ -23,8 +23,8 @@ function soraka.new(x, y)
   })
   champ.abilities = {
     aa = ranged_aa_cast.new(1.2, 550, 86, { 0.8,1.0,0.8 }),
-    q = splash_cast.new(4.7, 800, 265),
-    w = buff_cast.new(3.5, 550),
+    q = splash_cast.new(4.9, 800, 265),
+    w = buff_cast.new(3.7, 550),
     e = splash_cast.new(11.24, 925, 260),
     r = ability:new(128.51),
   }
@@ -47,6 +47,9 @@ target:effect(slow.new(1.0, 0.2))
 end
 
 function champ.abilities.w:precast(context, cast)
+if cast.target == champ then
+return nil
+end
 if cast.target.max_health - cast.target.health < 240 or champ.health < 196 then
 return nil
 end

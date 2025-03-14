@@ -19,7 +19,7 @@ local pantheon = {}
 function pantheon.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2348,
-    armor = 114.4,
+    armor = 104.4,
     mr = 72.6,
     ms = 375,
     sprite = 'pantheon.jpg',

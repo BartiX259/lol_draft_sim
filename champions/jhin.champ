@@ -1,0 +1,52 @@
+champion jhin
+sprite jhin.jpg
+
+attributes:
+  health 1939
+  armor 80
+  mr 46
+  ms 395
+
+behavior:
+  range aa
+  movement kite
+
+abilities:
+  color 0.6, 0.1, 0.6
+
+  aa:
+    cd 1
+    range 550
+    damage 274
+    cast ranged_aa
+    start:
+      counter = 0
+    hit:
+      counter = (counter + 1) % 4
+      if counter == 0 then
+        damage physical 507 -- 4th shot
+      else
+        damage physical
+      end
+
+  q:
+    cd 4.5
+    range 580
+    damage 347
+    speed 1800
+    cast ranged_aa
+
+  w:
+    cd 10.9
+    range 2520
+    damage 337
+    speed 1600
+    size 90
+    stop_on_hit true
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+      effect root 2.25s

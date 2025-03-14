@@ -2,7 +2,7 @@ champion varus
 sprite varus.jpg
 
 attributes:
-  health 1860
+  health 1960
   armor 67.2
   mr 45.6
   ms 375

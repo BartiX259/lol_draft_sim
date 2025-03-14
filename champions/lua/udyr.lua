@@ -62,7 +62,7 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(82.5, damage.MAGIC):deal(champ, target)
+damage:new(80.5, damage.MAGIC):deal(champ, target)
 target:effect(slow.new(0.5, 0.3))
 end
 

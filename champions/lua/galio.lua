@@ -109,8 +109,10 @@ end
 
 function champ.abilities.r:cast(context)
 for _,ally in pairs ( distances.in_range_list ( champ , context.allies , 5500 )) do
+if ally ~= champ then
 if distances.in_range ( ally , context.enemies , 650 / 4 ) >= math.clamp ( # context.enemies - 1 , 1 , 3 ) then
 return { pos = ally.pos }
+end
 end
 end
 end

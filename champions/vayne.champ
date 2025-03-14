@@ -17,7 +17,7 @@ abilities:
   aa:
     cd 0.68
     range 550
-    damage 220
+    damage 240
     cast ranged_aa
     start:
       counter = 2

@@ -36,7 +36,7 @@ to = cast.target,
 })
 local hit_cols = { [ cast.target ] = true }
 self.proj.next = aoe:new(self, { colliders = context.enemies,
-size = 250,
+size = 200,
 color = { 0.9,0.5,0.6 },
 hit_cols = hit_cols,
 })

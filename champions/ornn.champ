@@ -3,7 +3,7 @@ sprite ornn.jpg
 
 attributes:
   health 2650
-  armor 200
+  armor 185
   mr 127
   ms 380
 

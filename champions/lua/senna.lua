@@ -22,9 +22,9 @@ function senna.new(x, y)
     damage_split = { 1.0, 0.0, 0.0 }
   })
   champ.abilities = {
-    aa = ranged_aa_cast.new(1.4, 630, 230, { 0.6,0.7,0.8 }),
+    aa = ranged_aa_cast.new(1.3, 630, 230, { 0.6,0.7,0.8 }),
     q = ranged_cast.new(5.4, 1000),
-    w = ranged_cast.new(9.3, 900),
+    w = ranged_cast.new(9, 900),
     r = big_cast.new(81, 2000, 200),
     r_shield = none_cast.new(),
   }

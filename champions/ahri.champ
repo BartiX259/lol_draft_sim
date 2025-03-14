@@ -2,7 +2,7 @@ champion ahri
 sprite ahri.jpg
 
 attributes:
-  health 1838
+  health 1958
   armor 67.4
   mr 45.6
   ms 385

@@ -19,10 +19,10 @@ function vayne.new(x, y)
     mr = 45.6,
     ms = 375,
     sprite = 'vayne.jpg',
-    damage_split = { 0.4821178120617111, 0.035764375876577846, 0.4821178120617111 }
+    damage_split = { 0.48355899419729204, 0.03288201160541586, 0.48355899419729204 }
   })
   champ.abilities = {
-    aa = ranged_aa_cast.new(0.68, 550, 220, { 0.3,0.3,0.3 }),
+    aa = ranged_aa_cast.new(0.68, 550, 240, { 0.3,0.3,0.3 }),
     q = dash_cast.new(2, 300, 550),
     e = ranged_cast.new(10, 450),
   }
@@ -34,9 +34,9 @@ end
 function champ.abilities.aa:hit(target)
 self.counter = ( self.counter + 1 ) % 3
 if self.counter == 2 then
-damage:new(220, damage.TRUE):deal(champ, target)
+damage:new(240, damage.TRUE):deal(champ, target)
 else
-damage:new(220, damage.PHYSICAL):deal(champ, target)
+damage:new(240, damage.PHYSICAL):deal(champ, target)
 end
 end
 

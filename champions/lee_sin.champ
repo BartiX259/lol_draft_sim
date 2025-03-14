@@ -3,7 +3,7 @@ sprite lee_sin.jpg
 
 attributes:
   health 2541
-  armor 129.8
+  armor 119.8
   mr 78.6
   ms 385
 
@@ -45,8 +45,10 @@ w:
   range 700
   cast buff
   use:
-    effect on self dash to cast.pos speed 1695
-    effect on self shield 2s 250
+    if cast.target ~= self then
+      effect on self dash to cast.pos speed 1695
+      effect on self shield 2s 250
+    end
     effect shield 2s 250
 
 r:

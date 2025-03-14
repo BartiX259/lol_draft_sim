@@ -2,7 +2,7 @@ champion leona
 sprite leona.jpg
 
 attributes:
-  health 2798
+  health 2598
   armor 186
   mr 147
   ms 395

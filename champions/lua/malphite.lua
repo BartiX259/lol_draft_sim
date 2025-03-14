@@ -17,10 +17,10 @@ local malphite = {}
 -- Constructor
 function malphite.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2663,
-    armor = 191.4,
+    health = 2613,
+    armor = 201.4,
     mr = 112.6,
-    ms = 335,
+    ms = 385,
     sprite = 'malphite.jpg',
     damage_split = { 0.0, 1.0, 0.0 }
   })

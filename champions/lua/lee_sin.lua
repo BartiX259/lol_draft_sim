@@ -17,7 +17,7 @@ local lee_sin = {}
 function lee_sin.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2541,
-    armor = 129.8,
+    armor = 119.8,
     mr = 78.6,
     ms = 385,
     sprite = 'lee_sin.jpg',
@@ -50,8 +50,10 @@ champ:effect(dash.new(1695, target))
 end
 
 function champ.abilities.w:use(context, cast)
+if cast.target ~= champ then
 champ:effect(dash.new(1695, cast.pos))
 champ:effect(shield.new(2.0, 250.0))
+end
 cast.target:effect(shield.new(2.0, 250.0))
 end
 

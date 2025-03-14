@@ -15,7 +15,7 @@ local leona = {}
 -- Constructor
 function leona.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 2798,
+    health = 2598,
     armor = 186,
     mr = 147,
     ms = 395,

@@ -55,7 +55,7 @@ abilities:
   r:
     color 0.3, 0.7, 0.8, 0.9
     cd 5.7
-    damage 82.5
+    damage 80.5
     range 185
     size 370
     tick 0.5

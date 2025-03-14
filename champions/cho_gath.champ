@@ -3,8 +3,8 @@ sprite cho_gath.jpg
 
 attributes:
   health 2952
-  armor 85.1
-  mr 76.6
+  armor 80.1
+  mr 70.6
   ms 395
 
 behavior:

@@ -1,0 +1,62 @@
+champion caitlyn
+sprite caitlyn.jpg
+
+attributes:
+  health 1950
+  armor 70
+  mr 40
+  ms 370
+
+behavior:
+  range aa
+  movement kite
+
+abilities:
+  color 0.9, 0.7, 0.4
+
+  aa:
+    cd 1
+    range 650
+    damage 220
+    cast ranged_aa
+    start:
+      counter = 5
+    hit:
+      counter = (counter + 1) % 5
+      if counter == 0 then
+        damage physical 400 -- Headshot
+      else
+        damage physical
+      end
+
+  q:
+    cd 6.3
+    damage 450
+    range 1250
+    speed 2200
+    size 80
+    cast ranged
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage physical
+
+  e:
+    color 0.9, 0.9, 0.9, 0.9
+    cd 8.5
+    damage 280
+    range 800
+    speed 1600
+    size 200
+    dist 400 -- Distance of knockback for Caitlyn
+    cast dash
+    use:
+      local dpos = pos + cast.dir * dist
+      effect on self dash to dpos speed speed
+      local net_dir = -cast.dir
+      proj = missile from pos dir net_dir
+      spawn proj
+    hit:
+      damage magic
+      effect slow 50% 1.5s

@@ -27,7 +27,7 @@ aa:
 
 q:
   cd 2.9
-  damage 210
+  damage 230
   range 725
   size 150
   speed 2500
@@ -71,7 +71,7 @@ e_ret:
 
 r:
   cd 72.7
-  damage 19
+  damage 20
   range 300
   size 650
   persist_time 12
@@ -80,10 +80,9 @@ r:
   cast ranged
   use:
     active = true
-    proj = aoe follow self on impact do
-        self:heal(19 * in_range)
-    end
+    proj = aoe follow self
     delay persist_time active = false
     spawn proj
   hit:
+    self:heal(20)
     damage magic

@@ -4,7 +4,7 @@ sprite vi.jpg
 attributes:
   health 2423
   armor 111.4
-  mr 66.6
+  mr 69.6
   ms 380
 
 behavior:
@@ -45,7 +45,7 @@ abilities:
       effect on self dash to cast.pos speed 1400
     hit:
       damage physical
-      effect on self shield 263 3s -- passive shield
+      effect on self shield 273 3s -- passive shield
       proj.despawn = true
       self:del_effect("dash")
       effect airborne 1s

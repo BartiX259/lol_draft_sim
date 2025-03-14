@@ -1,0 +1,73 @@
+champion renekton
+sprite renekton.jpg
+
+attributes:
+  health 2442
+  armor 112.4
+  mr 72.6
+  ms 385
+
+behavior:
+  if closest_dist < aa.range + 50 then
+    range aa
+    self.target = closest_enemy
+  else
+    range 600
+    movement peel
+  end
+
+abilities:
+  color 0.7, 0.3, 0.1
+
+  aa:
+    cd 1.5
+    range 125
+    damage 219
+    cast melee_aa
+
+  q:
+    cd 5.5
+    damage 330
+    range 240
+    size 480
+    cast splash
+    use:
+      proj = aoe follow self deploy_time 0.05
+      spawn proj
+    hit:
+      self:heal(110)
+      damage physical
+
+  w:
+    cd 7
+    damage 178
+    range 175
+    cast ranged
+    use:
+      damage physical
+      effect stun 0.75s
+
+  e:
+    cd 9
+    range 450
+    dist 450
+    speed 1200
+    cast dash
+    use:
+      effect on self dash to cast.pos speed speed
+
+  r:
+    cd 100
+    opacity 0.8
+    damage 68
+    range 200
+    size 400
+    tick 0.5
+    persist_time 15
+    cast ranged
+    use:
+      self.health = self.health + 500
+      proj = aoe follow self
+      spawn proj
+    hit:
+      damage magic

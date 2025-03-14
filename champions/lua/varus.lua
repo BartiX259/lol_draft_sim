@@ -12,7 +12,7 @@ local varus = {}
 -- Constructor
 function varus.new(x, y)
   local champ = champion.new({ x = x, y = y,
-    health = 1860,
+    health = 1960,
     armor = 67.2,
     mr = 45.6,
     ms = 375,

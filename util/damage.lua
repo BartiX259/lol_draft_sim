@@ -11,12 +11,11 @@ function damage:new(value, type)
   }, { __index = self })
 end
 
-function damage:calculate(dealer, target)
-  return self.value
-end
-
 function damage:deal(dealer, target)
-  local amount = self:calculate(dealer, target)
+  if target:has_effect("invulnerable") then
+    return
+  end
+  local amount = self.value
   for _, buff in pairs(dealer:get_effects("damage_buff")) do
     amount = amount * buff.amount
   end

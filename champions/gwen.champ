@@ -28,6 +28,7 @@ abilities:
     damage 223
     cast melee_aa
     hit:
+      e.timer = e.timer - 0.8
       damage magic
 
   q:
@@ -85,7 +86,7 @@ abilities:
     speed 2200
     size 80
     needles 5
-    cast ranged
+    cast big
     use:
       for i = 1, needles do
           local proj = missile from pos

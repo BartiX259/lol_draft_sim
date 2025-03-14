@@ -24,7 +24,7 @@ abilities:
     use:
       proj = missile from pos to cast.target range nil colliders nil
       local hit_cols = { [cast.target] = true }
-      proj.next = aoe size 250
+      proj.next = aoe size 200
       spawn proj
     hit:
       damage physical

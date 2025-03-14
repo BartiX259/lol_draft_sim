@@ -1,0 +1,86 @@
+champion gnar
+sprite gnar.jpg
+
+attributes:
+  health 2488
+  armor 126
+  mr 96
+  ms 380
+
+behavior:
+  range aa
+  movement kite
+
+abilities:
+  color 0.7, 0.7, 0.4 -- Brownish
+
+aa:
+  cd 0.96
+  range 500
+  damage 158
+  cast ranged_aa
+
+q:
+  cd 9.5
+  range 1100
+  damage 363
+  speed 1400
+  size 100
+  cast ranged
+  use:
+    proj = missile from pos
+    spawn proj
+  hit:
+    damage physical
+
+q_ret:
+  stats q
+  range nil
+  cast after q
+  use:
+    proj = missile from q.proj to self
+    spawn proj
+  hit:
+   damage physical
+
+e_engage:
+  cd 11.4
+  range 500
+  cast ranged
+  pre-cast:
+    if r.timer <= 0 then
+      return cast
+    end
+  use:
+    local cpos = cast.pos - cast.dir * 100
+    effect on self dash to cpos speed 1400
+
+e_normal:
+  cd 11.4
+  range aa
+  dist 500
+  cast dash
+  pre-cast:
+    if r.timer > 0 then
+      return cast
+    end
+  use:
+    effect on self dash to cast.pos speed 1400
+
+
+r:
+  cd 57.1
+  damage 330
+  range 200
+  size 300
+  cast splash
+  use:
+    used = true
+    proj = aoe at self
+    dir = (pos - closest_enemy.pos):normalize()
+    spawn proj
+  hit:
+    damage physical
+    local tpos = target.pos + dir * 300
+    effect pull to tpos speed 1000
+    effect stun 1.5s

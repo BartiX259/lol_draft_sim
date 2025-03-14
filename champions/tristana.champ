@@ -1,0 +1,76 @@
+champion tristana
+sprite tristana.jpg
+
+attributes:
+  health 1964
+  armor 78
+  mr 48.6
+  ms 380
+
+behavior:
+    range aa
+    movement kite
+
+abilities:
+  color 0.8, 0.6, 0.2
+
+  aa:
+    cd 0.871
+    range 656
+    damage 230
+    speed 2250
+    size 55
+    cast ranged
+    use:
+      proj = missile from pos to cast.target range nil colliders nil
+      hit_cols = { [cast.target] = true }
+      spawn proj
+    hit:
+      damage physical
+  
+  aa_explosion: -- Approximate e/passive
+    size 250
+    damage 215
+    cast after aa
+    use:
+      local hit_cols = aa.hit_cols
+      proj = aoe at aa.proj.pos
+      spawn proj
+    hit:
+      damage magic
+
+  w: -- Rocket Jump
+    cd 10
+    damage 320
+    range aa -- Don't adjust
+    dist 700 -- Jump range, can be adjusted
+    size 350 -- AoE size on landing (updated to match wiki)
+    cast dash
+    use:
+      proj = aoe at cast.pos
+      effect on self dash to cast.pos speed 1500
+      spawn proj
+    hit:
+      damage magic
+      effect slow 40% 2s
+
+  r: -- Buster Shot
+    cd 110
+    damage 402
+    range 656 -- Updated to match aa range
+    speed 2000
+    size 200
+    cast ranged
+    pre-cast:
+      if closest_dist < 300 then
+        return cast
+      end
+    use:
+      proj = missile from pos
+      spawn proj
+    hit:
+      damage magic
+      local knockback_dir = (target.pos - pos):normalize()
+      local knockback_dist = 600
+      local target_pos = target.pos + knockback_dir * knockback_dist
+      effect pull to target_pos speed 1800

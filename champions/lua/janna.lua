@@ -24,7 +24,7 @@ function janna.new(x, y)
     mr = 45.6,
     ms = 385,
     sprite = 'janna.jpg',
-    damage_split = { 0.0, 1.0, 0.0 }
+    damage_split = { 0.0, 0.9999999999999999, 0.0 }
   })
   champ.abilities = {
     aa = ranged_aa_cast.new(1.176, 550, 95, { 0.7,0.9,1.0 }),
@@ -86,7 +86,7 @@ follow = champ,
 re_hit = false,
 }):on_impact(function()
 for _,ally in pairs ( distances.in_range_list ( champ , context.allies , 725 )) do
-ally :heal ( 30 )
+ally :heal ( 25 )
 end
 end)
 context.spawn( self.proj
@@ -94,9 +94,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.r:hit(target)
-damage:new(47.5, damage.MAGIC):deal(champ, target)
 local knockback_dir = ( target.pos - champ.pos ):normalize ()
-local knockback_dist = 400
+local knockback_dist = 350
 local target_pos = target.pos + knockback_dir * knockback_dist
 target:effect(pull.new(1800, target_pos))
 end

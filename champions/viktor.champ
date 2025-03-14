@@ -2,10 +2,10 @@ champion viktor
 sprite viktor.jpg
 
 attributes:
-  health 2000
+  health 1970
   armor 75
   mr 45
-  ms 335
+  ms 385
 
 behavior:
   range q + 100
@@ -21,18 +21,18 @@ aa:
   cast ranged_aa
 
 q:
-  cd 4.8
+  cd 5.4
   range 600
-  damage 200
+  damage 250
   speed 2000
   size 100
   cast ranged
   use:
-    proj = missile from pos
+    proj = missile from pos to cast.target colliders nil
     spawn proj
   hit:
     damage magic
-    effect shield 242 2s
+    effect on self shield 242 2s
 
 w:
   cd 12.4
@@ -52,7 +52,7 @@ w:
     effect slow 30% 1s
 
 e:
-  cd 7.6
+  cd 7.9
   damage 330
   range 550
   speed 1500
@@ -70,7 +70,7 @@ e:
 
 r:
   cd 76.2
-  damage 155
+  damage 135
   range 700
   size 400
   tick 0.5

@@ -108,8 +108,7 @@ function vec2:softinv(cap)
   if mag > cap * math.pi then
     return vec2.new(0, 0)
   end
-  local cap2 = cap / 2
-  return self:normalize() * (cap2 * math.cos(mag / cap) + cap2)
+  return self * (cap * (math.cos(mag / cap)+1)/(2*mag))
 end
 
 return vec2

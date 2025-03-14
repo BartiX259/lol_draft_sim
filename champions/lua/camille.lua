@@ -17,7 +17,7 @@ local camille = {}
 function camille.new(x, y)
   local champ = champion.new({ x = x, y = y,
     health = 2588,
-    armor = 115,
+    armor = 105,
     mr = 77,
     ms = 385,
     sprite = 'camille.jpg',
