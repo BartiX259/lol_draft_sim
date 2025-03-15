@@ -33,6 +33,8 @@ end
 
 function love.load()
   love.window.setMode(1200, 800, {resizable = true})
+  love.graphics.setBackgroundColor(0.07, 0.07, 0.08)
+  --Background = love.graphics.newImage("assets/background.png")
   -- love.window.maximize()
   -- love.profiler = require('profile')
   -- love.profiler.start()
@@ -153,7 +155,7 @@ end
 ui.new_game = function ()
   SimInfo = nil
   SimCallback = nil
-  love.profiler.reset()
+  --love.profiler.reset()
   NewGame()
 end
 ui.new_sim = function()
@@ -595,6 +597,13 @@ function GameTick(dt)
 end
 
 function love.draw()
+  -- Background
+  
+    -- for i = 0, love.graphics.getWidth() / Background:getWidth() do
+    --     for j = 0, love.graphics.getHeight() / Background:getHeight() do
+    --         love.graphics.draw(Background, i * Background:getWidth(), j * Background:getHeight())
+    --     end
+    -- end
   -- UI
   if GameState == DRAFT then
     ui.draft()
