@@ -21,7 +21,7 @@ aa:
   cast melee_aa
 
 q:
-  cd 3.8
+  cd 3.7
   range 725
   damage 460.5
   speed 2600
@@ -34,7 +34,7 @@ q:
     damage physical
 
 e:
-  cd 6.4
+  cd 6.3
   range 750
   damage 640
   size 250

@@ -15,6 +15,12 @@
 
 ![simulation result image](./assets/examples/sim_end.png)
 
+### Find best in slot
+
+![find best image 1](./assets/examples/find_best_1.png)
+
+![find best image 2](./assets/examples/find_best_2.png)
+
 ## Running the program
 
 1. Install the [LÖVE game engine](https://love2d.org/) (< 10MB)

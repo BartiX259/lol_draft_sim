@@ -21,7 +21,7 @@ function ornn.new(x, y)
     mr = 127,
     ms = 380,
     sprite = 'ornn.jpg',
-    damage_split = { 0.4302472477892077, 0.5697527522107922, 0.0 }
+    damage_split = { 0.3830369357045144, 0.6169630642954858, 0.0 }
   })
   champ.abilities = {
     aa = melee_aa_cast.new(1.2, 175, 111),
@@ -43,7 +43,7 @@ champ:effect(dash.new(1600, cast.pos))
 end
 
 function champ.abilities.e:hit(target)
-damage:new(298, damage.PHYSICAL):deal(champ, target)
+damage:new(245, damage.PHYSICAL):deal(champ, target)
 target:effect(airborne.new(1.25))
 end
 

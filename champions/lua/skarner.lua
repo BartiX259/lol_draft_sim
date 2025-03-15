@@ -20,11 +20,11 @@ function skarner.new(x, y)
     mr = 96.6,
     ms = 380,
     sprite = 'skarner.jpg',
-    damage_split = { 0.7320368672489506, 0.2679631327510496, 0.0 }
+    damage_split = { 0.7630498360462026, 0.23695016395379756, 0.0 }
   })
   champ.abilities = {
     aa = melee_aa_cast.new(1.0, 175, 169),
-    q = ranged_cast.new(5.4, 475),
+    q = ranged_cast.new(5.2, 475),
     e = ranged_cast.new(12.5, 700),
     r = ranged_cast.new(82, 190),
   }
@@ -44,8 +44,8 @@ context.spawn( self.proj
 end
 
 function champ.abilities.q:hit(target)
-damage:new(222, damage.PHYSICAL):deal(champ, target)
-target:effect(slow.new(2.0, 0.2))
+damage:new(252, damage.PHYSICAL):deal(champ, target)
+target:effect(slow.new(2.0, 0.4))
 end
 
 function champ.abilities.e:use(context, cast)

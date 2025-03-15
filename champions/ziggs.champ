@@ -24,7 +24,7 @@ abilities:
 
   q:
     cd 3.3
-    damage 250
+    damage 280
     range 1400
     speed 1700
     size 200
@@ -47,7 +47,7 @@ abilities:
       damage magic
 
   e:
-    cd 12.31
+    cd 12
     range 1000
     speed 1500
     size 300

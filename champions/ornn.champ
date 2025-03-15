@@ -27,7 +27,7 @@ abilities:
 
   e:
     cd 7.7
-    damage 298
+    damage 245
     range 800
     speed 1600
     size 360
